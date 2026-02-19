@@ -9,6 +9,7 @@ interface HabitRepository {
 
     fun getArchivedHabits(): Flow<List<Habit>>
     suspend fun getHabitById(habitId: Int): Habit?
+    fun observeHabitById(habitId: Int): Flow<Habit?>
     suspend fun addHabit(habit: Habit)
     suspend fun updateHabit(habit: Habit)
     suspend fun deleteHabit(habitId: Int)
