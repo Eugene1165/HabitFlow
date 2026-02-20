@@ -3,8 +3,9 @@ package com.example.habitflow.data.mapper
 import com.example.habitflow.data.local.entity.HabitEntryEntity
 import com.example.habitflow.domain.model.HabitEntry
 import java.time.LocalDate
+import javax.inject.Inject
 
-class HabitEntryMapper {
+class HabitEntryMapper @Inject constructor() {
 
     fun mapHabitEntryEntityToHabitEntry(
         entity: HabitEntryEntity

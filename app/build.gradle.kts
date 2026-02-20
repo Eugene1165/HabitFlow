@@ -10,6 +10,7 @@ android {
     namespace = "com.example.habitflow"
     compileSdk {
         version = release(36)
+        buildToolsVersion = "36.0.0"
     }
 
     defaultConfig {

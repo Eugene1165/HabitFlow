@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 interface HabitEntryDao {
 
     @Insert
-    suspend fun insertEntry(entity: HabitEntryEntity): Unit
+    suspend fun addEntry(entity: HabitEntryEntity): Unit
 
     @Query("SELECT * FROM habit_entries WHERE habitId = :habitId AND date BETWEEN :startDate AND :endDate  ")
     fun getEntriesForPeriod(habitId:Int, startDate: String,endDate: String): Flow<List<HabitEntryEntity>>

@@ -6,8 +6,9 @@ import com.example.habitflow.domain.model.RepeatType
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
+import javax.inject.Inject
 
-class HabitMapper {
+class HabitMapper @Inject constructor() {
     fun mapHabitEntityToHabit(
         entity: HabitEntity,
         ): Habit {
