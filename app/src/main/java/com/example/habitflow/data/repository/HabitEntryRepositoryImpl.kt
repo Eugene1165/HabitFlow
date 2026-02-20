@@ -27,7 +27,12 @@ class HabitEntryRepositoryImpl @Inject constructor(
         startDate: LocalDate,
         endDate: LocalDate
     ): Flow<List<HabitEntry>> {
-        return dao.getEntriesForPeriod(habitId,startDate.toString(),endDate.toString())
+        return dao.getEntriesForPeriod(habitId, startDate.toString(), endDate.toString())
+            .map { list -> list.map { habitEntryMapper.mapHabitEntryEntityToHabitEntry(it) } }
+    }
+
+    override fun getEntriesForDate(date: LocalDate): Flow<List<HabitEntry>> {
+        return dao.getEntriesForDate(date.toString())
             .map { list -> list.map { habitEntryMapper.mapHabitEntryEntityToHabitEntry(it) } }
     }
 
@@ -36,14 +41,14 @@ class HabitEntryRepositoryImpl @Inject constructor(
         currentDate: LocalDate,
         isDone: Boolean
     ) {
-        return dao.updateEntry(habitId,currentDate.toString(),isDone)
+        return dao.updateEntry(habitId, currentDate.toString(), isDone)
     }
 
     override suspend fun getEntryByDate(
         habitId: Int,
         date: LocalDate
     ): HabitEntry? {
-        return dao.getEntryByDate(habitId,date.toString())?.let {
+        return dao.getEntryByDate(habitId, date.toString())?.let {
             habitEntryMapper.mapHabitEntryEntityToHabitEntry(it)
         }
     }

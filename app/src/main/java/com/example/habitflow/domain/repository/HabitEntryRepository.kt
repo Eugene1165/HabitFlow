@@ -16,6 +16,8 @@ interface HabitEntryRepository {
         endDate: LocalDate
     ): Flow<List<HabitEntry>>
 
+    fun getEntriesForDate(date: LocalDate): Flow<List<HabitEntry>>
+
     suspend fun updateEntry(habitId: Int, currentDate: LocalDate, isDone: Boolean)
 
     suspend fun getEntryByDate(habitId: Int,date: LocalDate): HabitEntry?

@@ -23,4 +23,7 @@ interface HabitEntryDao {
 
     @Query("SELECT * FROM habit_entries WHERE habitId = :habitId")
     fun getEntriesForHabit(habitId: Int): Flow<List<HabitEntryEntity>>
+
+    @Query("SELECT * FROM habit_entries WHERE date = :date")
+    fun getEntriesForDate(date: String): Flow<List<HabitEntryEntity>>
 }
