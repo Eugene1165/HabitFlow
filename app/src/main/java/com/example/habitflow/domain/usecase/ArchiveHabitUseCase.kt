@@ -1,9 +1,10 @@
 package com.example.habitflow.domain.usecase
 
 import com.example.habitflow.domain.repository.HabitRepository
+import javax.inject.Inject
 
-class ArchiveHabitUseCase(private val repository: HabitRepository) {
-    suspend operator fun invoke(habitId: Int){
+class ArchiveHabitUseCase @Inject constructor(private val repository: HabitRepository) {
+    suspend operator fun invoke(habitId: Int) {
         return repository.archiveHabit(habitId)
     }
 }

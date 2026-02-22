@@ -8,10 +8,8 @@ plugins {
 
 android {
     namespace = "com.example.habitflow"
-    compileSdk {
-        version = release(36)
-        buildToolsVersion = "36.0.0"
-    }
+    compileSdk = 36
+    buildToolsVersion = "36.0.0"
 
     defaultConfig {
         applicationId = "com.example.habitflow"
@@ -41,6 +39,12 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        force("com.squareup:javapoet:1.13.0")
     }
 }
 

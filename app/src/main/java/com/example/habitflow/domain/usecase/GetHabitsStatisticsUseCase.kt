@@ -16,10 +16,11 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import java.time.temporal.WeekFields
+import javax.inject.Inject
 
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class GetHabitsStatisticsUseCase(
+class GetHabitsStatisticsUseCase @Inject constructor(
     private val habitRepository: HabitRepository,
     private val habitEntryRepository: HabitEntryRepository
 ) {

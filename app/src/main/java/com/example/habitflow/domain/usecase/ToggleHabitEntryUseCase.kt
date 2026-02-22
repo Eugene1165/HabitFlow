@@ -3,8 +3,9 @@ package com.example.habitflow.domain.usecase
 import com.example.habitflow.domain.model.HabitEntry
 import com.example.habitflow.domain.repository.HabitEntryRepository
 import java.time.LocalDate
+import javax.inject.Inject
 
-class ToggleHabitEntryUseCase(private val repository: HabitEntryRepository) {
+class ToggleHabitEntryUseCase @Inject constructor(private val repository: HabitEntryRepository) {
     suspend operator fun invoke(habitId: Int, date: LocalDate) {
         if (date.isAfter(LocalDate.now()))
             throw IllegalArgumentException(
