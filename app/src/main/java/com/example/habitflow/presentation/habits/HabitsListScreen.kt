@@ -32,11 +32,12 @@ import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.example.habitflow.domain.model.Habit
 
 
 @Composable
-fun HabitsListScreen() {
+fun HabitsListScreen(navController: NavController) {
     val viewModel: HabitsListViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     Scaffold(
