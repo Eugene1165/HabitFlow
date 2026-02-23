@@ -1,4 +1,4 @@
-package com.example.habitflow.presentation.habits
+package com.example.habitflow.presentation.habits.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
@@ -34,6 +35,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.habitflow.domain.model.Habit
+import com.example.habitflow.domain.model.RepeatType
+import com.example.habitflow.presentation.habits.list.HabitsListUiState
+import com.example.habitflow.presentation.habits.list.HabitsListViewModel
+import java.time.LocalDate
+import java.time.LocalTime
 
 
 @Composable
@@ -149,19 +155,19 @@ fun HabitItem(
 }
 
 
-@androidx.compose.ui.tooling.preview.Preview
+@Preview
 @Composable
 fun PreviewHabitItem() {
     val fakeHabit = Habit(
         id = 1,
         title = "Утренняя зарядка",
         description = "Каждое утро",
-        startDate = java.time.LocalDate.now(),
+        startDate = LocalDate.now(),
         color = "#FF5733",
         target = null,
         isArchived = false,
-        repeatType = com.example.habitflow.domain.model.RepeatType.Daily,
-        reminder = java.time.LocalTime.of(7, 0)
+        repeatType = RepeatType.Daily,
+        reminder = LocalTime.of(7, 0)
     )
     HabitItem(
         habit = fakeHabit,

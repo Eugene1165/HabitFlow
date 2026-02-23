@@ -1,4 +1,4 @@
-package com.example.habitflow.presentation.screens
+package com.example.habitflow.presentation.main
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -14,8 +14,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.habitflow.presentation.habits.HabitsListScreen
+import com.example.habitflow.presentation.habits.list.HabitsListScreen
 import com.example.habitflow.presentation.navigation.NavigationItem
+import com.example.habitflow.presentation.settings.SettingsScreen
+import com.example.habitflow.presentation.statistics.StatisticsScreen
 
 @Composable
 fun MainScreen(navController: NavHostController) {

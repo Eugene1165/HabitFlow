@@ -1,4 +1,4 @@
-package com.example.habitflow.presentation.screens
+package com.example.habitflow.presentation.statistics
 
 import androidx.compose.runtime.Composable
 

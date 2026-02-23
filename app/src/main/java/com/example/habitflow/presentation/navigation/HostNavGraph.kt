@@ -6,11 +6,11 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.habitflow.presentation.habits.CreateHabitScreen
-import com.example.habitflow.presentation.habits.HabitInfoScreen
-import com.example.habitflow.presentation.screens.CalendarScreen
-import com.example.habitflow.presentation.screens.MainScreen
-import com.example.habitflow.presentation.screens.OnBoardingScreen
+import com.example.habitflow.presentation.habits.create.CreateHabitScreen
+import com.example.habitflow.presentation.habits.info.HabitInfoScreen
+import com.example.habitflow.presentation.habits.calendar.CalendarScreen
+import com.example.habitflow.presentation.main.MainScreen
+import com.example.habitflow.presentation.onboarding.OnBoardingScreen
 
 @Composable
 fun HostNavGraph(navController: NavHostController) {

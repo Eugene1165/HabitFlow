@@ -1,10 +1,11 @@
-package com.example.habitflow.presentation.habits
+package com.example.habitflow.presentation.habits.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.habitflow.domain.usecase.GetAllActiveHabitsUseCase
 import com.example.habitflow.domain.usecase.GetEntriesForDateUseCase
 import com.example.habitflow.domain.usecase.ToggleHabitEntryUseCase
+import com.example.habitflow.presentation.habits.list.HabitWithStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

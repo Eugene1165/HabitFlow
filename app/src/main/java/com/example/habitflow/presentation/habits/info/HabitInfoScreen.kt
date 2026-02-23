@@ -1,4 +1,4 @@
-package com.example.habitflow.presentation.habits
+package com.example.habitflow.presentation.habits.info
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController

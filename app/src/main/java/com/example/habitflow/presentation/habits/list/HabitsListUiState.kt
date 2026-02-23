@@ -1,4 +1,6 @@
-package com.example.habitflow.presentation.habits
+package com.example.habitflow.presentation.habits.list
+
+import com.example.habitflow.presentation.habits.list.HabitWithStatus
 
 sealed class HabitsListUiState {
     object Loading : HabitsListUiState()
