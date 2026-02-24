@@ -50,13 +50,11 @@ fun HabitsListScreen(navController: NavController) {
     val viewModel: HabitsListViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate("create_habit") }) {
-                Icon(Icons.Default.Add, contentDescription = null)
-            }
-        }
-    ) { paddingValues ->
-        Box(modifier = Modifier.padding(paddingValues)) {
+        modifier = Modifier.fillMaxSize()
+    ) { it.toString()
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
             when (state) {
                 is HabitsListUiState.Loading -> {
                     Box(
@@ -106,9 +104,15 @@ fun HabitsListScreen(navController: NavController) {
                     }
                 }
             }
-
+            FloatingActionButton(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp),
+                containerColor = Color.Green,
+                onClick = { navController.navigate("create_habit") }) {
+                Icon(Icons.Default.Add, contentDescription = null)
+            }
         }
-
     }
 }
 
