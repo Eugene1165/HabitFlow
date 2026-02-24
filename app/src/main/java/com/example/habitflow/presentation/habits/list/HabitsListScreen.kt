@@ -36,8 +36,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.habitflow.domain.model.Habit
 import com.example.habitflow.domain.model.RepeatType
-import com.example.habitflow.presentation.habits.list.HabitsListUiState
-import com.example.habitflow.presentation.habits.list.HabitsListViewModel
 import java.time.LocalDate
 import java.time.LocalTime
 

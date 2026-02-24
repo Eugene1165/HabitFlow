@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.Surface
 import androidx.navigation.compose.rememberNavController
 import com.example.habitflow.presentation.navigation.HostNavGraph
 import com.example.habitflow.presentation.theme.HabitFlowTheme
@@ -16,8 +17,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             HabitFlowTheme {
-                val navController = rememberNavController()
-                HostNavGraph(navController)
+                Surface {
+                    val navController = rememberNavController()
+                    HostNavGraph(navController)
+                }
             }
         }
     }
