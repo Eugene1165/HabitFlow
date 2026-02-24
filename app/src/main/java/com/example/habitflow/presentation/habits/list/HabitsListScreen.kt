@@ -1,6 +1,7 @@
 package com.example.habitflow.presentation.habits.list
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,11 +14,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,7 +50,11 @@ fun HabitsListScreen(navController: NavController) {
     val viewModel: HabitsListViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     Scaffold(
-        floatingActionButton = {}
+        floatingActionButton = {
+            FloatingActionButton(onClick = { navController.navigate("create_habit") }) {
+                Icon(Icons.Default.Add, contentDescription = null)
+            }
+        }
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             when (state) {
@@ -77,7 +86,7 @@ fun HabitsListScreen(navController: NavController) {
                                 habit = habitWithStatus.habit,
                                 isCompletedToday = habitWithStatus.isCompletedToday,
                                 onToggle = { habitId -> viewModel.onToggle(habitId) },
-                                onCardClick = {}
+                                onCardClick = { habitId -> navController.navigate("habit_info/$habitId") }
                             )
                         }
                     }
@@ -114,10 +123,11 @@ fun HabitItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp),
+            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .clickable { onCardClick(habit.id) },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = Color.White),
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
