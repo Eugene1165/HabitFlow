@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">HabitFlow</string>
+    <string name="CreateHabbit">Создание привычек</string>
 </resources>
