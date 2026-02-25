@@ -6,6 +6,7 @@ import com.example.habitflow.domain.usecase.GetAllActiveHabitsUseCase
 import com.example.habitflow.domain.usecase.GetEntriesForDateUseCase
 import com.example.habitflow.domain.usecase.ToggleHabitEntryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -26,8 +27,22 @@ class HabitsListViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
+        loadHabits()
+    }
+
+    fun onToggle(habitId: Int){
+        viewModelScope.launch {
+            val today = LocalDate.now()
+            toggleHabitEntryUseCase.invoke(habitId,today)
+        }
+    }
+
+    private var loadJob: Job? = null
+    fun loadHabits(){
+        loadJob?.cancel()
+        _state.value = HabitsListUiState.Loading
         val today = LocalDate.now()
-        combine(
+        loadJob = combine(
             getAllActiveHabitsUseCase(),
             getEntriesForDateUseCase(today)
         ) { habits, entries ->
@@ -50,13 +65,4 @@ class HabitsListViewModel @Inject constructor(
             .catch { e -> _state.value = HabitsListUiState.Error(e.message ?: "Ошибка") }
             .launchIn(viewModelScope)
     }
-
-    fun onToggle(habitId: Int){
-        viewModelScope.launch {
-            val today = LocalDate.now()
-            toggleHabitEntryUseCase.invoke(habitId,today)
-        }
-    }
-
-
 }

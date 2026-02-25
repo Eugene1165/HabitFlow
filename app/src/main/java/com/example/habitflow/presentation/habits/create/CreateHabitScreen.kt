@@ -30,6 +30,7 @@ import com.example.habitflow.R
 import com.example.habitflow.domain.model.RepeatType
 import com.example.habitflow.presentation.components.HabitFlowTopBar
 import java.time.DayOfWeek
+import com.example.habitflow.presentation.extensions.toDisplayName
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -91,6 +92,7 @@ fun CreateHabitScreen(navController: NavController) {
                 )
                 TextField(
                     value = state.target?.toString() ?: "",
+                    readOnly = false,
                     onValueChange = { viewModel.onTargetChanged(it.toIntOrNull()) },
                     label = { Text("Цель") }
                 )
@@ -180,19 +182,5 @@ private fun WeeklyDaysSelector(
 }
 
 
-private fun RepeatType.toDisplayName(): String = when (this) {
-    is RepeatType.Daily -> "Ежедневно"
-    is RepeatType.WeeklyDays -> "По дням недели"
-    is RepeatType.WeeklyCount -> "Раз в неделю"
-}
 
-private fun DayOfWeek.toDisplayName(): String = when (this) {
-    DayOfWeek.MONDAY -> "Пн"
-    DayOfWeek.TUESDAY -> "Вт"
-    DayOfWeek.WEDNESDAY -> "Cр"
-    DayOfWeek.THURSDAY -> "Чт"
-    DayOfWeek.FRIDAY -> "Пт"
-    DayOfWeek.SUNDAY -> "Вс"
-    DayOfWeek.SATURDAY -> "Сб"
-}
 

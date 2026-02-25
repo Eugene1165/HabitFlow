@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,6 +42,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.habitflow.domain.model.Habit
 import com.example.habitflow.domain.model.RepeatType
+import com.example.habitflow.presentation.extensions.toDisplayName
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -51,9 +53,10 @@ fun HabitsListScreen(navController: NavController) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     Scaffold(
         modifier = Modifier.fillMaxSize()
-    ) { it.toString()
+    ) { paddingValues ->
         Box(
             modifier = Modifier.fillMaxSize()
+                .padding(paddingValues)
         ) {
             when (state) {
                 is HabitsListUiState.Loading -> {
@@ -78,7 +81,9 @@ fun HabitsListScreen(navController: NavController) {
 
                 is HabitsListUiState.Content -> {
                     val habits = (state as HabitsListUiState.Content).habits
-                    LazyColumn {
+                    LazyColumn(
+                        contentPadding = PaddingValues(bottom = 80.dp)
+                    ) {
                         items(habits) { habitWithStatus ->
                             HabitItem(
                                 habit = habitWithStatus.habit,
@@ -97,7 +102,7 @@ fun HabitsListScreen(navController: NavController) {
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text("Ошибка")
-                            Button(onClick = {}) {
+                            Button(onClick = {viewModel.loadHabits()}) {
                                 Text("Повторить")
                             }
                         }
@@ -156,7 +161,7 @@ fun HabitItem(
                     color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(text = habit.repeatType.toString(), color = Color.Gray)
+                Text(text = habit.repeatType.toDisplayName(), color = Color.Gray)
             }
             Checkbox(
                 checked = isCompletedToday,
