@@ -62,7 +62,7 @@ fun CreateHabitScreen(navController: NavController) {
     Scaffold(
         topBar = {
             HabitFlowTopBar(
-                title = stringResource(R.string.CreateHabbit),
+                title = stringResource(R.string.createHabbit),
                 onBackClick = { navController.popBackStack() })
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },

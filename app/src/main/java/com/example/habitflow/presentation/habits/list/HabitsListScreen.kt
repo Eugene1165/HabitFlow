@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,6 +41,7 @@ import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.habitflow.R
 import com.example.habitflow.domain.model.Habit
 import com.example.habitflow.domain.model.RepeatType
 import com.example.habitflow.presentation.extensions.toDisplayName
@@ -55,7 +57,8 @@ fun HabitsListScreen(navController: NavController) {
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(paddingValues)
         ) {
             when (state) {
@@ -74,7 +77,7 @@ fun HabitsListScreen(navController: NavController) {
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("Нет привычек")
+                        Text(stringResource(R.string.noHabits))
                     }
 
                 }
