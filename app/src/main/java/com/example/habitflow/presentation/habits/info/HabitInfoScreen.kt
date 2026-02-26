@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -29,7 +30,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -91,11 +95,13 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
                         ) {
                             Text(
                                 text = currentState.habit.title,
-                                style = MaterialTheme.typography.headlineSmall
+                                style = MaterialTheme.typography.headlineSmall,
+                                color = Color.White
                             )
                             Text(
                                 text = currentState.habit.description ?: "",
-                                style = MaterialTheme.typography.bodyMedium
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color.White
                             )
                         }
                     }
@@ -109,7 +115,16 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Icon(Icons.Default.Star, contentDescription = null)
-                                Text("Streak ${currentState.statistics.currentStreak}")
+                                Text(
+                                    text = "Streak",
+                                    color = Color.Gray, fontSize = 12.sp
+                                )
+                                Text(
+                                    text = "${currentState.statistics.currentStreak}",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 20.sp
+                                )
+                                Text("дней", color = Color.Gray, fontSize = 12.sp)
                             }
                         }
                         Card() {
@@ -118,7 +133,13 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Icon(Icons.Default.Star, contentDescription = null)
-                                Text("best streak ${currentState.statistics.bestStreak}")
+                                Text("best streak", color = Color.Gray, fontSize = 12.sp)
+                                Text(
+                                    text = "${currentState.statistics.bestStreak}",
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text("дней", color = Color.Gray, fontSize = 12.sp)
                             }
                         }
                         Card() {
@@ -127,20 +148,36 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Icon(Icons.Default.Info, contentDescription = null)
+                                Text("Процент", color = Color.Gray, fontSize = 12.sp)
                                 Text(
-                                    "%.0f%%".format(
+                                    text = "%.0f%%".format(
                                         currentState.statistics.percentCompletion * 100
                                     )
                                 )
+                                Text("выполнения", color = Color.Gray, fontSize = 12.sp)
 
                             }
                         }
                     }
                     WeeklyProgressRow(weeklyEntries = currentState.weeklyEntries)
-                    Button(onClick = { viewModel.onToggleToday() }) {
+
+
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        onClick = { viewModel.onToggleToday() },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(currentState.habit.color.toColorInt())
+                        )
+                    ) {
                         Text(if (currentState.isTodayDone) "Снять отметку" else "Отметить сегодня")
                     }
-                    OutlinedButton(onClick = {viewModel.onNavigateToCalendar()}) {
+                    OutlinedButton(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        onClick = { viewModel.onNavigateToCalendar() }) {
                         Text("Открыть календарь")
                     }
                 }
@@ -168,6 +205,7 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
 fun WeeklyProgressRow(weeklyEntries: List<HabitEntry>) {
     val today = LocalDate.now()
     val days = (6 downTo 0).map { today.minusDays(it.toLong()) }
+    val daysNames = listOf("Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс")
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -180,12 +218,19 @@ fun WeeklyProgressRow(weeklyEntries: List<HabitEntry>) {
                 entry != null -> MaterialTheme.colorScheme.error
                 else -> MaterialTheme.colorScheme.outline
             }
-            Box(
-                modifier = Modifier
-                    .size(36.dp)
-                    .clip(CircleShape)
-                    .background(color)
-            )
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .background(color)
+                )
+                Text(
+                    text = daysNames[day.dayOfWeek.value - 1],
+                    fontSize = 10.sp,
+                    color = Color.Gray
+                )
+            }
         }
     }
 }

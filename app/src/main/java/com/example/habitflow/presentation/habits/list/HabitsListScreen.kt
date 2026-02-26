@@ -2,6 +2,7 @@ package com.example.habitflow.presentation.habits.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -32,7 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,7 +42,6 @@ import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.habitflow.R
 import com.example.habitflow.domain.model.Habit
 import com.example.habitflow.domain.model.RepeatType
 import com.example.habitflow.presentation.extensions.toDisplayName
@@ -59,6 +59,7 @@ fun HabitsListScreen(navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .background(Color(0xFFFAF8FF))
                 .padding(paddingValues)
         ) {
             when (state) {
@@ -73,13 +74,16 @@ fun HabitsListScreen(navController: NavController) {
                 }
 
                 is HabitsListUiState.Empty -> {
-                    Box(
+                    Column(
                         modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
-                        Text(stringResource(R.string.noHabits))
+                        Text("📋", fontSize = 48.sp)
+                        Spacer(Modifier.height(8.dp))
+                        Text("Нет привычек", fontWeight = FontWeight.SemiBold)
+                        Text("Создай первую привычку", color = Color.Gray)
                     }
-
                 }
 
                 is HabitsListUiState.Content -> {
@@ -105,7 +109,7 @@ fun HabitsListScreen(navController: NavController) {
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text("Ошибка")
-                            Button(onClick = {viewModel.loadHabits()}) {
+                            Button(onClick = { viewModel.loadHabits() }) {
                                 Text("Повторить")
                             }
                         }
@@ -116,7 +120,7 @@ fun HabitsListScreen(navController: NavController) {
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(16.dp),
-                containerColor = Color.Green,
+                containerColor = Color(0xFF6650A4),
                 onClick = { navController.navigate("create_habit") }) {
                 Icon(Icons.Default.Add, contentDescription = null)
             }
@@ -168,7 +172,12 @@ fun HabitItem(
             }
             Checkbox(
                 checked = isCompletedToday,
-                onCheckedChange = { onToggle(habit.id) })
+                onCheckedChange = { onToggle(habit.id) },
+                colors = CheckboxDefaults.colors(
+                    checkedColor = Color(habit.color.toColorInt()),
+                    uncheckedColor = Color.Gray
+                )
+            )
         }
     }
 

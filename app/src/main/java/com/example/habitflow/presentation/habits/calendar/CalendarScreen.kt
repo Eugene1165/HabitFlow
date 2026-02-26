@@ -28,6 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -66,7 +69,6 @@ fun CalendarScreen(habitId: Int, navController: NavController) {
             )
         }
     ) { paddingValues ->
-
         when (val currentState = state) {
             is CalendarUiState.Loading -> {
                 Box(
@@ -84,6 +86,7 @@ fun CalendarScreen(habitId: Int, navController: NavController) {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues)
+                        .background(Color(0xFFFAF8FF))
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -173,6 +176,7 @@ fun DayCell(
 
     Box(
         modifier = Modifier
+            .padding(4.dp)
             .clip(CircleShape)
             .clickable(enabled = isClickable) { onDayClick(day.date) }
             .background(backgroundColor),
@@ -213,8 +217,23 @@ fun CalendarContent(
         calendarState.animateScrollToMonth(yearMonth)
     }
 
+    val listOfWeekDay = listOf("Пн","Вт","Ср","Чт","Пт","Сб","Вс")
+
     HorizontalCalendar(
         state = calendarState,
+        monthHeader = {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                listOfWeekDay.forEach { day ->
+                    Text(
+                        text = day,
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center,
+                        color = Color.Gray,
+                        fontSize = 12.sp
+                    )
+                }
+            }
+        },
         dayContent = { day ->
             DayCell(
                 day = day,
