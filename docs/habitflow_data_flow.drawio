@@ -1,0 +1,747 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" version="21.0.0">
+  <diagram name="HabitFlow — Data Flow Architecture">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="2800" pageHeight="1960" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- ══════════════════════════════════════════════
+             ЗАГОЛОВОК
+        ══════════════════════════════════════════════ -->
+        <mxCell id="title" value="&lt;font style=&quot;font-size:20px;&quot;&gt;&lt;b&gt;HabitFlow — Архитектура загрузки и отображения данных&lt;/b&gt;&lt;/font&gt;"
+                style="text;html=1;align=center;strokeColor=none;fillColor=none;"
+                vertex="1" parent="1">
+          <mxGeometry x="50" y="10" width="2650" height="45" as="geometry"/>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════════
+             ЛЕГЕНДА
+        ══════════════════════════════════════════════ -->
+        <mxCell id="legend_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="2720" y="60" width="70" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_title" value="&lt;b&gt;ЛЕГЕНДА&lt;/b&gt;" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="2720" y="62" width="70" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_flow" value="" style="endArrow=block;endFill=1;strokeColor=#0050ef;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry x="2725" y="88" width="60" height="10" relative="1" as="geometry">
+            <Array as="points"/>
+            <mxPoint x="2725" y="88" as="sourcePoint"/>
+            <mxPoint x="2785" y="88" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend_flow_lbl" value="Flow (реактивный)" style="text;html=1;align=left;strokeColor=none;fillColor=none;fontSize=8;fontColor=#0050ef;" vertex="1" parent="1">
+          <mxGeometry x="2720" y="93" width="70" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_action" value="" style="endArrow=open;endFill=0;strokeColor=#cc4400;strokeWidth=2;dashed=1;" edge="1" parent="1">
+          <mxGeometry x="2725" y="115" width="60" height="10" relative="1" as="geometry">
+            <mxPoint x="2725" y="115" as="sourcePoint"/>
+            <mxPoint x="2785" y="115" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend_action_lbl" value="Action (suspend)" style="text;html=1;align=left;strokeColor=none;fillColor=none;fontSize=8;fontColor=#cc4400;" vertex="1" parent="1">
+          <mxGeometry x="2720" y="120" width="70" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_state" value="" style="endArrow=block;endFill=1;strokeColor=#007700;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry x="2725" y="142" width="60" height="10" relative="1" as="geometry">
+            <mxPoint x="2725" y="142" as="sourcePoint"/>
+            <mxPoint x="2785" y="142" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend_state_lbl" value="StateFlow → UI" style="text;html=1;align=left;strokeColor=none;fillColor=none;fontSize=8;fontColor=#007700;" vertex="1" parent="1">
+          <mxGeometry x="2720" y="147" width="70" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_nav" value="" style="endArrow=block;endFill=1;strokeColor=#9900cc;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry x="2725" y="169" width="60" height="10" relative="1" as="geometry">
+            <mxPoint x="2725" y="169" as="sourcePoint"/>
+            <mxPoint x="2785" y="169" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend_nav_lbl" value="Navigation / Event" style="text;html=1;align=left;strokeColor=none;fillColor=none;fontSize=8;fontColor=#9900cc;" vertex="1" parent="1">
+          <mxGeometry x="2720" y="174" width="70" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_auto" value="⚡ AUTO" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontSize=8;fontColor=#555555;" vertex="1" parent="1">
+          <mxGeometry x="2720" y="196" width="70" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_auto_lbl" value="Room → Flow → UI" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontSize=8;fontColor=#555555;" vertex="1" parent="1">
+          <mxGeometry x="2720" y="208" width="70" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_auto_lbl2" value="авто-обновление" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontSize=8;fontColor=#555555;" vertex="1" parent="1">
+          <mxGeometry x="2720" y="220" width="70" height="14" as="geometry"/>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════════
+             ФОНЫ СЛОЁВ
+        ══════════════════════════════════════════════ -->
+        <!-- Presentation Layer BG -->
+        <mxCell id="bg_pres" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;opacity=40;" vertex="1" parent="1">
+          <mxGeometry x="10" y="60" width="2700" height="540" as="geometry"/>
+        </mxCell>
+        <mxCell id="bg_pres_lbl" value="PRESENTATION LAYER — Jetpack Compose · ViewModel · StateFlow · Channel&lt;Event&gt;"
+                style="text;html=1;align=left;strokeColor=none;fillColor=none;fontColor=#023878;fontSize=12;fontStyle=1;"
+                vertex="1" parent="1">
+          <mxGeometry x="20" y="64" width="800" height="22" as="geometry"/>
+        </mxCell>
+
+        <!-- Domain Layer BG -->
+        <mxCell id="bg_dom" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;opacity=40;" vertex="1" parent="1">
+          <mxGeometry x="10" y="620" width="2700" height="460" as="geometry"/>
+        </mxCell>
+        <mxCell id="bg_dom_lbl" value="DOMAIN LAYER — Pure Kotlin · Use Cases · Repository Interfaces · Domain Models"
+                style="text;html=1;align=left;strokeColor=none;fillColor=none;fontColor=#1a5e20;fontSize=12;fontStyle=1;"
+                vertex="1" parent="1">
+          <mxGeometry x="20" y="624" width="800" height="22" as="geometry"/>
+        </mxCell>
+
+        <!-- Data Layer BG -->
+        <mxCell id="bg_data" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;opacity=40;" vertex="1" parent="1">
+          <mxGeometry x="10" y="1100" width="2700" height="440" as="geometry"/>
+        </mxCell>
+        <mxCell id="bg_data_lbl" value="DATA LAYER — Repository Implementations · Mappers · Room DAOs"
+                style="text;html=1;align=left;strokeColor=none;fillColor=none;fontColor=#7a5e00;fontSize=12;fontStyle=1;"
+                vertex="1" parent="1">
+          <mxGeometry x="20" y="1104" width="700" height="22" as="geometry"/>
+        </mxCell>
+
+        <!-- Database BG -->
+        <mxCell id="bg_db" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;opacity=40;" vertex="1" parent="1">
+          <mxGeometry x="10" y="1560" width="2700" height="360" as="geometry"/>
+        </mxCell>
+        <mxCell id="bg_db_lbl" value="ROOM DATABASE — SQLite · Реактивные Flow&lt;Entity&gt; · Автоматическое обновление UI"
+                style="text;html=1;align=left;strokeColor=none;fillColor=none;fontColor=#6d0000;fontSize=12;fontStyle=1;"
+                vertex="1" parent="1">
+          <mxGeometry x="20" y="1564" width="800" height="22" as="geometry"/>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════════
+             РАЗДЕЛИТЕЛИ КОЛОНОК
+        ══════════════════════════════════════════════ -->
+        <mxCell id="sep1" value="" style="line;strokeColor=#9999aa;fillColor=none;strokeWidth=1;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="682" y="60" width="10" height="1860" as="geometry"/>
+        </mxCell>
+        <mxCell id="sep2" value="" style="line;strokeColor=#9999aa;fillColor=none;strokeWidth=1;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1358" y="60" width="10" height="1860" as="geometry"/>
+        </mxCell>
+        <mxCell id="sep3" value="" style="line;strokeColor=#9999aa;fillColor=none;strokeWidth=1;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="2034" y="60" width="10" height="1860" as="geometry"/>
+        </mxCell>
+
+        <!-- Заголовки колонок -->
+        <mxCell id="ch1" value="① HabitsListScreen" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontSize=11;fontStyle=1;fontColor=#023878;" vertex="1" parent="1">
+          <mxGeometry x="20" y="62" width="650" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="ch2" value="② HabitInfoScreen" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontSize=11;fontStyle=1;fontColor=#023878;" vertex="1" parent="1">
+          <mxGeometry x="690" y="62" width="660" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="ch3" value="③ CalendarScreen" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontSize=11;fontStyle=1;fontColor=#023878;" vertex="1" parent="1">
+          <mxGeometry x="1365" y="62" width="660" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="ch4" value="④ CreateHabitScreen" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontSize=11;fontStyle=1;fontColor=#023878;" vertex="1" parent="1">
+          <mxGeometry x="2040" y="62" width="660" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════════
+             КОЛОНКА 1: HabitsListScreen
+        ══════════════════════════════════════════════ -->
+
+        <!-- Screen -->
+        <mxCell id="p_hl_screen" value="&lt;b&gt;HabitsListScreen&lt;/b&gt; (Compose)&lt;hr/&gt;• collectAsStateWithLifecycle(vm.state)&lt;br&gt;• LazyColumn → HabitItem (checkbox + title)&lt;br&gt;• FAB → CreateHabit&lt;br&gt;• onToggle(habitId) | onHabitClick(id)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="30" y="92" width="310" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- ViewModel -->
+        <mxCell id="p_hl_vm" value="&lt;b&gt;HabitsListViewModel&lt;/b&gt;&lt;hr/&gt;• state: StateFlow&lt;HabitsListUiState&gt;&lt;br&gt;• init { loadHabits() }  ← launchIn(scope)&lt;br&gt;• loadJob: Job? (отменяется при reload)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b3d4f5;strokeColor=#4a7cb8;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="360" y="92" width="300" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- UiState -->
+        <mxCell id="p_hl_state" value="&lt;b&gt;HabitsListUiState&lt;/b&gt; (sealed)&lt;hr/&gt;• Loading&lt;br&gt;• Empty&lt;br&gt;• Content(habits: List&lt;HabitWithStatus&gt;)&lt;br&gt;• Error(message: String)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f4fe;strokeColor=#6c8ebf;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="30" y="205" width="200" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitWithStatus -->
+        <mxCell id="p_hl_hwstatus" value="&lt;b&gt;HabitWithStatus&lt;/b&gt; (UI model)&lt;hr/&gt;• habit: Habit&lt;br&gt;• isCompletedToday: Boolean"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f4fe;strokeColor=#6c8ebf;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="245" y="205" width="200" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Combine pattern -->
+        <mxCell id="p_hl_combine" value="&lt;b&gt;Паттерн загрузки:&lt;/b&gt;&lt;hr/&gt;combine(&lt;br&gt;  getAllActiveHabitsUseCase(),   &lt;i&gt;Flow&lt;List&lt;Habit&gt;&gt;&lt;/i&gt;&lt;br&gt;  getEntriesForDateUseCase(today) &lt;i&gt;Flow&lt;List&lt;HabitEntry&gt;&gt;&lt;/i&gt;&lt;br&gt;) { habits, entries → habitsWithStatus }&lt;br&gt;.onEach { state.value = it }&lt;br&gt;.catch { state.value = Error }&lt;br&gt;.launchIn(viewModelScope)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cce5ff;strokeColor=#4a7cb8;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="460" y="205" width="200" height="125" as="geometry"/>
+        </mxCell>
+
+        <!-- Action: Toggle -->
+        <mxCell id="p_hl_toggle" value="⚡ &lt;b&gt;onToggle(habitId)&lt;/b&gt;&lt;hr/&gt;viewModelScope.launch {&lt;br&gt;  toggleHabitEntryUseCase(habitId, today)&lt;br&gt;} → Room UPDATE/INSERT&lt;br&gt;→ Flow re-emits автоматически&lt;br&gt;→ UI recompose"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6794c;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="30" y="330" width="310" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- Navigation -->
+        <mxCell id="p_hl_nav" value="🧭 &lt;b&gt;Navigation&lt;/b&gt;&lt;hr/&gt;→ CreateHabitScreen (FAB)&lt;br&gt;→ HabitInfoScreen(habitId) (тап)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8d5f5;strokeColor=#9900cc;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="360" y="330" width="290" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════════
+             КОЛОНКА 2: HabitInfoScreen
+        ══════════════════════════════════════════════ -->
+
+        <!-- Screen -->
+        <mxCell id="p_hi_screen" value="&lt;b&gt;HabitInfoScreen&lt;/b&gt; (Compose)&lt;hr/&gt;• collectAsStateWithLifecycle(vm.state)&lt;br&gt;• LaunchedEffect(vm.events) → navigation&lt;br&gt;• Карточки статистики: streak, best, %&lt;br&gt;• WeeklyProgressRow (7 кружков)&lt;br&gt;• Кнопка отметки / Архивировать / Календарь"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="700" y="92" width="310" height="110" as="geometry"/>
+        </mxCell>
+
+        <!-- ViewModel -->
+        <mxCell id="p_hi_vm" value="&lt;b&gt;HabitInfoViewModel&lt;/b&gt;&lt;hr/&gt;• habitId: Int (SavedStateHandle[&quot;habitId&quot;])&lt;br&gt;• state: StateFlow&lt;HabitInfoUiState&gt;&lt;br&gt;• events: Channel&lt;HabitInfoEvent&gt;&lt;br&gt;• init { loadHabit() }"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b3d4f5;strokeColor=#4a7cb8;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="1030" y="92" width="300" height="110" as="geometry"/>
+        </mxCell>
+
+        <!-- UiState -->
+        <mxCell id="p_hi_state" value="&lt;b&gt;HabitInfoUiState&lt;/b&gt; (sealed)&lt;hr/&gt;• Loading&lt;br&gt;• Content(&lt;br&gt;    habit: Habit,&lt;br&gt;    statistics: HabitStatistics,&lt;br&gt;    isTodayDone: Boolean,&lt;br&gt;    weeklyEntries: List&lt;HabitEntry&gt;&lt;br&gt;  )&lt;br&gt;• Error(message)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f4fe;strokeColor=#6c8ebf;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="700" y="220" width="200" height="145" as="geometry"/>
+        </mxCell>
+
+        <!-- Events -->
+        <mxCell id="p_hi_events" value="&lt;b&gt;HabitInfoEvent&lt;/b&gt; (sealed)&lt;hr/&gt;• NavigateBack&lt;br&gt;• NavigateToCalendar(habitId)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8d5f5;strokeColor=#9900cc;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="915" y="220" width="200" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Combine pattern -->
+        <mxCell id="p_hi_combine" value="&lt;b&gt;Паттерн загрузки:&lt;/b&gt;&lt;hr/&gt;loadHabit() → suspend getHabitByIdUseCase()&lt;br&gt;↓ habit: Habit (одноразово)&lt;br&gt;combine(&lt;br&gt;  getHabitsStatisticsUseCase(habitId),&lt;br&gt;  getEntriesForPeriodUseCase(id, -6d..today)&lt;br&gt;) { stats, entries → Content(...) }&lt;br&gt;.catch { Error }&lt;br&gt;.collect { state.value = it }"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cce5ff;strokeColor=#4a7cb8;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="1130" y="220" width="200" height="145" as="geometry"/>
+        </mxCell>
+
+        <!-- Actions -->
+        <mxCell id="p_hi_actions" value="⚡ &lt;b&gt;Actions:&lt;/b&gt;&lt;hr/&gt;• onToggleToday() → toggleHabitEntryUseCase(id, today)&lt;br&gt;• onArchive() → archiveHabitUseCase(id) → events.send(NavigateBack)&lt;br&gt;• onNavigateToCalendar() → events.send(NavigateToCalendar(id))"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6794c;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="700" y="380" width="630" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════════
+             КОЛОНКА 3: CalendarScreen
+        ══════════════════════════════════════════════ -->
+
+        <!-- Screen -->
+        <mxCell id="p_cal_screen" value="&lt;b&gt;CalendarScreen&lt;/b&gt; (Compose)&lt;hr/&gt;• collectAsStateWithLifecycle(vm.state)&lt;br&gt;• CalendarGrid(month, doneDates)&lt;br&gt;• Стрелки ← → для смены месяца&lt;br&gt;• Клик по дате → onDateToggled(date)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="1375" y="92" width="310" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- ViewModel -->
+        <mxCell id="p_cal_vm" value="&lt;b&gt;CalendarViewModel&lt;/b&gt;&lt;hr/&gt;• habitId: Int (SavedStateHandle)&lt;br&gt;• _yearMonth: MutableStateFlow&lt;YearMonth&gt;&lt;br&gt;• state: StateFlow&lt;CalendarUiState&gt;&lt;br&gt;• events: Channel&lt;CalendarEvent&gt;"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b3d4f5;strokeColor=#4a7cb8;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="1700" y="92" width="300" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- UiState -->
+        <mxCell id="p_cal_state" value="&lt;b&gt;CalendarUiState&lt;/b&gt; (sealed)&lt;hr/&gt;• Loading&lt;br&gt;• Content(&lt;br&gt;    habit: Habit,&lt;br&gt;    yearMonth: YearMonth,&lt;br&gt;    doneDates: Set&lt;LocalDate&gt;&lt;br&gt;  )&lt;br&gt;• Error(message)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f4fe;strokeColor=#6c8ebf;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="1375" y="210" width="200" height="130" as="geometry"/>
+        </mxCell>
+
+        <!-- CalendarEvent -->
+        <mxCell id="p_cal_event" value="&lt;b&gt;CalendarEvent&lt;/b&gt;&lt;hr/&gt;• NavigateBack"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8d5f5;strokeColor=#9900cc;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="1590" y="210" width="160" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- flatMapLatest pattern -->
+        <mxCell id="p_cal_flat" value="&lt;b&gt;Реактивный паттерн (ключевой):&lt;/b&gt;&lt;hr/&gt;_yearMonth&lt;br&gt;  .flatMapLatest { month →   ← отменяет пред. запрос!&lt;br&gt;    getEntriesForPeriodUseCase(&lt;br&gt;      id, month.atDay(1), month.atEndOfMonth()&lt;br&gt;    ).map { entries → month to entries }&lt;br&gt;  }&lt;br&gt;  .combine(habitFlow) { (month, entries), habit →&lt;br&gt;    Content(habit, month, entries.filter{isDone}.toSet())&lt;br&gt;  }&lt;br&gt;  .onEach { state.value = it }&lt;br&gt;  .launchIn(viewModelScope)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cce5ff;strokeColor=#4a7cb8;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="1768" y="210" width="232" height="200" as="geometry"/>
+        </mxCell>
+
+        <!-- Actions -->
+        <mxCell id="p_cal_actions" value="⚡ &lt;b&gt;Actions:&lt;/b&gt;&lt;hr/&gt;• onMonthChanged(ym) → _yearMonth.value = ym → flatMapLatest отменяет старый запрос и запускает новый&lt;br&gt;• onDateToggled(date) → toggleHabitEntryUseCase(habitId, date) → Room re-emits → UI обновляется"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6794c;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="1375" y="360" width="630" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════════
+             КОЛОНКА 4: CreateHabitScreen
+        ══════════════════════════════════════════════ -->
+
+        <!-- Screen -->
+        <mxCell id="p_cr_screen" value="&lt;b&gt;CreateHabitScreen&lt;/b&gt; (Compose)&lt;hr/&gt;• collectAsStateWithLifecycle(vm.state)&lt;br&gt;• Scaffold + SnackbarHost&lt;br&gt;• Поля: title, desc, color, repeat, target&lt;br&gt;• ExposedDropdown для RepeatType&lt;br&gt;• Кнопка Save (disabled при isSaving)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="2050" y="92" width="310" height="110" as="geometry"/>
+        </mxCell>
+
+        <!-- ViewModel -->
+        <mxCell id="p_cr_vm" value="&lt;b&gt;CreateHabitViewModel&lt;/b&gt;&lt;hr/&gt;• state: StateFlow&lt;CreateHabitUiState&gt;&lt;br&gt;• events: Channel&lt;CreateHabitEvent&gt;&lt;br&gt;• _state.update { it.copy(...) }"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b3d4f5;strokeColor=#4a7cb8;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="2375" y="92" width="300" height="110" as="geometry"/>
+        </mxCell>
+
+        <!-- UiState -->
+        <mxCell id="p_cr_state" value="&lt;b&gt;CreateHabitUiState&lt;/b&gt; (data class)&lt;hr/&gt;• title: String = &quot;&quot;&lt;br&gt;• description: String = &quot;&quot;&lt;br&gt;• color: String = &quot;#FF5733&quot;&lt;br&gt;• repeatType: RepeatType = Daily&lt;br&gt;• startDate: LocalDate = now()&lt;br&gt;• target: Int? = null&lt;br&gt;• reminder: LocalTime? = null&lt;br&gt;• isSaving: Boolean = false&lt;br&gt;• error: String? = null"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f4fe;strokeColor=#6c8ebf;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="2050" y="220" width="200" height="185" as="geometry"/>
+        </mxCell>
+
+        <!-- Event -->
+        <mxCell id="p_cr_event" value="&lt;b&gt;CreateHabitEvent&lt;/b&gt;&lt;hr/&gt;• NavigateToHabitsList"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8d5f5;strokeColor=#9900cc;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="2265" y="220" width="170" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Save flow -->
+        <mxCell id="p_cr_flow" value="&lt;b&gt;Паттерн сохранения:&lt;/b&gt;&lt;hr/&gt;onSave():&lt;br&gt;1. if (title.isBlank()) → error message&lt;br&gt;2. _state.update { isSaving = true }&lt;br&gt;3. addHabitUseCase(Habit(id=0, ...)&lt;br&gt;4. events.send(NavigateToHabitsList)&lt;br&gt;catch: _state.update { isSaving=false, error=msg }"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cce5ff;strokeColor=#4a7cb8;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="2450" y="220" width="230" height="185" as="geometry"/>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════════
+             DOMAIN LAYER: USE CASES
+        ══════════════════════════════════════════════ -->
+
+        <!-- GetAllActiveHabitsUseCase -->
+        <mxCell id="d_uc_getall" value="&lt;b&gt;GetAllActiveHabitsUseCase&lt;/b&gt;&lt;hr/&gt;operator fun invoke(): Flow&lt;List&lt;Habit&gt;&gt;&lt;br&gt;→ habitRepository.getAllActiveHabits()"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="30" y="655" width="300" height="75" as="geometry"/>
+        </mxCell>
+
+        <!-- GetEntriesForDateUseCase -->
+        <mxCell id="d_uc_entries_date" value="&lt;b&gt;GetEntriesForDateUseCase&lt;/b&gt;&lt;hr/&gt;operator fun invoke(date): Flow&lt;List&lt;HabitEntry&gt;&gt;&lt;br&gt;→ entryRepository.getEntriesForDate(date)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="345" y="655" width="300" height="75" as="geometry"/>
+        </mxCell>
+
+        <!-- GetHabitsStatisticsUseCase -->
+        <mxCell id="d_uc_stats" value="&lt;b&gt;GetHabitsStatisticsUseCase&lt;/b&gt; 🔥&lt;hr/&gt;operator fun invoke(habitId): Flow&lt;HabitStatistics&gt;&lt;br&gt;→ habitRepo.observeHabitById(id)&lt;br&gt;  .flatMapLatest { habit →&lt;br&gt;    entryRepo.getEntriesForPeriod(start=habit.startDate, end=today)&lt;br&gt;    .map { entries → calculateStatistics(habit, entries) }&lt;br&gt;  }&lt;br&gt;Методы: calculateDailyStreak() | calculateWeeklyDaysStreak()&lt;br&gt;        calculateWeeklyCountStreak() | calculatePercent()"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="700" y="648" width="390" height="140" as="geometry"/>
+        </mxCell>
+
+        <!-- GetEntriesForPeriodUseCase -->
+        <mxCell id="d_uc_period" value="&lt;b&gt;GetHabitEntriesForPeriodUseCase&lt;/b&gt;&lt;hr/&gt;operator fun invoke(id, start, end):&lt;br&gt;  Flow&lt;List&lt;HabitEntry&gt;&gt;&lt;br&gt;→ entryRepository.getEntriesForPeriod(...)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="1105" y="648" width="290" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- ToggleHabitEntryUseCase -->
+        <mxCell id="d_uc_toggle" value="&lt;b&gt;ToggleHabitEntryUseCase&lt;/b&gt; ⚠️&lt;hr/&gt;suspend operator fun invoke(habitId, date):&lt;br&gt;&lt;b&gt;ПРАВИЛО:&lt;/b&gt; if (date &gt; today) → Exception!&lt;br&gt;getEntryByDate(habitId, date)&lt;br&gt;• null → addEntry(isDone=true)&lt;br&gt;• exists → updateEntry(!isDone)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="1410" y="648" width="300" height="115" as="geometry"/>
+        </mxCell>
+
+        <!-- AddHabitUseCase -->
+        <mxCell id="d_uc_add" value="&lt;b&gt;AddHabitUseCase&lt;/b&gt;&lt;hr/&gt;suspend operator fun invoke(habit):&lt;br&gt;→ habitRepository.addHabit(habit)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="1725" y="648" width="230" height="75" as="geometry"/>
+        </mxCell>
+
+        <!-- ArchiveHabitUseCase -->
+        <mxCell id="d_uc_archive" value="&lt;b&gt;ArchiveHabitUseCase&lt;/b&gt;&lt;hr/&gt;suspend operator fun invoke(habitId):&lt;br&gt;→ habitRepository.archiveHabit(habitId)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="1970" y="648" width="240" height="75" as="geometry"/>
+        </mxCell>
+
+        <!-- GetHabitByIdUseCase -->
+        <mxCell id="d_uc_byid" value="&lt;b&gt;GetHabitByIdUseCase&lt;/b&gt;&lt;hr/&gt;suspend operator fun invoke(id): Habit?&lt;br&gt;→ habitRepository.getHabitById(id)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="2225" y="648" width="240" height="75" as="geometry"/>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════════
+             DOMAIN LAYER: REPOSITORY INTERFACES
+        ══════════════════════════════════════════════ -->
+
+        <!-- HabitRepository interface -->
+        <mxCell id="d_repo_habit" value="&lt;b&gt;HabitRepository&lt;/b&gt; (interface)&lt;hr/&gt;• getAllActiveHabits(): Flow&lt;List&lt;Habit&gt;&gt;&lt;br&gt;• getArchivedHabits(): Flow&lt;List&lt;Habit&gt;&gt;&lt;br&gt;• observeHabitById(id): Flow&lt;Habit?&gt;&lt;br&gt;• suspend getHabitById(id): Habit?&lt;br&gt;• suspend addHabit(habit)&lt;br&gt;• suspend updateHabit(habit)&lt;br&gt;• suspend archiveHabit(id)&lt;br&gt;• suspend restoreHabit(id)&lt;br&gt;• suspend deleteHabit(id)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c5;strokeColor=#5c9e55;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="30" y="810" width="320" height="195" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitEntryRepository interface -->
+        <mxCell id="d_repo_entry" value="&lt;b&gt;HabitEntryRepository&lt;/b&gt; (interface)&lt;hr/&gt;• getEntriesForHabit(id): Flow&lt;List&lt;HabitEntry&gt;&gt;&lt;br&gt;• getEntriesForPeriod(id, start, end): Flow&lt;&gt;&lt;br&gt;• getEntriesForDate(date): Flow&lt;List&lt;HabitEntry&gt;&gt;&lt;br&gt;• suspend addEntry(entry)&lt;br&gt;• suspend updateEntry(id, date, isDone)&lt;br&gt;• suspend getEntryByDate(id, date): HabitEntry?"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c5;strokeColor=#5c9e55;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="370" y="810" width="340" height="165" as="geometry"/>
+        </mxCell>
+
+        <!-- Domain Models: Habit -->
+        <mxCell id="d_model_habit" value="&lt;b&gt;Habit&lt;/b&gt; (domain model)&lt;hr/&gt;id: Int&lt;br&gt;title: String&lt;br&gt;description: String?&lt;br&gt;color: String (Hex)&lt;br&gt;startDate: LocalDate&lt;br&gt;repeatType: RepeatType&lt;br&gt;reminder: LocalTime?&lt;br&gt;target: Int?&lt;br&gt;isArchived: Boolean"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e1;strokeColor=#82b366;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="730" y="810" width="185" height="190" as="geometry"/>
+        </mxCell>
+
+        <!-- Domain Models: HabitEntry -->
+        <mxCell id="d_model_entry" value="&lt;b&gt;HabitEntry&lt;/b&gt;&lt;hr/&gt;id: Int&lt;br&gt;habitId: Int (FK)&lt;br&gt;date: LocalDate&lt;br&gt;isDone: Boolean"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e1;strokeColor=#82b366;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="930" y="810" width="165" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- Domain Models: RepeatType -->
+        <mxCell id="d_model_repeat" value="&lt;b&gt;RepeatType&lt;/b&gt; (sealed)&lt;hr/&gt;• Daily&lt;br&gt;• WeeklyDays(days: List&lt;DayOfWeek&gt;)&lt;br&gt;• WeeklyCount(count: Int)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e1;strokeColor=#82b366;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="1110" y="810" width="220" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Domain Models: HabitStatistics -->
+        <mxCell id="d_model_stats" value="&lt;b&gt;HabitStatistics&lt;/b&gt;&lt;hr/&gt;currentStreak: Int&lt;br&gt;bestStreak: Int&lt;br&gt;percentCompletion: Float"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e1;strokeColor=#82b366;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="1345" y="810" width="200" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- UserPreferencesRepository -->
+        <mxCell id="d_repo_prefs" value="&lt;b&gt;UserPreferencesRepository&lt;/b&gt;&lt;hr/&gt;• isOnBoardingCompleted(): Flow&lt;Boolean&gt;&lt;br&gt;• suspend setOnBoardingCompleted()"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c5;strokeColor=#5c9e55;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="1560" y="810" width="280" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════════
+             DATA LAYER: REPOSITORY IMPLEMENTATIONS
+        ══════════════════════════════════════════════ -->
+
+        <!-- HabitRepositoryImpl -->
+        <mxCell id="da_repo_habit" value="&lt;b&gt;HabitRepositoryImpl&lt;/b&gt;&lt;hr/&gt;@Inject constructor(dao: HabitDao, mapper: HabitMapper)&lt;br&gt;getAllActiveHabits():&lt;br&gt;  dao.getAllActiveHabits()&lt;br&gt;  .map { list → list.map(mapper::toHabit) }&lt;br&gt;addHabit(habit):&lt;br&gt;  dao.addHabit(mapper.toEntity(habit))"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;align=left;verticalAlign=top;fontStyle=1;"
+                vertex="1" parent="1">
+          <mxGeometry x="30" y="1130" width="340" height="150" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitEntryRepositoryImpl -->
+        <mxCell id="da_repo_entry" value="&lt;b&gt;HabitEntryRepositoryImpl&lt;/b&gt;&lt;hr/&gt;@Inject constructor(dao: HabitEntryDao, mapper: HabitEntryMapper)&lt;br&gt;getEntriesForPeriod(id, start, end):&lt;br&gt;  dao.getEntriesForPeriod(id, start.toString(), end.toString())&lt;br&gt;  .map { list → list.map(mapper::toEntry) }&lt;br&gt;addEntry(entry): dao.addEntry(mapper.toEntity(entry))"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;align=left;verticalAlign=top;fontStyle=1;"
+                vertex="1" parent="1">
+          <mxGeometry x="390" y="1130" width="380" height="150" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitMapper -->
+        <mxCell id="da_mapper_habit" value="&lt;b&gt;HabitMapper&lt;/b&gt;&lt;hr/&gt;mapHabitEntityToHabit(entity) → Habit:&lt;br&gt;• repeatType: String → sealed RepeatType&lt;br&gt;• repeatDays: &quot;MON,WED&quot; → List&lt;DayOfWeek&gt;&lt;br&gt;• startDate: String → LocalDate&lt;br&gt;• reminder: String? → LocalTime?&lt;br&gt;mapHabitToHabitEntity(habit) → Entity:&lt;br&gt;• RepeatType → String + repeatDays String"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe9b3;strokeColor=#c8a000;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="30" y="1300" width="340" height="170" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitEntryMapper -->
+        <mxCell id="da_mapper_entry" value="&lt;b&gt;HabitEntryMapper&lt;/b&gt;&lt;hr/&gt;mapEntityToEntry(entity) → HabitEntry:&lt;br&gt;• date: String → LocalDate&lt;br&gt;mapEntryToEntity(entry) → Entity:&lt;br&gt;• date: LocalDate → String (ISO)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe9b3;strokeColor=#c8a000;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="390" y="1300" width="280" height="110" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitDao -->
+        <mxCell id="da_dao_habit" value="&lt;b&gt;HabitDao&lt;/b&gt; (@Dao)&lt;hr/&gt;@Query getAllActiveHabits(): Flow&lt;List&lt;HabitEntity&gt;&gt;&lt;br&gt;@Query getArchivedHabits(): Flow&lt;&gt;&lt;br&gt;@Query observeHabitById(id): Flow&lt;HabitEntity?&gt;&lt;br&gt;@Query getHabitById(id): HabitEntity? (suspend)&lt;br&gt;@Insert addHabit(entity) (suspend)&lt;br&gt;@Update updateHabit(entity) (suspend)&lt;br&gt;@Query archiveHabit(id) → UPDATE isArchived=1&lt;br&gt;@Query deleteHabit(id) → DELETE"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6794c;fontSize=10;align=left;verticalAlign=top;fontStyle=1;"
+                vertex="1" parent="1">
+          <mxGeometry x="800" y="1130" width="340" height="195" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitEntryDao -->
+        <mxCell id="da_dao_entry" value="&lt;b&gt;HabitEntryDao&lt;/b&gt; (@Dao)&lt;hr/&gt;@Query getEntriesForHabit(id): Flow&lt;&gt;&lt;br&gt;@Query getEntriesForPeriod(id,start,end): Flow&lt;&gt;&lt;br&gt;@Query getEntriesForDate(date): Flow&lt;&gt;&lt;br&gt;@Query getEntryByDate(id,date): HabitEntryEntity?&lt;br&gt;@Insert addEntry(entity) (suspend)&lt;br&gt;@Query updateEntry(id,date,isDone) (suspend)&lt;br&gt;   → UPDATE habit_entries SET isDone=?"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6794c;fontSize=10;align=left;verticalAlign=top;fontStyle=1;"
+                vertex="1" parent="1">
+          <mxGeometry x="1160" y="1130" width="340" height="195" as="geometry"/>
+        </mxCell>
+
+        <!-- DI Info -->
+        <mxCell id="da_di" value="&lt;b&gt;Hilt DI&lt;/b&gt; (инъекции зависимостей)&lt;hr/&gt;&lt;b&gt;RepositoryModule:&lt;/b&gt;&lt;br&gt;@Binds HabitRepository → HabitRepositoryImpl&lt;br&gt;@Binds HabitEntryRepository → HabitEntryRepositoryImpl&lt;br&gt;&lt;br&gt;&lt;b&gt;DatabaseModule:&lt;/b&gt;&lt;br&gt;@Provides HabitDatabase (Singleton)&lt;br&gt;@Provides HabitDao = db.habitDao()&lt;br&gt;@Provides HabitEntryDao = db.habitEntryDao()"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0e6ff;strokeColor=#9900cc;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="1520" y="1130" width="340" height="195" as="geometry"/>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════════
+             ROOM DATABASE
+        ══════════════════════════════════════════════ -->
+
+        <!-- HabitDatabase -->
+        <mxCell id="db_database" value="&lt;b&gt;HabitDatabase&lt;/b&gt;&lt;hr/&gt;@Database(entities=[HabitEntity, HabitEntryEntity], version=1)&lt;br&gt;abstract class extends RoomDatabase&lt;br&gt;Room.databaseBuilder(context, &quot;habit_database&quot;)"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;align=left;verticalAlign=top;fontStyle=1;"
+                vertex="1" parent="1">
+          <mxGeometry x="30" y="1595" width="370" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitEntity / TABLE: habits -->
+        <mxCell id="db_table_habits" value="&lt;b&gt;TABLE: habits&lt;/b&gt; (HabitEntity)&lt;hr/&gt;id           INTEGER PK AUTOINCREMENT&lt;br&gt;title        TEXT NOT NULL&lt;br&gt;description  TEXT&lt;br&gt;startDate    TEXT (ISO: &quot;2024-01-15&quot;)&lt;br&gt;color        TEXT (&quot;#FF5733&quot;)&lt;br&gt;isArchived   INTEGER (0/1)&lt;br&gt;repeatType   TEXT (&quot;DAILY&quot;/&quot;WEEKLY_DAYS&quot;/&quot;WEEKLY_COUNT&quot;)&lt;br&gt;repeatDays   TEXT (&quot;MON,WED,FRI&quot;)&lt;br&gt;repeatCount  INTEGER&lt;br&gt;reminder     TEXT (ISO LocalTime)&lt;br&gt;target       INTEGER"
+                style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffd7d7;strokeColor=#b85450;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="420" y="1595" width="340" height="285" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitEntryEntity / TABLE: habit_entries -->
+        <mxCell id="db_table_entries" value="&lt;b&gt;TABLE: habit_entries&lt;/b&gt; (HabitEntryEntity)&lt;hr/&gt;id       INTEGER PK AUTOINCREMENT&lt;br&gt;habitId  INTEGER NOT NULL&lt;br&gt;         FK(habits.id) ON DELETE CASCADE&lt;br&gt;         INDEX for fast lookup&lt;br&gt;date     TEXT (ISO: &quot;2024-01-15&quot;)&lt;br&gt;isDone   INTEGER (0/1)"
+                style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffd7d7;strokeColor=#b85450;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="780" y="1595" width="340" height="170" as="geometry"/>
+        </mxCell>
+
+        <!-- Room Reactive note -->
+        <mxCell id="db_reactive_note" value="⚡ &lt;b&gt;Room Реактивность&lt;/b&gt;&lt;hr/&gt;Любое INSERT/UPDATE/DELETE&lt;br&gt;автоматически вызывает&lt;br&gt;повторную эмиссию всех&lt;br&gt;активных Flow запросов к&lt;br&gt;затронутым таблицам.&lt;br&gt;&lt;br&gt;Это ключевой механизм&lt;br&gt;offline-first архитектуры!"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;align=left;verticalAlign=top;fontStyle=1;"
+                vertex="1" parent="1">
+          <mxGeometry x="1140" y="1595" width="240" height="180" as="geometry"/>
+        </mxCell>
+
+        <!-- Offline-first note -->
+        <mxCell id="db_offline_note" value="🌐 &lt;b&gt;Offline-First принцип&lt;/b&gt;&lt;hr/&gt;• UI ВСЕГДА читает из Room&lt;br&gt;• Retrofit используется ТОЛЬКО&lt;br&gt;  для синхронизации с сервером&lt;br&gt;• ViewModel НЕ знает о сети&lt;br&gt;• При конфликте: побеждает&lt;br&gt;  последнее изменение&lt;br&gt;• Приложение работоспособно&lt;br&gt;  без интернета полностью"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e1;strokeColor=#5c9e55;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="1400" y="1595" width="240" height="200" as="geometry"/>
+        </mxCell>
+
+        <!-- Business rules note -->
+        <mxCell id="db_rules_note" value="📜 &lt;b&gt;Бизнес-правила (UseCase)&lt;/b&gt;&lt;hr/&gt;• Нельзя отметить будущие даты&lt;br&gt;• Streak Daily: прерывается при пропуске&lt;br&gt;• Streak WeeklyDays: только активные дни&lt;br&gt;• Streak WeeklyCount: по итогу недели&lt;br&gt;• % = выполненные / активные дни&lt;br&gt;• Архив: скрыт из активных, статистика сохраняется&lt;br&gt;• Смена расписания не ломает прошлую статистику"
+                style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;align=left;verticalAlign=top;"
+                vertex="1" parent="1">
+          <mxGeometry x="1660" y="1595" width="360" height="200" as="geometry"/>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════════
+             FLOW ARROWS: PRESENTATION → DOMAIN
+        ══════════════════════════════════════════════ -->
+
+        <!-- HabitsList: Screen → ViewModel (StateFlow) -->
+        <mxCell id="e_hl_sv" value="collectAsStateWithLifecycle()" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#007700;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="p_hl_vm" target="p_hl_screen" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitsList: ViewModel → GetAllActiveHabitsUseCase -->
+        <mxCell id="e_hl_uc1" value="invoke() → Flow" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#0050ef;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="p_hl_vm" target="d_uc_getall" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitsList: ViewModel → GetEntriesForDateUseCase -->
+        <mxCell id="e_hl_uc2" value="invoke(today)" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#0050ef;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="p_hl_vm" target="d_uc_entries_date" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitsList: onToggle → ToggleHabitEntryUseCase -->
+        <mxCell id="e_hl_toggle" value="onToggle() suspend" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#cc4400;strokeWidth=2;dashed=1;fontSize=8;endArrow=open;endFill=0;" edge="1" source="p_hl_toggle" target="d_uc_toggle" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitInfo: ViewModel → GetHabitsStatisticsUseCase -->
+        <mxCell id="e_hi_uc_stats" value="invoke(habitId)" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#0050ef;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="p_hi_vm" target="d_uc_stats" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitInfo: ViewModel → GetEntriesForPeriodUseCase -->
+        <mxCell id="e_hi_uc_period" value="invoke(id,-6d..today)" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#0050ef;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="p_hi_vm" target="d_uc_period" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitInfo: ViewModel → GetHabitByIdUseCase -->
+        <mxCell id="e_hi_uc_byid" value="suspend invoke(id)" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#cc4400;strokeWidth=2;dashed=1;fontSize=8;endArrow=open;endFill=0;" edge="1" source="p_hi_vm" target="d_uc_byid" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitInfo: ArchiveAction → ArchiveUseCase -->
+        <mxCell id="e_hi_archive" value="onArchive()" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#cc4400;strokeWidth=2;dashed=1;fontSize=8;endArrow=open;endFill=0;" edge="1" source="p_hi_actions" target="d_uc_archive" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitInfo StateFlow → Screen -->
+        <mxCell id="e_hi_sv" value="StateFlow → collectAsStateWithLifecycle" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#007700;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="p_hi_vm" target="p_hi_screen" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Calendar: ViewModel → GetHabitByIdUseCase -->
+        <mxCell id="e_cal_byid" value="habitFlow" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#cc4400;strokeWidth=2;dashed=1;fontSize=8;endArrow=open;endFill=0;" edge="1" source="p_cal_vm" target="d_uc_byid" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Calendar: ViewModel → GetEntriesForPeriod -->
+        <mxCell id="e_cal_period" value="flatMapLatest(month)" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#0050ef;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="p_cal_vm" target="d_uc_period" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Calendar StateFlow → Screen -->
+        <mxCell id="e_cal_sv" value="StateFlow → UI" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#007700;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="p_cal_vm" target="p_cal_screen" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- CreateHabit: onSave → AddHabitUseCase -->
+        <mxCell id="e_cr_add" value="onSave() suspend" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#cc4400;strokeWidth=2;dashed=1;fontSize=8;endArrow=open;endFill=0;" edge="1" source="p_cr_flow" target="d_uc_add" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- CreateHabit StateFlow → Screen -->
+        <mxCell id="e_cr_sv" value="StateFlow → UI" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#007700;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="p_cr_vm" target="p_cr_screen" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════════
+             FLOW ARROWS: DOMAIN → DATA
+        ══════════════════════════════════════════════ -->
+
+        <!-- GetAllActiveHabitsUseCase → HabitRepository interface -->
+        <mxCell id="e_uc_repo_habit1" value="getAllActiveHabits()" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#0050ef;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="d_uc_getall" target="d_repo_habit" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- GetEntriesForDate → HabitEntryRepository -->
+        <mxCell id="e_uc_repo_entry1" value="getEntriesForDate()" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#0050ef;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="d_uc_entries_date" target="d_repo_entry" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- GetHabitsStatisticsUseCase → HabitRepository + HabitEntryRepository -->
+        <mxCell id="e_stats_repo" value="observeHabitById() + getEntriesForPeriod()" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#0050ef;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="d_uc_stats" target="d_repo_entry" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- GetEntriesForPeriod → HabitEntryRepository -->
+        <mxCell id="e_period_repo" value="getEntriesForPeriod()" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#0050ef;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="d_uc_period" target="d_repo_entry" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ToggleHabitEntryUseCase → HabitEntryRepository -->
+        <mxCell id="e_toggle_repo" value="getEntryByDate() + add/update" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#cc4400;strokeWidth=2;dashed=1;fontSize=8;endArrow=open;endFill=0;" edge="1" source="d_uc_toggle" target="d_repo_entry" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- AddHabitUseCase → HabitRepository -->
+        <mxCell id="e_add_repo" value="addHabit()" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#cc4400;strokeWidth=2;dashed=1;fontSize=8;endArrow=open;endFill=0;" edge="1" source="d_uc_add" target="d_repo_habit" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ArchiveHabitUseCase → HabitRepository -->
+        <mxCell id="e_archive_repo" value="archiveHabit(id)" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#cc4400;strokeWidth=2;dashed=1;fontSize=8;endArrow=open;endFill=0;" edge="1" source="d_uc_archive" target="d_repo_habit" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════════
+             FLOW ARROWS: DATA INTERFACES → IMPLEMENTATIONS
+        ══════════════════════════════════════════════ -->
+
+        <!-- HabitRepository → HabitRepositoryImpl -->
+        <mxCell id="e_repo_impl_habit" value="@Binds (Hilt)" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#9900cc;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="d_repo_habit" target="da_repo_habit" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitEntryRepository → HabitEntryRepositoryImpl -->
+        <mxCell id="e_repo_impl_entry" value="@Binds (Hilt)" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#9900cc;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="d_repo_entry" target="da_repo_entry" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════════
+             FLOW ARROWS: REPO IMPLS → DAOs + MAPPERS
+        ══════════════════════════════════════════════ -->
+
+        <!-- HabitRepositoryImpl → HabitMapper -->
+        <mxCell id="e_impl_mapper_habit" value="map entity ↔ domain" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#c8a000;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="da_repo_habit" target="da_mapper_habit" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitRepositoryImpl → HabitDao -->
+        <mxCell id="e_impl_dao_habit" value="DAO calls" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#d6794c;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="da_repo_habit" target="da_dao_habit" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitEntryRepositoryImpl → HabitEntryMapper -->
+        <mxCell id="e_impl_mapper_entry" value="map entity ↔ domain" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#c8a000;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="da_repo_entry" target="da_mapper_entry" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitEntryRepositoryImpl → HabitEntryDao -->
+        <mxCell id="e_impl_dao_entry" value="DAO calls" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#d6794c;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="da_repo_entry" target="da_dao_entry" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════════
+             FLOW ARROWS: DAOs → ROOM DB
+        ══════════════════════════════════════════════ -->
+
+        <!-- HabitDao → HabitDatabase (SQL) -->
+        <mxCell id="e_dao_db_habit" value="SQL queries" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b85450;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="da_dao_habit" target="db_table_habits" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitEntryDao → habit_entries table -->
+        <mxCell id="e_dao_db_entry" value="SQL queries" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b85450;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="da_dao_entry" target="db_table_entries" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Room DB reactive emit back up -->
+        <mxCell id="e_db_reactive" value="⚡ Flow re-emit (авто)" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#007700;strokeWidth=3;dashed=1;fontSize=9;endArrow=block;endFill=1;entryX=1;entryY=0.5;exitX=1;exitY=0.5;" edge="1" source="db_table_habits" target="da_dao_habit" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1200" y="1688"/>
+              <mxPoint x="1200" y="1228"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════════
+             NAVIGATION FLOW (между экранами)
+        ══════════════════════════════════════════════ -->
+
+        <!-- HabitsList → HabitInfo (тап) -->
+        <mxCell id="nav_hl_hi" value="→ habit_info/{habitId}" style="edgeStyle=elbowEdgeStyle;strokeColor=#9900cc;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="p_hl_nav" target="p_hi_screen" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitsList → CreateHabit (FAB) -->
+        <mxCell id="nav_hl_cr" value="→ create_habit (FAB)" style="edgeStyle=elbowEdgeStyle;strokeColor=#9900cc;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="p_hl_nav" target="p_cr_screen" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitInfo → Calendar -->
+        <mxCell id="nav_hi_cal" value="→ calendar/{habitId}" style="edgeStyle=elbowEdgeStyle;strokeColor=#9900cc;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;" edge="1" source="p_hi_events" target="p_cal_screen" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- HabitInfo → Back -->
+        <mxCell id="nav_hi_back" value="NavigateBack" style="edgeStyle=elbowEdgeStyle;strokeColor=#9900cc;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;dashed=1;" edge="1" source="p_hi_events" target="p_hl_screen" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- CreateHabit → Back (after save) -->
+        <mxCell id="nav_cr_back" value="NavigateToHabitsList" style="edgeStyle=elbowEdgeStyle;strokeColor=#9900cc;strokeWidth=2;fontSize=8;endArrow=block;endFill=1;dashed=1;" edge="1" source="p_cr_event" target="p_hl_screen" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

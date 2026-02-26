@@ -39,7 +39,7 @@ fun HostNavGraph(navController: NavHostController) {
             arguments = listOf(navArgument("habitId") {type = NavType.IntType})
         ) { backStackEntry ->
             val habitId = backStackEntry.arguments?.getInt("habitId") ?: return@composable
-            CalendarScreen(habitId = habitId)
+            CalendarScreen(habitId = habitId,navController)
         }
     }
 }

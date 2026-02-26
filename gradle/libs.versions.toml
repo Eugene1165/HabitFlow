@@ -18,6 +18,8 @@ gson = "2.11.0"
 kaspresso = "1.5.4"
 ksp = "2.0.21-1.0.28"
 datastoreCore = "1.2.0"
+kizitonwose-calendar = "2.6.2"
+
 
 
 [libraries]
@@ -59,6 +61,9 @@ kaspresso = { group = "com.kaspersky.android-components", name = "kaspresso", ve
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.2.0" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastoreCore" }
+
+kizitonwose-calendar-compose = { group = "com.kizitonwose.calendar", name = "compose", version.ref ="kizitonwose-calendar" }
+
 
 
 
