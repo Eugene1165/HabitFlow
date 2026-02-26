@@ -3,10 +3,14 @@ package com.example.habitflow.presentation.habits.create
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -18,6 +22,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -29,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -83,22 +89,32 @@ fun CreateHabitScreen(navController: NavController) {
     ) { paddingValues ->
         Column(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(scrollState),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             TextField(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 value = state.title,
                 onValueChange = { viewModel.onTitleChanged(it) },
                 label = { Text("Название") }
             )
+            Spacer(Modifier.height(8.dp))
             TextField(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 value = state.description,
                 onValueChange = { viewModel.onDescriptionChanged(it) },
                 label = { Text("Описание") }
             )
+            Spacer(Modifier.height(8.dp))
             Text("Цвет", modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+            Spacer(Modifier.height(8.dp))
             SetColor(
                 selectedColor = state.color,
                 colors = listOf(
@@ -111,16 +127,23 @@ fun CreateHabitScreen(navController: NavController) {
                     "#E91E63",
                     "#607D8B"
                 ),
-                onColorSelected = {viewModel.onColorChanged(it)}
+                onColorSelected = { viewModel.onColorChanged(it) }
             )
+            Spacer(Modifier.height(8.dp))
             TextField(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 value = state.target?.toString() ?: "",
                 readOnly = false,
                 onValueChange = { viewModel.onTargetChanged(it.toIntOrNull()) },
                 label = { Text("Цель") }
             )
+            Spacer(Modifier.height(8.dp))
             ExposedDropdownMenuBox(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 expanded = expanded,
                 onExpandedChange = { expanded = it }
             ) {
@@ -172,12 +195,17 @@ fun CreateHabitScreen(navController: NavController) {
 
                 RepeatType.Daily -> {}
             }
+            Spacer(Modifier.height(8.dp))
             TextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 value = state.reminder?.toString() ?: "",
                 onValueChange = {},
                 readOnly = true,
                 label = { Text("Напоминание") }
             )
+            Spacer(Modifier.height(8.dp))
             Button(
                 modifier = Modifier
                     .fillMaxWidth()

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -105,29 +106,29 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
                             )
                         }
                     }
+                    Spacer(Modifier.height(16.dp))
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Card() {
+                        Card(modifier = Modifier.weight(1f)) {
                             Column(
                                 modifier = Modifier.padding(16.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Icon(Icons.Default.Star, contentDescription = null)
-                                Text(
-                                    text = "Streak",
-                                    color = Color.Gray, fontSize = 12.sp
-                                )
+                                Text(text = "Streak", color = Color.Gray, fontSize = 12.sp)
                                 Text(
                                     text = "${currentState.statistics.currentStreak}",
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 20.sp
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold
                                 )
                                 Text("дней", color = Color.Gray, fontSize = 12.sp)
                             }
                         }
-                        Card() {
+                        Card(modifier = Modifier.weight(1f)) {
                             Column(
                                 modifier = Modifier.padding(16.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
@@ -142,7 +143,7 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
                                 Text("дней", color = Color.Gray, fontSize = 12.sp)
                             }
                         }
-                        Card() {
+                        Card(modifier = Modifier.weight(1f)) {
                             Column(
                                 modifier = Modifier.padding(16.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
@@ -152,16 +153,18 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
                                 Text(
                                     text = "%.0f%%".format(
                                         currentState.statistics.percentCompletion * 100
-                                    )
+                                    ),
+                                    fontWeight = FontWeight.Bold
                                 )
-                                Text("выполнения", color = Color.Gray, fontSize = 12.sp)
-
+                                Text("выполнения", color = Color.Gray, fontSize = 11.sp)
                             }
                         }
                     }
-                    WeeklyProgressRow(weeklyEntries = currentState.weeklyEntries)
-
-
+                    Spacer(Modifier.height(16.dp))
+                    WeeklyProgressRow(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        weeklyEntries = currentState.weeklyEntries)
+                    Spacer(Modifier.height(16.dp))
                     Button(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -202,13 +205,13 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
 }
 
 @Composable
-fun WeeklyProgressRow(weeklyEntries: List<HabitEntry>) {
+fun WeeklyProgressRow(modifier: Modifier,weeklyEntries: List<HabitEntry>) {
     val today = LocalDate.now()
     val days = (6 downTo 0).map { today.minusDays(it.toLong()) }
     val daysNames = listOf("Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс")
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         days.forEach { day ->
