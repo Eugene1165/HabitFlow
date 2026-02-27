@@ -10,7 +10,8 @@ sealed class HabitInfoUiState() {
         val habit: Habit,
         val statistics: HabitStatistics,
         val isTodayDone: Boolean,
-        val weeklyEntries: List<HabitEntry>
+        val weeklyEntries: List<HabitEntry>,
+        val editingHabit: Habit?
     ) : HabitInfoUiState()
     data class Error(val message: String) : HabitInfoUiState()
 }
