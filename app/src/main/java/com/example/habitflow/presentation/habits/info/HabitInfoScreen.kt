@@ -11,14 +11,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -61,12 +65,21 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
         }
     }
 
+    val scrollState = rememberScrollState()
+
     Scaffold(
         topBar = {
             HabitFlowTopBar(
                 title = "Привычка №$habitId",
                 onBackClick = { navController.popBackStack() }
             )
+        },
+        floatingActionButton = {
+            if (state is HabitInfoUiState.Content) {
+                FloatingActionButton(onClick = { navController.navigate("create_habit?habitId=$habitId") }) {
+                    Icon(Icons.Default.Edit, contentDescription = null)
+                }
+            }
         }
     ) { paddingValues ->
         when (val currentState = state) {
@@ -84,12 +97,13 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues)
+                        .verticalScroll(scrollState)
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(120.dp)
-                            .background(Color(android.graphics.Color.parseColor(currentState.habit.color)))
+                            .background(Color(currentState.habit.color.toColorInt()))
                     ) {
                         Column(
                             modifier = Modifier.padding(16.dp)
@@ -163,7 +177,8 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
                     Spacer(Modifier.height(16.dp))
                     WeeklyProgressRow(
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        weeklyEntries = currentState.weeklyEntries)
+                        weeklyEntries = currentState.weeklyEntries
+                    )
                     Spacer(Modifier.height(16.dp))
                     Button(
                         modifier = Modifier
@@ -180,7 +195,8 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
-                        onClick = { viewModel.onNavigateToCalendar() }) {
+                        onClick = { viewModel.onNavigateToCalendar() }
+                    ) {
                         Text("Открыть календарь")
                     }
                 }
@@ -205,7 +221,7 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
 }
 
 @Composable
-fun WeeklyProgressRow(modifier: Modifier,weeklyEntries: List<HabitEntry>) {
+fun WeeklyProgressRow(modifier: Modifier, weeklyEntries: List<HabitEntry>) {
     val today = LocalDate.now()
     val days = (6 downTo 0).map { today.minusDays(it.toLong()) }
     val daysNames = listOf("Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс")

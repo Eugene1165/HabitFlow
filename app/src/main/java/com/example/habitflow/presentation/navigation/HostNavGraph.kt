@@ -31,15 +31,24 @@ fun HostNavGraph(navController: NavHostController) {
             val habitId = backStackEntry.arguments?.getInt("habitId") ?: return@composable
             HabitInfoScreen(habitId = habitId, navController = navController)
         }
-        composable("create_habit") {
-            CreateHabitScreen(navController = navController)
+        composable(
+            route = "create_habit?habitId={habitId}",
+            arguments = listOf(
+                navArgument("habitId") {
+                    type = NavType.IntType
+                    defaultValue = -1
+                }
+            )
+        ) { backStackEntry ->
+            val habitId = backStackEntry.arguments?.getInt("habitId")?.takeIf { it != -1 }
+            CreateHabitScreen(habitId=habitId,navController=navController,)
         }
         composable(
             route = "calendar/{habitId}",
-            arguments = listOf(navArgument("habitId") {type = NavType.IntType})
+            arguments = listOf(navArgument("habitId") { type = NavType.IntType })
         ) { backStackEntry ->
             val habitId = backStackEntry.arguments?.getInt("habitId") ?: return@composable
-            CalendarScreen(habitId = habitId,navController)
+            CalendarScreen(habitId = habitId, navController)
         }
     }
 }

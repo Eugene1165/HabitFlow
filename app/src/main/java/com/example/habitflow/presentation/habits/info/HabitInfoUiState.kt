@@ -11,7 +11,6 @@ sealed class HabitInfoUiState() {
         val statistics: HabitStatistics,
         val isTodayDone: Boolean,
         val weeklyEntries: List<HabitEntry>,
-        val editingHabit: Habit?
     ) : HabitInfoUiState()
     data class Error(val message: String) : HabitInfoUiState()
 }
