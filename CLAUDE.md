@@ -70,7 +70,7 @@ app/src/main/java/com/example/habitflow/
     │   ├── info/                 # HabitInfoScreen, ViewModel, UiState, Event
     │   ├── create/               # CreateHabitScreen, ViewModel, UiState, Event
     │   └── calendar/             # CalendarScreen, ViewModel, UiState, Event
-    ├── statistics/               # StatisticsScreen, ViewModel (placeholder)
+    ├── statistics/               # StatisticsScreen, ViewModel, UiState
     └── settings/                 # SettingsScreen, ViewModel (placeholder)
 ```
 
@@ -275,7 +275,6 @@ App Start
     │   ├── → HabitInfoScreen       (тап на привычку)
     │   │   └── → CalendarScreen    (детальный календарь)
     │   └── → CreateHabitScreen     (FAB)
-    ├── Tab 2: StatisticsScreen
-    │   └── → HabitStatDetailScreen (статистика по одной привычке)
+    ├── Tab 2: StatisticsScreen     (агрегированная статистика по всем привычкам)
     └── Tab 3: SettingsScreen
 ```
