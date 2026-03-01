@@ -50,6 +50,7 @@ fun HostNavGraph(navController: NavHostController) {
             val habitId = backStackEntry.arguments?.getInt("habitId") ?: return@composable
             CalendarScreen(habitId = habitId, navController)
         }
+
     }
 }
 
