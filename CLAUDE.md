@@ -61,17 +61,18 @@ app/src/main/java/com/example/habitflow/
 └── presentation/
     ├── navigation/               # HostNavGraph (string routes), NavigationItem
     ├── theme/                    # Color, Type, Theme (Material You, dynamic color Android 12+)
-    ├── components/               # HabitFlowTopBar
-    ├── extensions/               # RepeatTypeExtensions
-    ├── main/                     # MainScreen (BottomNavigation)
+    ├── components/               # HabitFlowTopBar, HabitCard (shared slot-компонент)
+    ├── extensions/               # RepeatTypeExtensions (toDisplayName для RepeatType и DayOfWeek)
+    ├── main/                     # MainScreen (BottomNavigation 4 таба), MainViewModel
     ├── onboarding/               # OnBoardingScreen, ViewModel, UiState, Event
     ├── habits/
     │   ├── list/                 # HabitsListScreen, ViewModel, UiState, HabitWithStatus
     │   ├── info/                 # HabitInfoScreen, ViewModel, UiState, Event
-    │   ├── create/               # CreateHabitScreen, ViewModel, UiState, Event
+    │   ├── create/               # HabitFormScreen, HabitFormViewModel, UiState, Event (создание + редактирование)
     │   └── calendar/             # CalendarScreen, ViewModel, UiState, Event
     ├── statistics/               # StatisticsScreen, ViewModel, UiState
-    └── settings/                 # SettingsScreen, ViewModel (placeholder)
+    ├── archived/                 # ArchivedScreen, ViewModel, UiState (архив + восстановление + удаление)
+    └── settings/                 # SettingsScreen, ViewModel, UiState (тёмная тема, начало недели)
 ```
 
 ### Key Domain Models
@@ -101,11 +102,11 @@ data class HabitStatistics(val currentStreak: Int, val bestStreak: Int, val perc
 ### Navigation Routes (string-based)
 
 ```
-"onboarding"             → OnBoardingScreen
-"main"                   → MainScreen (BottomNavigation)
-"habit_info/{habitId}"   → HabitInfoScreen
-"create_habit"           → CreateHabitScreen
-"calendar/{habitId}"     → CalendarScreen
+"onboarding"                      → OnBoardingScreen
+"main"                            → MainScreen (BottomNavigation)
+"habit_info/{habitId}"            → HabitInfoScreen
+"create_habit?habitId={habitId}"  → HabitFormScreen (создание + редактирование, defaultValue = -1)
+"calendar/{habitId}"              → CalendarScreen
 ```
 
 ### Key Patterns
@@ -276,5 +277,6 @@ App Start
     │   │   └── → CalendarScreen    (детальный календарь)
     │   └── → CreateHabitScreen     (FAB)
     ├── Tab 2: StatisticsScreen     (агрегированная статистика по всем привычкам)
-    └── Tab 3: SettingsScreen
+    ├── Tab 3: SettingsScreen       (тёмная тема, начало недели)
+    └── Tab 4: ArchivedScreen       (архив, восстановление, удаление)
 ```

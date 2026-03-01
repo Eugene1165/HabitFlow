@@ -199,6 +199,17 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
                     ) {
                         Text("Открыть календарь")
                     }
+                    //архивируем привычку-кнопка для архивации
+                    if (!currentState.habit.isArchived) {
+                        OutlinedButton(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            onClick = { viewModel.onArchive() }
+                        ) {
+                            Text("Архивировать привычку")
+                        }
+                    }
                 }
             }
 
