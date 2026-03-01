@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.habitflow.presentation.archived.ArchivedScreen
 import com.example.habitflow.presentation.habits.list.HabitsListScreen
 import com.example.habitflow.presentation.navigation.NavigationItem
 import com.example.habitflow.presentation.settings.SettingsScreen
@@ -31,7 +32,8 @@ fun MainScreen(navController: NavHostController) {
                 val items = listOf(
                     NavigationItem.Habits,
                     NavigationItem.Statistics,
-                    NavigationItem.Settings
+                    NavigationItem.Settings,
+                    NavigationItem.Archived
                 )
                 items.forEach { item ->
                     NavigationBarItem(
@@ -63,8 +65,7 @@ fun MainScreen(navController: NavHostController) {
             composable(NavigationItem.Habits.route) { HabitsListScreen(navController) }
             composable(NavigationItem.Statistics.route) { StatisticsScreen() }
             composable(NavigationItem.Settings.route) { SettingsScreen() }
-
-
+            composable(NavigationItem.Archived.route) { ArchivedScreen(navController) }
         }
     }
 
