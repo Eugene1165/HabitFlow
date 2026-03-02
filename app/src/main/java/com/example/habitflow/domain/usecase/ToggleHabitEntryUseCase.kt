@@ -6,8 +6,8 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 class ToggleHabitEntryUseCase @Inject constructor(private val repository: HabitEntryRepository) {
-    suspend operator fun invoke(habitId: Int, date: LocalDate) {
-        if (date.isAfter(LocalDate.now()))
+    suspend operator fun invoke(habitId: Int, date: LocalDate,today: LocalDate = LocalDate.now()) {
+        if (date.isAfter(today))
             throw IllegalArgumentException(
                 "Пользователь НЕ может отметить выполнение в будущем "
             )

@@ -27,6 +27,7 @@ class GetHabitsStatisticsUseCase @Inject constructor(
 
     operator fun invoke(
         habitId: Int,
+        today: LocalDate = LocalDate.now()
     ): Flow<HabitStatistics> {
         return habitRepository.observeHabitById(habitId)
             .flatMapLatest { habit ->
@@ -34,28 +35,32 @@ class GetHabitsStatisticsUseCase @Inject constructor(
                 habitEntryRepository.getEntriesForPeriod(
                     habitId = habitId,
                     startDate = habit.startDate,
-                    endDate = LocalDate.now()
+                    endDate = today
                 ).map { entries ->
-                    calculateStatistics(habit, entries)
+                    calculateStatistics(habit, entries,today)
                 }
             }
     }
 
 
-    private fun calculateStatistics(habit: Habit, entries: List<HabitEntry>): HabitStatistics {
+    private fun calculateStatistics(
+        habit: Habit,
+        entries: List<HabitEntry>,
+        today: LocalDate = LocalDate.now()
+    ): HabitStatistics {
         val completedDays = entries.count { it.isDone }
         val activeDays = when (val repeatType = habit.repeatType) {
             is RepeatType.Daily -> {
                 ChronoUnit.DAYS.between(
                     habit.startDate,
-                    LocalDate.now()
-                ).toInt()+1
+                    today
+                ).toInt() + 1
             }
 
             is RepeatType.WeeklyDays -> {
                 var count = 0
                 var date = habit.startDate
-                while (!date.isAfter(LocalDate.now())) {
+                while (!date.isAfter(today)) {
                     if (date.dayOfWeek in repeatType.days) count++
                     date = date.plusDays(1)
                 }
@@ -65,21 +70,26 @@ class GetHabitsStatisticsUseCase @Inject constructor(
             is RepeatType.WeeklyCount -> {
                 (ChronoUnit.WEEKS.between(
                     habit.startDate,
-                    LocalDate.now()).toInt() + 1) * repeatType.count
+                    today
+                ).toInt() + 1) * repeatType.count
             }
         }
         if (activeDays == 0) return HabitStatistics(0, 0, 0f)
         val completionPercent = completedDays.toFloat() / activeDays
 
         val currentStreak = when (val repeatType = habit.repeatType) {
-            is RepeatType.Daily -> calculateDailyStreak(entries)
-            is RepeatType.WeeklyDays -> calculateWeeklyDaysStreak(entries, repeatType.days)
-            is RepeatType.WeeklyCount -> calculateWeeklyCountStreak(entries, repeatType.count)
+            is RepeatType.Daily -> calculateDailyStreak(entries, today)
+            is RepeatType.WeeklyDays -> calculateWeeklyDaysStreak(entries, repeatType.days, today)
+            is RepeatType.WeeklyCount -> calculateWeeklyCountStreak(
+                entries,
+                repeatType.count,
+                today
+            )
         }
 
         val bestStreak = when (val repeatType = habit.repeatType) {
-            is RepeatType.Daily -> calculateDailyBestStreak(entries)
-            is RepeatType.WeeklyDays -> calculateWeeklyDaysBestStreak(entries, repeatType.days)
+            is RepeatType.Daily -> calculateDailyBestStreak(entries,today)
+            is RepeatType.WeeklyDays -> calculateWeeklyDaysBestStreak(entries, repeatType.days,today)
             is RepeatType.WeeklyCount -> calculateWeeklyCountBestStreak(entries, repeatType.count)
         }
         return HabitStatistics(
@@ -89,14 +99,17 @@ class GetHabitsStatisticsUseCase @Inject constructor(
         )
     }
 
-    private fun calculateDailyStreak(entries: List<HabitEntry>): Int {
+    private fun calculateDailyStreak(
+        entries: List<HabitEntry>,
+        today: LocalDate = LocalDate.now()
+    ): Int {
         val completedDates = entries
             .filter { it.isDone }
             .map { it.date }
             .toSet()
         var streak = 0
 
-        var checkDate = LocalDate.now()
+        var checkDate = today
 
         while (completedDates.contains(checkDate)) {
             streak++
@@ -105,13 +118,17 @@ class GetHabitsStatisticsUseCase @Inject constructor(
         return streak
     }
 
-    private fun calculateWeeklyDaysStreak(entries: List<HabitEntry>, days: List<DayOfWeek>): Int {
+    private fun calculateWeeklyDaysStreak(
+        entries: List<HabitEntry>,
+        days: List<DayOfWeek>,
+        today: LocalDate = LocalDate.now()
+    ): Int {
         val completedDates = entries
             .filter { it.isDone }
             .map { it.date }
             .toSet()
         var streak = 0
-        var date = LocalDate.now()
+        var date = today
 
         while (true) {
             if (date.dayOfWeek !in days) {
@@ -129,13 +146,17 @@ class GetHabitsStatisticsUseCase @Inject constructor(
         return streak
     }
 
-    private fun calculateWeeklyCountStreak(entries: List<HabitEntry>, requiredCount: Int): Int {
+    private fun calculateWeeklyCountStreak(
+        entries: List<HabitEntry>,
+        requiredCount: Int,
+        today: LocalDate = LocalDate.now()
+    ): Int {
         val byWeek = entries.groupBy {
             it.date.get(WeekFields.ISO.weekOfWeekBasedYear())
         }
 
         var streak = 0
-        var currentWeek = LocalDate.now().get(WeekFields.ISO.weekOfWeekBasedYear())
+        var currentWeek = today.get(WeekFields.ISO.weekOfWeekBasedYear())
 
         while (true) {
             val weekEntries = byWeek[currentWeek] ?: break
@@ -151,7 +172,10 @@ class GetHabitsStatisticsUseCase @Inject constructor(
         return streak
     }
 
-    private fun calculateDailyBestStreak(entries: List<HabitEntry>): Int {
+    private fun calculateDailyBestStreak(
+        entries: List<HabitEntry>,
+        today: LocalDate = LocalDate.now()
+    ): Int {
         val completedDates = entries
             .filter { it.isDone }
             .map { it.date }
@@ -161,7 +185,7 @@ class GetHabitsStatisticsUseCase @Inject constructor(
         var current = 0
         var date = entries.minOfOrNull { it.date } ?: return 0
 
-        while (!date.isAfter(LocalDate.now())) {
+        while (!date.isAfter(today)) {
             if (completedDates.contains(date)) {
                 current++
                 if (current > best) best = current
@@ -175,7 +199,8 @@ class GetHabitsStatisticsUseCase @Inject constructor(
 
     private fun calculateWeeklyDaysBestStreak(
         entries: List<HabitEntry>,
-        days: List<DayOfWeek>
+        days: List<DayOfWeek>,
+        today: LocalDate = LocalDate.now()
     ): Int {
         val completedDates = entries
             .filter { it.isDone }
@@ -185,7 +210,7 @@ class GetHabitsStatisticsUseCase @Inject constructor(
         var current = 0
         var date = entries.minOfOrNull { it.date } ?: return 0 //начальная дата
 
-        while (!date.isAfter(LocalDate.now())) {
+        while (!date.isAfter(today)) {
             if (date.dayOfWeek in days) {
                 if (completedDates.contains(date)) {
                     current++

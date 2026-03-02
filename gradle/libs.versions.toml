@@ -19,6 +19,10 @@ kaspresso = "1.5.4"
 ksp = "2.0.21-1.0.28"
 datastoreCore = "1.2.0"
 kizitonwose-calendar = "2.6.2"
+mockk = "1.13.12"
+kotlinx-coroutines-test = "1.8.1"
+turbine = "1.2.0"
+
 
 
 
@@ -55,6 +59,7 @@ squareup-okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-inte
 
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlinx-coroutines-test = {group = "org.jetbrains.kotlinx", name="kotlinx-coroutines-test",version.ref="kotlinx-coroutines-test"}
 
 kaspresso = { group = "com.kaspersky.android-components", name = "kaspresso", version.ref = "kaspresso" }
 
@@ -64,8 +69,8 @@ androidx-datastore-preferences = { group = "androidx.datastore", name = "datasto
 
 kizitonwose-calendar-compose = { group = "com.kizitonwose.calendar", name = "compose", version.ref ="kizitonwose-calendar" }
 
-
-
+mockk = { group = "io.mockk", name ="mockk",version.ref = "mockk"}
+turbine = {group = "app.cash.turbine",name= "turbine",version.ref = "turbine"}
 
 
 [plugins]

@@ -204,7 +204,7 @@ UI state через sealed class, чёткое разделение ответс
 4.3 Статистика: календарь, текущий streak, лучший streak, процент выполнения, статистика за
 неделю/месяц, достижения.
 
-4.4 Настройки: тёмная тема, начало недели, напоминания, синхронизация.
+4.4 Настройки: тёмная тема, начало недели, напоминания (WorkManager + NotificationManager — в плане).
 
 🧠 5. БИЗНЕС-ПРАВИЛА
 
@@ -270,13 +270,24 @@ Domain не знает о Room и Retrofit. DTO не используются в
 
 ```
 App Start
-├── OnboardingScreen          (если первый запуск)
-└── MainScreen                (BottomNavigation)
-    ├── Tab 1: HabitsListScreen
-    │   ├── → HabitInfoScreen       (тап на привычку)
-    │   │   └── → CalendarScreen    (детальный календарь)
-    │   └── → CreateHabitScreen     (FAB)
-    ├── Tab 2: StatisticsScreen     (агрегированная статистика по всем привычкам)
-    ├── Tab 3: SettingsScreen       (тёмная тема, начало недели)
-    └── Tab 4: ArchivedScreen       (архив, восстановление, удаление)
+├── OnboardingScreen              (если первый запуск)
+└── MainScreen                    (BottomNavigation)
+    ├── Tab 1: HabitsListScreen   ✅
+    │   ├── → HabitInfoScreen     ✅ (архивация, toggle, статистика)
+    │   │   └── → CalendarScreen  ✅ (детальный календарь)
+    │   └── → HabitFormScreen     ✅ (FAB — создание + редактирование)
+    ├── Tab 2: StatisticsScreen   ✅ (агрегированная статистика по всем привычкам)
+    ├── Tab 3: SettingsScreen     ✅ (тёмная тема, начало недели)
+    └── Tab 4: ArchivedScreen     ✅ (архив, восстановление, удаление)
 ```
+
+### Статус реализации
+
+| Слой | Статус |
+|---|---|
+| Domain (модели, репозитории, use cases) | ✅ Готов |
+| Data (Room, DataStore, маппинг) | ✅ Готов |
+| Presentation (все экраны) | ✅ Готов |
+| Уведомления (WorkManager + NotificationManager) | 🔲 В плане |
+| Unit-тесты (статистика, toggle) | ✅ Готов (11 тестов: GetHabitsStatisticsUseCase x5, ToggleHabitEntryUseCase x4, GetAllHabitsStatisticsUseCase x2) |
+| Retrofit / синхронизация | ❌ Отложено (нет API) |
