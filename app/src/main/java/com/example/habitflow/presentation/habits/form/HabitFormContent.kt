@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.habitflow.domain.model.RepeatType
 import com.example.habitflow.presentation.components.ColorPicker
@@ -78,14 +80,17 @@ fun HabitFormContent(
             onColorSelected = { onColorChanged(it) }
         )
         Spacer(Modifier.height(8.dp))
+        var targetText by remember { mutableStateOf(state.target?.toString() ?: "")  }
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            value = state.target?.toString() ?: "",
-            readOnly = false,
-            onValueChange = { onTargetChanged(it.toIntOrNull()) },
-            label = { Text("Цель") }
+            value = targetText ,
+            onValueChange = { newText ->
+                targetText = newText
+                onTargetChanged(newText.toIntOrNull()) },
+            label = { Text("Цель") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
         Spacer(Modifier.height(8.dp))
         ExposedDropdownMenuBox(
@@ -135,11 +140,27 @@ fun HabitFormContent(
                 onDayToggle = { onSelectedDaysChanged(it) }
             )
 
-            is RepeatType.WeeklyCount -> TextField(
-                value = state.repeatType.count.toString(),
-                onValueChange = { onWeeklyCountChanged(it.toIntOrNull() ?: 1) },
-                label = { Text("Раз в неделю") }
-            )
+            is RepeatType.WeeklyCount -> {
+                var countText by remember { mutableStateOf(state.repeatType.count.toString()) }
+                TextField(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    value = countText,
+                    onValueChange = { newText ->
+                        countText = newText
+                        newText.toIntOrNull()?.let { text ->
+                            if (text == 0) {
+                                onWeeklyCountChanged(1)
+                                countText = "1"
+                            }
+                            else onWeeklyCountChanged(text)
+                        }
+                    },
+                    label = { Text("Раз в неделю") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+            }
 
             RepeatType.Daily -> {}
         }

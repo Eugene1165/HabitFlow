@@ -19,6 +19,7 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,8 +52,9 @@ fun HabitsListScreen(navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFFAF8FF))
-                .padding(paddingValues)
+                .background(MaterialTheme.colorScheme.background)
+                .padding(paddingValues),
+
         ) {
             when (state) {
                 is HabitsListUiState.Loading -> {
