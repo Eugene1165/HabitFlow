@@ -101,8 +101,7 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
                 ) {
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(120.dp)
+                            .fillMaxSize()
                             .background(Color(currentState.habit.color.toColorInt()))
                     ) {
                         Column(

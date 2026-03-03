@@ -102,9 +102,9 @@ fun AppearanceSection(
     isDarkTheme: Boolean,
     onDarkThemeToggled: (Boolean) -> Unit,
 ) {
-    Row(
+    Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalAlignment = Alignment.Start
     ) {
         Text("Темная тема")
         Switch(checked = isDarkTheme, onCheckedChange = onDarkThemeToggled)
@@ -117,16 +117,21 @@ fun CalendarSection(
     onFirstDayChanged: (DayOfWeek) -> Unit
 ) {
     val scrollState = rememberScrollState()
-    Row(
-        modifier = Modifier.horizontalScroll(scrollState),
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        DayOfWeek.entries.forEach { day ->
-            FilterChip(
-                selected = day == firstDayOfWeek,
-                onClick = { onFirstDayChanged(day) },
-                label = { Text(day.toDisplayName()) }
-            )
+        Text("Отметь день  начала недели для отсчета в календаре")
+        Row(
+            modifier = Modifier.horizontalScroll(scrollState),
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            DayOfWeek.entries.forEach { day ->
+                FilterChip(
+                    selected = day == firstDayOfWeek,
+                    onClick = { onFirstDayChanged(day) },
+                    label = { Text(day.toDisplayName()) }
+                )
+            }
         }
     }
 }
