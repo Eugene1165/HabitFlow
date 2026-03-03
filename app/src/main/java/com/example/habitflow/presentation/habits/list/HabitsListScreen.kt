@@ -110,7 +110,7 @@ fun HabitsListScreen(navController: NavController) {
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text("Ошибка")
-                            Button(onClick = { viewModel.loadHabits() }) {
+                            Button(onClick = { viewModel.state }) {
                                 Text("Повторить")
                             }
                         }
