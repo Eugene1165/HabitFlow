@@ -29,10 +29,9 @@ fun ColorPicker(
                     .size(40.dp)
                     .clip(CircleShape)
                     .background(Color(color.toColorInt()))
-                    .then(
-                        if (color == selectedColor)
-                            Modifier.border(2.dp, Color.Black, CircleShape)
-                        else Modifier
+                    .selectedBorder(
+                        color = color,
+                        selectedColor = selectedColor
                     )
                     .clickable { onColorSelected(color) }
             ) { }
@@ -50,3 +49,9 @@ val habitColors = listOf(
     "#E91E63",
     "#607D8B"
 )
+
+private fun Modifier.selectedBorder(color: String, selectedColor: String): Modifier =
+    this.then(
+        if (color == selectedColor) Modifier.border(2.dp, Color.Black, CircleShape)
+        else Modifier
+    )
