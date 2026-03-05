@@ -2,6 +2,7 @@ package com.example.habitflow.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.habitflow.data.local.entity.HabitEntity
@@ -22,7 +23,7 @@ interface HabitDao {
     @Query("SELECT * FROM habits WHERE id=:habitId ")
     fun observeHabitById(habitId: Int): Flow<HabitEntity?>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addHabit(habit: HabitEntity)
 
     @Update

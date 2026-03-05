@@ -2,22 +2,17 @@ package com.example.habitflow.data.mapper
 
 import com.example.habitflow.data.local.entity.HabitEntity
 import com.example.habitflow.domain.model.Habit
-import com.example.habitflow.domain.model.RepeatType
-import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
+import com.example.habitflow.domain.extensions.toRepeatType
+import com.example.habitflow.domain.extensions.toTypeString
+import com.example.habitflow.domain.model.RepeatType
 
 class HabitMapper @Inject constructor() {
     fun mapHabitEntityToHabit(
         entity: HabitEntity,
-        ): Habit {
-        val repeatType: RepeatType = when(entity.repeatType){
-            "DAILY" -> RepeatType.Daily
-            "WEEKLY_DAYS" -> RepeatType.WeeklyDays(entity.repeatDays!!.split(",").map { DayOfWeek.valueOf(it)})
-            "WEEKLY_COUNT" -> RepeatType.WeeklyCount(entity.repeatCount!!)
-            else -> throw IllegalArgumentException("Unknown repeatType: ${entity.repeatType}")
-        }
+    ): Habit {
         return Habit(
             id = entity.id,
             title = entity.title,
@@ -26,7 +21,7 @@ class HabitMapper @Inject constructor() {
             color = entity.color,
             target = entity.target,
             isArchived = entity.isArchived,
-            repeatType = repeatType,
+            repeatType = entity.repeatType.toRepeatType(entity.repeatDays, entity.repeatCount),
             reminder = entity.reminder?.let { LocalTime.parse(it) }
         )
     }
@@ -34,11 +29,6 @@ class HabitMapper @Inject constructor() {
     fun mapHabitToHabitEntity(
         habit: Habit,
     ): HabitEntity {
-        val repeatType: String = when (habit.repeatType) {
-            is RepeatType.Daily -> "DAILY"
-            is RepeatType.WeeklyDays -> "WEEKLY_DAYS"
-            is RepeatType.WeeklyCount -> "WEEKLY_COUNT"
-        }
         val repeatDays: String? = when (val rt = habit.repeatType) {
             is RepeatType.WeeklyDays -> rt.days.joinToString(",")
             else -> null
@@ -54,7 +44,7 @@ class HabitMapper @Inject constructor() {
             startDate = habit.startDate.toString(),
             color = habit.color,
             isArchived = habit.isArchived,
-            repeatType = repeatType,
+            repeatType = habit.repeatType.toTypeString(),
             repeatDays = repeatDays,
             repeatCount = repeatCount,
             reminder = habit.reminder?.toString(),
