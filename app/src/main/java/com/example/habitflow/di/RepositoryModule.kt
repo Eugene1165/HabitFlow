@@ -23,4 +23,6 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindUserPreferencesRepository(impl: UserPreferencesRepositoryImpl): UserPreferencesRepository
+
+
 }

@@ -4,12 +4,14 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.habitflow.data.local.dao.HabitDao
 import com.example.habitflow.data.local.dao.HabitEntryDao
 import com.example.habitflow.data.local.entity.HabitEntity
 import com.example.habitflow.data.local.entity.HabitEntryEntity
 
-@Database(entities = [HabitEntity::class, HabitEntryEntity::class], version = 1, exportSchema = false)
+@Database(entities = [HabitEntity::class, HabitEntryEntity::class], version = 2, exportSchema = false)
 abstract class HabitDatabase: RoomDatabase() {
     abstract fun habitDao(): HabitDao
     abstract fun habitEntryDao(): HabitEntryDao
@@ -24,8 +26,20 @@ abstract class HabitDatabase: RoomDatabase() {
                     context = context,
                     klass = HabitDatabase::class.java,
                     name = "habit_database"
-                ).build().also { INSTANCE = it }
+                )
+                    .addMigrations(MIGRATION_1_2)
+                    .build().also { INSTANCE = it }
             }
         }
+
+        val MIGRATION_1_2 = object : Migration(1,2){
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "ALTER TABLE habit_entries ADD COLUMN isSynced INTEGER NOT NULL DEFAULT 0"
+                )
+            }
+        }
+
+
     }
 }

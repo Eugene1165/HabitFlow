@@ -14,18 +14,20 @@ class HabitEntryMapper @Inject constructor() {
             id = entity.id,
             habitId = entity.habitId,
             date = LocalDate.parse(entity.date),
-            isDone = entity.isDone
+            isDone = entity.isDone,
         )
     }
 
     fun mapHabitEntryToHabitEntryEntity(
-        entry: HabitEntry
+        entry: HabitEntry,
+        isSynced: Boolean = false
     ): HabitEntryEntity {
         return HabitEntryEntity(
             id = entry.id,
             habitId = entry.habitId,
             date = entry.date.toString(),
-            isDone = entry.isDone
+            isDone = entry.isDone,
+            isSynced = isSynced
         )
     }
 }

@@ -32,7 +32,7 @@ Android app (Middle-level) built with Clean Architecture + MVVM:
 - **Kotlin 2.0.21**, JVM target 11
 - **Jetpack Compose** + Material 3, Compose BOM 2024.09.00
 - **Hilt** (Dagger2-based) for DI — KSP generates code for both Hilt and Room
-- **Room 2.6.1** for local DB, **Retrofit 2.11.0** + OkHttp for network (infrastructure ready, not yet integrated)
+- **Room 2.6.1** for local DB, **Retrofit 2.11.0** + OkHttp for network (Supabase, offline-first реализован)
 - **Navigation Compose 2.8.5**, Coroutines + Flow for async
 - **Kizitonwose Calendar 2.6.2** for calendar UI, **DataStore Preferences 1.2.0** for settings
 - **Min SDK 26**, Target SDK 36
@@ -56,7 +56,10 @@ app/src/main/java/com/example/habitflow/
 │   │   ├── entity/               # HabitEntity, HabitEntryEntity
 │   │   ├── database/             # HabitDatabase (Room)
 │   │   └── preferences/          # UserPreferencesRepositoryImpl (DataStore)
-│   ├── mapper/                   # HabitMapper, HabitEntryMapper
+│   ├── mapper/                   # HabitMapper, HabitEntryMapper, HabitDtoMapper, HabitEntryDtoMapper
+│   ├── remote/
+│   │   ├── api/                  # HabitApiService, HabitEntryApiService (Retrofit + Supabase)
+│   │   └── dto/                  # HabitDto, HabitEntryDto
 │   └── repository/               # HabitRepositoryImpl, HabitEntryRepositoryImpl
 └── presentation/
     ├── navigation/               # HostNavGraph (string routes), NavigationItem
@@ -291,4 +294,5 @@ App Start
 | Presentation (все экраны) | ✅ Готов |
 | Уведомления (WorkManager + NotificationManager) | 🔲 В плане |
 | Unit-тесты (статистика, toggle) | ✅ Готов (11 тестов: GetHabitsStatisticsUseCase x5, ToggleHabitEntryUseCase x4, GetAllHabitsStatisticsUseCase x2) |
-| Retrofit / синхронизация | ❌ Отложено (нет API) |
+| Retrofit / синхронизация Habits | ✅ Готов (offline-first, Supabase) |
+| Retrofit / синхронизация HabitEntries | ⚠️ Частично (addEntry/updateEntry реализованы, habit_entries в Supabase не появляются — требует отладки) |

@@ -53,11 +53,11 @@ class HabitRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addHabit(habit: Habit) {
-        dao.addHabit(habitMapper.mapHabitToHabitEntity(habit))
+        val generatedId = dao.addHabit(habitMapper.mapHabitToHabitEntity(habit))
+        val habitWithId = habit.copy(id = generatedId.toInt())
         try {
-            habitApiService.createEntries(habitDtoMapper.mapHabitToDto(habit))
-        } catch (_: Exception) {
-        }
+            habitApiService.createEntries(habitDtoMapper.mapHabitToDto(habitWithId))
+        } catch (e: Exception) { }
 
     }
 

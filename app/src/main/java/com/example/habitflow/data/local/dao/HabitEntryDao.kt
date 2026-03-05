@@ -2,6 +2,7 @@ package com.example.habitflow.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.habitflow.data.local.entity.HabitEntryEntity
 import kotlinx.coroutines.flow.Flow
@@ -9,8 +10,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface HabitEntryDao {
 
-    @Insert
-    suspend fun addEntry(entity: HabitEntryEntity): Unit
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addEntry(entity: HabitEntryEntity): Long
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAll(entities: List<HabitEntryEntity>)
 
     @Query("SELECT * FROM habit_entries WHERE habitId = :habitId AND date BETWEEN :startDate AND :endDate  ")
     fun getEntriesForPeriod(habitId:Int, startDate: String,endDate: String): Flow<List<HabitEntryEntity>>

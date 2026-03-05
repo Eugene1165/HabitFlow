@@ -11,22 +11,22 @@ import retrofit2.http.POST
 
 interface HabitApiService {
 
-    @GET("rest/v1/habits")
+    @GET("rest/v1/Habit")
     suspend fun getAllEntries(): List<HabitDto>
 
-    @POST("rest/v1/habits")
+    @POST("rest/v1/Habit")
     suspend fun createEntries(
         @Body habit: HabitDto
     ): HabitDto
 
 
-    @PATCH("rest/v1/habits")
+    @PATCH("rest/v1/Habit")
     suspend fun updateEntriesById(
         @Query("id") habitId: String,
         @Body habit: HabitDto
     ): HabitDto
 
-    @DELETE("rest/v1/habits")
+    @DELETE("rest/v1/Habit")
     suspend fun removeEntriesById(
         @Query("id") habitId: String,
     ): Response<Unit>

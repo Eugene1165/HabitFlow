@@ -24,7 +24,7 @@ interface HabitDao {
     fun observeHabitById(habitId: Int): Flow<HabitEntity?>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addHabit(habit: HabitEntity)
+    suspend fun addHabit(habit: HabitEntity): Long
 
     @Update
     suspend fun updateHabit(habit: HabitEntity)

@@ -1,25 +1,52 @@
 package com.example.habitflow.data.repository
 
 import com.example.habitflow.data.local.dao.HabitEntryDao
+import com.example.habitflow.data.mapper.HabitEntryDtoMapper
 import com.example.habitflow.data.mapper.HabitEntryMapper
+import com.example.habitflow.data.remote.api.HabitEntryApiService
 import com.example.habitflow.domain.model.HabitEntry
 import com.example.habitflow.domain.repository.HabitEntryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import java.time.LocalDate
 import javax.inject.Inject
 
 class HabitEntryRepositoryImpl @Inject constructor(
     private val dao: HabitEntryDao,
     private val habitEntryMapper: HabitEntryMapper,
+    private val habitEntryDtoMapper: HabitEntryDtoMapper,
+    private val habitEntryApiService: HabitEntryApiService
 ) : HabitEntryRepository {
+
     override suspend fun addEntry(entry: HabitEntry) {
-        dao.addEntry(habitEntryMapper.mapHabitEntryToHabitEntryEntity(entry))
+        val generatedId = dao.addEntry(habitEntryMapper.mapHabitEntryToHabitEntryEntity(entry))
+        val entryWithId = entry.copy(id = generatedId.toInt())
+        try {
+            habitEntryApiService.createEntry(habitEntryDtoMapper.mapHabitEntryToDto(entryWithId))
+        } catch (_: Exception) {
+        }
     }
 
     override fun getEntriesForHabit(habitId: Int): Flow<List<HabitEntry>> {
         return dao.getEntriesForHabit(habitId)
             .map { list -> list.map { habitEntryMapper.mapHabitEntryEntityToHabitEntry(it) } }
+            .onStart {
+                try {
+                    val dtos = habitEntryApiService.getEntriesByHabitId("eq.${habitId}")
+                    val entities = dtos.map { dto ->
+                        habitEntryDtoMapper.mapDtoToHabitEntry(dto)
+                            .let {
+                                habitEntryMapper.mapHabitEntryToHabitEntryEntity(
+                                    it,
+                                    isSynced = true
+                                )
+                            }
+                    }
+                    dao.insertAll(entities)
+                } catch (_: Exception) {
+                }
+            }
     }
 
     override fun getEntriesForPeriod(
@@ -41,7 +68,14 @@ class HabitEntryRepositoryImpl @Inject constructor(
         currentDate: LocalDate,
         isDone: Boolean
     ) {
-        return dao.updateEntry(habitId, currentDate.toString(), isDone)
+        dao.updateEntry(habitId, currentDate.toString(), isDone)
+        try {
+            val entry = dao.getEntryByDate(habitId, currentDate.toString()) ?: return
+            val domainEntity = habitEntryMapper.mapHabitEntryEntityToHabitEntry(entry)
+            val dto = habitEntryDtoMapper.mapHabitEntryToDto(domainEntity)
+            habitEntryApiService.updateEntryById("eq.${entry.id}",dto)
+        } catch (e: Exception) {
+        }
     }
 
     override suspend fun getEntryByDate(

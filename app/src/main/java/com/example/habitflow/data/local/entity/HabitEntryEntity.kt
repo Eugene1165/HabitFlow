@@ -23,5 +23,7 @@ data class HabitEntryEntity(
     @ColumnInfo
     val date: String,
     @ColumnInfo
-    val isDone: Boolean
+    val isDone: Boolean,
+    @ColumnInfo
+    val isSynced: Boolean = false
 )

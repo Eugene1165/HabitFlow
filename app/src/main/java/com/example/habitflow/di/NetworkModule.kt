@@ -2,6 +2,7 @@ package com.example.habitflow.di
 
 import com.example.habitflow.BuildConfig
 import com.example.habitflow.data.remote.api.HabitApiService
+import com.example.habitflow.data.remote.api.HabitEntryApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,5 +40,16 @@ class NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(HabitApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideHabitEntryApiService(client: OkHttpClient): HabitEntryApiService{
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.SUPABASE_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(HabitEntryApiService::class.java)
     }
 }
