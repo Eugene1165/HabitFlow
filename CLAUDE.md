@@ -295,4 +295,6 @@ App Start
 | Уведомления (WorkManager + NotificationManager) | 🔲 В плане |
 | Unit-тесты (статистика, toggle) | ✅ Готов (11 тестов: GetHabitsStatisticsUseCase x5, ToggleHabitEntryUseCase x4, GetAllHabitsStatisticsUseCase x2) |
 | Retrofit / синхронизация Habits | ✅ Готов (offline-first, Supabase) |
-| Retrofit / синхронизация HabitEntries | ⚠️ Частично (addEntry/updateEntry реализованы, habit_entries в Supabase не появляются — требует отладки) |
+| Retrofit / синхронизация HabitEntries | ✅ Готов (addEntry/updateEntry работают, данные пишутся в Supabase при toggle) |
+| Синхронизация archiveHabit / restoreHabit | ✅ Готов (PATCH через updateEntriesById, offline-first порядок) |
+| Сетевое логирование | ✅ Готов (HttpLoggingInterceptor BODY в NetworkModule) |

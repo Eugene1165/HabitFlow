@@ -30,7 +30,8 @@ class HabitRepositoryImpl @Inject constructor(
                             .let { habitMapper.mapHabitToHabitEntity(it) }
                             .let { dao.addHabit(it) }
                     }
-                }catch (_: kotlin.Exception){}
+                } catch (_: kotlin.Exception) {
+                }
             }
     }
 
@@ -57,7 +58,8 @@ class HabitRepositoryImpl @Inject constructor(
         val habitWithId = habit.copy(id = generatedId.toInt())
         try {
             habitApiService.createEntries(habitDtoMapper.mapHabitToDto(habitWithId))
-        } catch (e: Exception) { }
+        } catch (e: Exception) {
+        }
 
     }
 
@@ -68,7 +70,8 @@ class HabitRepositoryImpl @Inject constructor(
                 habit.id.toString(),
                 habitDtoMapper.mapHabitToDto(habit)
             )
-        } catch (_: Exception){}
+        } catch (_: Exception) {
+        }
     }
 
     override suspend fun deleteHabit(habitId: Int) {
@@ -81,9 +84,23 @@ class HabitRepositoryImpl @Inject constructor(
 
     override suspend fun archiveHabit(habitId: Int) {
         dao.archiveHabit(habitId)
+        try {
+            val entity = dao.getHabitById(habitId) ?: return
+            val habit = habitMapper.mapHabitEntityToHabit(entity).copy(isArchived = true)
+            val habitDto = habitDtoMapper.mapHabitToDto(habit)
+            habitApiService.updateEntriesById(habit.id.toString(), habitDto)
+        } catch (_: Exception) {
+        }
     }
 
     override suspend fun restoreHabit(habitId: Int) {
         dao.restoreHabit(habitId)
+        try {
+            val entity = dao.getHabitById(habitId) ?: return
+            val habit = habitMapper.mapHabitEntityToHabit(entity).copy(isArchived = false)
+            val habitDto = habitDtoMapper.mapHabitToDto(habit)
+            habitApiService.updateEntriesById(habit.id.toString(), habitDto)
+        } catch (_: Exception) {
+        }
     }
 }
