@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -55,7 +56,7 @@ fun HabitsListScreen(navController: NavController) {
                 .background(MaterialTheme.colorScheme.background)
                 .padding(paddingValues),
 
-        ) {
+            ) {
             when (state) {
                 is HabitsListUiState.Loading -> {
                     Box(
@@ -83,6 +84,7 @@ fun HabitsListScreen(navController: NavController) {
                 is HabitsListUiState.Content -> {
                     val habits = (state as HabitsListUiState.Content).habits
                     LazyColumn(
+                        modifier = Modifier.testTag("habits_list"),
                         contentPadding = PaddingValues(bottom = 80.dp)
                     ) {
                         items(habits) { habitWithStatus ->
@@ -91,6 +93,7 @@ fun HabitsListScreen(navController: NavController) {
                                 onClick = { habitId -> navController.navigate("habit_info/$habitId") }
                             ) {
                                 Checkbox(
+                                    modifier = Modifier.testTag("checkbox_habit_${habitWithStatus.habit.id}"),
                                     checked = habitWithStatus.isCompletedToday,
                                     onCheckedChange = { viewModel.onToggle(habitId = habitWithStatus.habit.id) },
                                     colors = CheckboxDefaults.colors(

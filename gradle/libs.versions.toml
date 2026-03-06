@@ -62,8 +62,12 @@ kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 kotlinx-coroutines-test = {group = "org.jetbrains.kotlinx", name="kotlinx-coroutines-test",version.ref="kotlinx-coroutines-test"}
 
 kaspresso = { group = "com.kaspersky.android-components", name = "kaspresso", version.ref = "kaspresso" }
+kaspresso-compose = { group = "com.kaspersky.android-components", name = "kaspresso-compose-support", version.ref = "kaspresso" }
+
 
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.2.0" }
+hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
+
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastoreCore" }
 
