@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -37,6 +38,7 @@ fun MainScreen(navController: NavHostController) {
                 )
                 items.forEach { item ->
                     NavigationBarItem(
+                        modifier = Modifier.testTag("tab_${item.route}"),
                         selected = currentRoute == item.route,
                         onClick = {
                             bottomNavController.navigate(item.route) {

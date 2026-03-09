@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
@@ -39,7 +40,9 @@ fun StatisticsScreen() {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .testTag("screen_statistics")
+            .fillMaxSize()
     ) { paddingValues ->
         Box(
             modifier = Modifier

@@ -2,24 +2,18 @@ package com.example.habitflow.tests
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.example.habitflow.MainActivity
-import com.example.habitflow.domain.usecase.CompleteOnBoardingUseCase
-import com.example.habitflow.screens.HabitsListScreen
+import com.example.habitflow.screens.KHabitFormScreen
+import com.example.habitflow.screens.KHabitsListScreen
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import io.github.kakaocup.compose.node.element.ComposeScreen
-import kotlinx.coroutines.runBlocking
+import io.github.kakaocup.compose.node.element.ComposeScreen.Companion.onComposeScreen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
 
 @HiltAndroidTest
 class HabitsListTest : TestCase() {
-
-    @Inject
-    lateinit var completeOnBoardingUseCase: CompleteOnBoardingUseCase
-
     @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
 
@@ -27,17 +21,36 @@ class HabitsListTest : TestCase() {
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Before
-    fun setUp(){
+    fun setUp() {
         hiltRule.inject()
-        runBlocking { completeOnBoardingUseCase }
         composeTestRule.waitForIdle()
     }
 
     @Test
     fun habitsListInDisplayed() = run {
-        ComposeScreen.onComposeScreen<HabitsListScreen>(composeTestRule){
-            fabAddHabit{
-                assertIsDisplayed()
+        step("Проверяем что fab отображается") {
+            onComposeScreen<KHabitsListScreen>(composeTestRule) {
+                fabAddHabit {
+                    assertIsDisplayed()
+                }
+            }
+        }
+    }
+
+    @Test
+    fun fabNavigate() = run {
+        step("Тапаем на FAB") {
+            onComposeScreen<KHabitsListScreen>(composeTestRule) {
+                fabAddHabit {
+                    performClick()
+                }
+            }
+        }
+        step("Проверяем что открылся экран создания привычки") {
+            onComposeScreen<KHabitFormScreen>(composeTestRule) {
+                screenHabitForm {
+                    assertIsDisplayed()
+                }
             }
         }
     }

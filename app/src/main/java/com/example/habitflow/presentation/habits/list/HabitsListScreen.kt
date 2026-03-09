@@ -48,7 +48,9 @@ fun HabitsListScreen(navController: NavController) {
     val viewModel: HabitsListViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     Scaffold(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .testTag("habit_list_screen")
+            .fillMaxSize()
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -122,6 +124,7 @@ fun HabitsListScreen(navController: NavController) {
             }
             FloatingActionButton(
                 modifier = Modifier
+                    .testTag("fab_add_new_habit")
                     .align(Alignment.BottomEnd)
                     .padding(16.dp),
                 containerColor = Color(0xFF6650A4),

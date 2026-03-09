@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,7 +47,9 @@ fun ArchivedScreen(navController: NavController) {
     var habitToDelete by remember { mutableStateOf<Int?>(null) }
 
 
-    Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
+    Scaffold(modifier = Modifier
+        .testTag("screen_archived")
+        .fillMaxSize()) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()

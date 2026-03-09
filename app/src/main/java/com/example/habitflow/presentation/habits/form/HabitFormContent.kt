@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.habitflow.domain.model.RepeatType
@@ -49,6 +50,7 @@ fun HabitFormContent(
     var expanded by remember { mutableStateOf(false) }
     Column(
         modifier = modifier
+            .testTag("screen_habit_form")
             .fillMaxWidth()
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
