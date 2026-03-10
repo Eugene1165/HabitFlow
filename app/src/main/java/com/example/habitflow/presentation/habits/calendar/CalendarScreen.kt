@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
@@ -62,6 +63,7 @@ fun CalendarScreen(habitId: Int, navController: NavController) {
     }
 
     Scaffold(
+        modifier = Modifier.testTag("screen_calendar"),
         topBar = {
             HabitFlowTopBar(
                 title = (state as? CalendarUiState.Content)?.habit?.title ?: "",

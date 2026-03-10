@@ -10,5 +10,10 @@ class KHabitInfoScreen(
     semanticsProvider = semanticsProvider
 ) {
     val screenHabitInfo = child<KNode> { hasTestTag("screen_habit_info") }
+    val archiveButton = child<KNode> { hasTestTag("btn_archive_habit") }
+    val calendarButton = child<KNode> { hasTestTag("btn_open_calendar") }
 
+    fun habitByTitle(title: String): KNode {
+        return child<KNode> { hasText(title) }
+    }
 }

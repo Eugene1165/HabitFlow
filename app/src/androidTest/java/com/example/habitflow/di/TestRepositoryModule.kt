@@ -1,5 +1,7 @@
 package com.example.habitflow.di
 
+import com.example.habitflow.FakeHabitEntryRepository
+import com.example.habitflow.FakeHabitRepository
 import com.example.habitflow.FakeUserPreferencesRepository
 import com.example.habitflow.data.repository.HabitEntryRepositoryImpl
 import com.example.habitflow.data.repository.HabitRepositoryImpl
@@ -19,13 +21,17 @@ import javax.inject.Singleton
     replaces = [RepositoryModule::class]
 )
 abstract class TestRepositoryModule {
-    @Binds
-    abstract fun bindHabitRepository(impl: HabitRepositoryImpl): HabitRepository
-
-    @Binds
-    abstract fun bindHabitEntryRepository(impl: HabitEntryRepositoryImpl): HabitEntryRepository
-
     companion object {
+        @Singleton
+        @Provides
+        fun provideFakeHabitEntryRepository(): HabitEntryRepository =
+            FakeHabitEntryRepository()
+
+        @Singleton
+        @Provides
+        fun provideFakeHabitRepository(): HabitRepository =
+            FakeHabitRepository()
+
         @Singleton
         @Provides
         fun provideFakeUserPreferencesRepository(): UserPreferencesRepository =

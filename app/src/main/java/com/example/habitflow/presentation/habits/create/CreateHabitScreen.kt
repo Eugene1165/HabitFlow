@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -88,6 +89,7 @@ fun CreateHabitScreen(habitId: Int?, navController: NavController) {
             Spacer(Modifier.height(8.dp))
             Button(
                 modifier = Modifier
+                    .testTag("btn_save_habit")
                     .fillMaxWidth()
                     .padding(16.dp),
                 onClick = { viewModel.onSave() },

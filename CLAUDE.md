@@ -298,4 +298,4 @@ App Start
 | Retrofit / синхронизация HabitEntries | ✅ Готов (addEntry/updateEntry работают, данные пишутся в Supabase при toggle) |
 | Синхронизация archiveHabit / restoreHabit | ✅ Готов (PATCH через updateEntriesById, offline-first порядок) |
 | Сетевое логирование | ✅ Готов (HttpLoggingInterceptor BODY в NetworkModule) |
-| Instrumented тесты (Kaspresso) | 🔄 В процессе (CustomTestRunner, HabitsListScreen Page Object, testTag на UI элементах; FakeUserPreferencesRepository — следующий шаг) |
+| Instrumented тесты (Kaspresso) | ✅ 15 тестов: NavigationTest x4, HabitsListTest x4 (отображение, FAB, toggle, навигация), HabitFormTest x2 (создание, валидация), HabitInfoTest x3 (отображение, архивация, переход в календарь); FakeHabitRepository + FakeHabitEntryRepository + FakeUserPreferencesRepository |

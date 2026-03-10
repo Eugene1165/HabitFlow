@@ -4,15 +4,10 @@ import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import io.github.kakaocup.compose.node.element.ComposeScreen
 import io.github.kakaocup.compose.node.element.KNode
 
-class KArchivedScreen(
+class KCalendarScreen(
     semanticsProvider: SemanticsNodeInteractionsProvider
-) : ComposeScreen<KArchivedScreen>(
+) : ComposeScreen<KCalendarScreen>(
     semanticsProvider = semanticsProvider
 ) {
-    val screenArchived = child<KNode> { hasTestTag("screen_archived") }
-
-    fun habitByTitle(title: String): KNode {
-        return child<KNode> { hasText(title) }
-    }
-
+    val screenCalendar = child<KNode> { hasTestTag("screen_calendar") }
 }

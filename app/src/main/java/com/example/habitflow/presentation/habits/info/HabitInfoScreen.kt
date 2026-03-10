@@ -195,7 +195,8 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
                     OutlinedButton(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
+                            .padding(horizontal = 16.dp)
+                            .testTag("btn_open_calendar"),
                         onClick = { viewModel.onNavigateToCalendar() }
                     ) {
                         Text("Открыть календарь")
@@ -205,7 +206,8 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
                         OutlinedButton(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
+                                .padding(horizontal = 16.dp)
+                                .testTag("btn_archive_habit"),
                             onClick = { viewModel.onArchive() }
                         ) {
                             Text("Архивировать привычку")

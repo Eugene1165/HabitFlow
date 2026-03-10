@@ -58,6 +58,7 @@ fun HabitFormContent(
     ) {
         TextField(
             modifier = Modifier
+                .testTag("habit_name")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             value = state.title,
@@ -67,6 +68,7 @@ fun HabitFormContent(
         Spacer(Modifier.height(8.dp))
         TextField(
             modifier = Modifier
+                .testTag("habit_description")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             value = state.description,
@@ -74,7 +76,10 @@ fun HabitFormContent(
             label = { Text("Описание") }
         )
         Spacer(Modifier.height(8.dp))
-        Text("Цвет", modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+        Text("Цвет",
+            modifier = Modifier
+                .testTag("habit_color")
+                .padding(horizontal = 16.dp, vertical = 8.dp))
         Spacer(Modifier.height(8.dp))
         ColorPicker(
             selectedColor = state.color,
@@ -82,21 +87,24 @@ fun HabitFormContent(
             onColorSelected = { onColorChanged(it) }
         )
         Spacer(Modifier.height(8.dp))
-        var targetText by remember { mutableStateOf(state.target?.toString() ?: "")  }
+        var targetText by remember { mutableStateOf(state.target?.toString() ?: "") }
         TextField(
             modifier = Modifier
+                .testTag("target")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            value = targetText ,
+            value = targetText,
             onValueChange = { newText ->
                 targetText = newText
-                onTargetChanged(newText.toIntOrNull()) },
+                onTargetChanged(newText.toIntOrNull())
+            },
             label = { Text("Цель") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
         Spacer(Modifier.height(8.dp))
         ExposedDropdownMenuBox(
             modifier = Modifier
+                .testTag("dropdown_menu")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             expanded = expanded,
@@ -155,8 +163,7 @@ fun HabitFormContent(
                             if (text == 0) {
                                 onWeeklyCountChanged(1)
                                 countText = "1"
-                            }
-                            else onWeeklyCountChanged(text)
+                            } else onWeeklyCountChanged(text)
                         }
                     },
                     label = { Text("Раз в неделю") },

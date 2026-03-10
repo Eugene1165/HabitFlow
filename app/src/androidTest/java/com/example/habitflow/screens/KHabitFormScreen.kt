@@ -9,5 +9,9 @@ class KHabitFormScreen(
 ) : ComposeScreen<KHabitFormScreen>(
     semanticsProvider = semanticsProvider
 ){
+    val errorSnackbar = child<KNode> { hasText("Заполните название привычки") }
     val screenHabitForm = child<KNode> { hasTestTag("screen_habit_form") }
+    val titleField = child<KNode> { hasTestTag("habit_name") }
+    val descriptionField = child<KNode> { hasTestTag("habit_description") }
+    val saveButton = child<KNode> { hasTestTag("btn_save_habit") }
 }
