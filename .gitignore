@@ -20,4 +20,6 @@ local.properties
 # OS
 .DS_Store
 Thumbs.db
+# Guides / personal notes
+**/guides/
 
