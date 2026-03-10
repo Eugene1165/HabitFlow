@@ -22,6 +22,8 @@ kizitonwose-calendar = "2.6.2"
 mockk = "1.13.12"
 kotlinx-coroutines-test = "1.8.1"
 turbine = "1.2.0"
+work = "2.9.1"
+
 
 
 
@@ -75,6 +77,11 @@ kizitonwose-calendar-compose = { group = "com.kizitonwose.calendar", name = "com
 
 mockk = { group = "io.mockk", name ="mockk",version.ref = "mockk"}
 turbine = {group = "app.cash.turbine",name= "turbine",version.ref = "turbine"}
+
+androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work" }
+hilt-work = { group = "androidx.hilt", name = "hilt-work", version = "1.2.0" }
+hilt-work-compiler = { group = "androidx.hilt", name = "hilt-compiler", version = "1.2.0" }
+
 
 
 [plugins]

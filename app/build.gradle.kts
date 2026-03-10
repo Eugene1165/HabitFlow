@@ -110,4 +110,8 @@ dependencies {
 
     implementation(libs.kizitonwose.calendar.compose)
 
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.hilt.work)
+    ksp(libs.hilt.work.compiler)
+
 }

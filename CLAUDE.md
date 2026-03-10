@@ -292,7 +292,7 @@ App Start
 | Domain (модели, репозитории, use cases) | ✅ Готов |
 | Data (Room, DataStore, маппинг) | ✅ Готов |
 | Presentation (все экраны) | ✅ Готов |
-| Уведомления (WorkManager + NotificationManager) | 🔲 В плане |
+| Уведомления (WorkManager + NotificationManager) | 🟡 В процессе (ReminderScheduler, WorkManagerReminderScheduler, ReminderWorker, WorkManagerModule готовы; TimePicker UI — в плане) |
 | Unit-тесты (статистика, toggle) | ✅ Готов (11 тестов: GetHabitsStatisticsUseCase x5, ToggleHabitEntryUseCase x4, GetAllHabitsStatisticsUseCase x2) |
 | Retrofit / синхронизация Habits | ✅ Готов (offline-first, Supabase) |
 | Retrofit / синхронизация HabitEntries | ✅ Готов (addEntry/updateEntry работают, данные пишутся в Supabase при toggle) |
