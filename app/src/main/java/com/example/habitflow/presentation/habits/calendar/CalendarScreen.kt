@@ -209,7 +209,6 @@ fun CalendarContent(
 
     LaunchedEffect(calendarState.firstVisibleMonth.yearMonth) {
         if (isFirstRender) {
-            isFirstRender = false
             return@LaunchedEffect
         }
         onMonthChanged(calendarState.firstVisibleMonth.yearMonth)

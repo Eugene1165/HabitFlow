@@ -1,4 +1,4 @@
-package com.example.habitflow
+package com.example.habitflow.fakeRepository
 
 import com.example.habitflow.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.flow.MutableStateFlow

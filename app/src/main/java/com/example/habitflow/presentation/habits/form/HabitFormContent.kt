@@ -1,5 +1,6 @@
 package com.example.habitflow.presentation.habits.form
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -10,13 +11,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +38,7 @@ import com.example.habitflow.presentation.components.ColorPicker
 import com.example.habitflow.presentation.components.habitColors
 import com.example.habitflow.presentation.extensions.toDisplayName
 import java.time.DayOfWeek
+import java.time.LocalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,9 +52,11 @@ fun HabitFormContent(
     onSelectedDaysChanged: (DayOfWeek) -> Unit,
     onWeeklyCountChanged: (Int) -> Unit,
     onTargetChanged: (Int?) -> Unit,
+    onReminderChanged: (LocalTime?) -> Unit
 ) {
     val scrollState = rememberScrollState()
     var expanded by remember { mutableStateOf(false) }
+    var showTimePicker by remember { mutableStateOf(false) }
     Column(
         modifier = modifier
             .testTag("screen_habit_form")
@@ -76,10 +85,12 @@ fun HabitFormContent(
             label = { Text("Описание") }
         )
         Spacer(Modifier.height(8.dp))
-        Text("Цвет",
+        Text(
+            "Цвет",
             modifier = Modifier
                 .testTag("habit_color")
-                .padding(horizontal = 16.dp, vertical = 8.dp))
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+        )
         Spacer(Modifier.height(8.dp))
         ColorPicker(
             selectedColor = state.color,
@@ -115,7 +126,7 @@ fun HabitFormContent(
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-                modifier = Modifier.menuAnchor()
+                modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable)
             )
             ExposedDropdownMenu(
                 expanded = expanded,
@@ -177,12 +188,24 @@ fun HabitFormContent(
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .clickable {
+                    showTimePicker = true
+                },
             value = state.reminder?.toString() ?: "",
+            enabled = false, // поле не получало фокус а клик обрабатывался через clickable
             onValueChange = {},
-            readOnly = true,
             label = { Text("Напоминание") }
         )
+        if (showTimePicker) {
+            TimePickerInRemember(
+                initialTime = state.reminder,
+                onConfirm = { time ->
+                    onReminderChanged(time)
+                    showTimePicker = false
+                },
+                onDismiss = { showTimePicker = false })
+        }
     }
 }
 
@@ -200,4 +223,37 @@ fun WeeklyDaysSelector(
             )
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TimePickerInRemember(
+    onConfirm: (LocalTime) -> Unit,
+    onDismiss: () -> Unit,
+    initialTime: LocalTime?
+) {
+    val timePicker = rememberTimePickerState(
+        initialHour = initialTime?.hour ?: 0,
+        initialMinute = initialTime?.minute ?: 0
+    )
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Выберите время") },
+        text = { TimePicker(state = timePicker) },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onConfirm(
+                        LocalTime.of(
+                            timePicker.hour,
+                            timePicker.minute
+                        )
+                    )
+                }
+            ) { Text("Сохранить") }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text("Отменить") }
+        }
+    )
 }

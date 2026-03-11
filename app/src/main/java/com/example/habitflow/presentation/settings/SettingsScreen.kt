@@ -39,9 +39,11 @@ fun SettingsScreen() {
             )
         }
     ) { paddingValues ->
-        Box(modifier = Modifier
-            .testTag("screen_settings")
-            .padding(paddingValues)) {
+        Box(
+            modifier = Modifier
+                .testTag("screen_settings")
+                .padding(paddingValues)
+        ) {
             when (state) {
                 is SettingsUiState.Loading -> {
                     Box(
@@ -106,11 +108,15 @@ fun AppearanceSection(
     onDarkThemeToggled: (Boolean) -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.Start
     ) {
         Text("Темная тема")
-        Switch(checked = isDarkTheme, onCheckedChange = onDarkThemeToggled)
+        Switch(
+            modifier = Modifier.testTag("switcher_theme"),
+            checked = isDarkTheme, onCheckedChange = onDarkThemeToggled
+        )
     }
 }
 
@@ -130,6 +136,7 @@ fun CalendarSection(
         ) {
             DayOfWeek.entries.forEach { day ->
                 FilterChip(
+                    modifier = Modifier.testTag("day_${day}"),
                     selected = day == firstDayOfWeek,
                     onClick = { onFirstDayChanged(day) },
                     label = { Text(day.toDisplayName()) }

@@ -101,11 +101,13 @@ fun ArchivedScreen(navController: NavController) {
                                 onClick = { habitId -> navController.navigate("habit_info/$habitId") }
                             ) {
                                 IconButton(
+                                    modifier = Modifier.testTag("restore_btn_${habit.id}"),
                                     onClick = { viewModel.onRestore(habit.id) }
                                 ) {
                                     Icon(Icons.Default.Refresh, contentDescription = null)
                                 }
                                 IconButton(
+                                    modifier = Modifier.testTag("delete_btn_${habit.id}"),
                                     onClick = { habitToDelete = habit.id }
                                 ) {
                                     Icon(Icons.Default.Delete, contentDescription = null)

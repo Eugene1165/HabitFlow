@@ -10,7 +10,6 @@ class AddHabitUseCase @Inject constructor(
     private val scheduler: ReminderScheduler
 ) {
     suspend operator fun invoke(habit: Habit) {
-        repository.addHabit(habit)
-        scheduler.schedule(habit)
+        scheduler.schedule(repository.addHabit(habit))
     }
 }

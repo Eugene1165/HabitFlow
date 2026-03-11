@@ -132,7 +132,9 @@ fun StatisticsContent(data: AllHabitsStatistics) {
 @Composable
 fun ActiveHabitsCard(count: Int) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .testTag("active_habit_card")
+            .fillMaxWidth(),
         shape = RoundedCornerShape(16.dp)
     ) {
         Row(
@@ -149,7 +151,7 @@ fun ActiveHabitsCard(count: Int) {
 
 @Composable
 fun StreakCard(modifier: Modifier, label: String, streakValue: Int, habitName: String) {
-    Card(modifier = modifier, shape = RoundedCornerShape(16.dp)) {
+    Card(modifier = modifier.testTag("streak_habit_card"), shape = RoundedCornerShape(16.dp)) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.Center
@@ -164,7 +166,9 @@ fun StreakCard(modifier: Modifier, label: String, streakValue: Int, habitName: S
 @Composable
 fun MostConsistentCard(habitName: String, percent: Float) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .testTag("most_habit_card")
+            .fillMaxWidth(),
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(

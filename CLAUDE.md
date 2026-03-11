@@ -292,10 +292,10 @@ App Start
 | Domain (модели, репозитории, use cases) | ✅ Готов |
 | Data (Room, DataStore, маппинг) | ✅ Готов |
 | Presentation (все экраны) | ✅ Готов |
-| Уведомления (WorkManager + NotificationManager) | 🟡 В процессе (ReminderScheduler, WorkManagerReminderScheduler, ReminderWorker, WorkManagerModule готовы; TimePicker UI — в плане) |
+| Уведомления (WorkManager + NotificationManager) | ✅ Готов (ReminderScheduler, WorkManagerReminderScheduler, ReminderWorker, WorkManagerModule, TimePicker UI в HabitFormContent, RequestNotificationPermission в MainActivity, addHabit возвращает Habit с реальным id) |
 | Unit-тесты (статистика, toggle) | ✅ Готов (11 тестов: GetHabitsStatisticsUseCase x5, ToggleHabitEntryUseCase x4, GetAllHabitsStatisticsUseCase x2) |
 | Retrofit / синхронизация Habits | ✅ Готов (offline-first, Supabase) |
 | Retrofit / синхронизация HabitEntries | ✅ Готов (addEntry/updateEntry работают, данные пишутся в Supabase при toggle) |
 | Синхронизация archiveHabit / restoreHabit | ✅ Готов (PATCH через updateEntriesById, offline-first порядок) |
 | Сетевое логирование | ✅ Готов (HttpLoggingInterceptor BODY в NetworkModule) |
-| Instrumented тесты (Kaspresso) | ✅ 15 тестов: NavigationTest x4, HabitsListTest x4 (отображение, FAB, toggle, навигация), HabitFormTest x2 (создание, валидация), HabitInfoTest x3 (отображение, архивация, переход в календарь); FakeHabitRepository + FakeHabitEntryRepository + FakeUserPreferencesRepository |
+| Instrumented тесты (Kaspresso) | ✅ 21 тест (все passing): NavigationTest x4, HabitsListTest x4, HabitFormTest x2, HabitInfoTest x3, ArchivedScreenTest x3 (отображение, восстановление, удаление), SettingsScreenTest x3 (отображение, тема, день недели), StatisticsScreenTest x1, CalendarScreenTest x1; AllTestsSuite — единая точка запуска; FakeHabitRepository + FakeHabitEntryRepository + FakeUserPreferencesRepository + FakeReminderScheduler; TestRepositoryModule replaces RepositoryModule + WorkManagerModule |

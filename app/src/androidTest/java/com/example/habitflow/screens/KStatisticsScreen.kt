@@ -10,5 +10,9 @@ class KStatisticsScreen(
     semanticsProvider = semanticsProvider
 ) {
     val screenStatistics = child<KNode> { hasTestTag("screen_statistics") }
+    val activeHabitCard = child<KNode> { hasTestTag("active_habit_card") }
+    val streakHabitCard = child<KNode> { hasTestTag("streak_habit_card") }
+    val mostHabitCard = child<KNode> { hasTestTag("most_habit_card") }
+
 
 }

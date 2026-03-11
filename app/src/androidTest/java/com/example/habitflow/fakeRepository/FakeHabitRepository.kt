@@ -1,4 +1,4 @@
-package com.example.habitflow
+package com.example.habitflow.fakeRepository
 
 import com.example.habitflow.domain.model.Habit
 import com.example.habitflow.domain.repository.HabitRepository
@@ -10,14 +10,14 @@ class FakeHabitRepository : HabitRepository {
     private val habits = MutableStateFlow<List<Habit>>(emptyList())
 
     override fun getAllActiveHabits(): Flow<List<Habit>> =
-        habits.map { list -> list.filter { !it.isArchived }}
+        habits.map { list -> list.filter { !it.isArchived } }
 
-    override fun getArchivedHabits(): Flow<List<Habit>> {
-        TODO("Not yet implemented")
-    }
+    override fun getArchivedHabits(): Flow<List<Habit>> =
+        habits.map { list -> list.filter { it.isArchived } }
+
 
     override suspend fun getHabitById(habitId: Int): Habit? {
-       return habits.value.find { it.id == habitId }
+        return habits.value.find { it.id == habitId }
     }
 
     override fun observeHabitById(habitId: Int): Flow<Habit?> {
@@ -25,17 +25,21 @@ class FakeHabitRepository : HabitRepository {
     }
 
 
-    override suspend fun addHabit(habit: Habit) {
+    override suspend fun addHabit(habit: Habit): Habit {
         habits.value += habit
+        return habit
     }
 
     override suspend fun updateHabit(habit: Habit) {
-        TODO("Not yet implemented")
+        habits.value = habits.value.map {
+            if(it.id ==habit.id) habit else it
+        }
     }
 
     override suspend fun deleteHabit(habitId: Int) {
-        TODO("Not yet implemented")
+        habits.value = habits.value.filter { it.id != habitId }
     }
+
 
     override suspend fun archiveHabit(habitId: Int) {
         habits.value = habits.value.map {
@@ -44,6 +48,8 @@ class FakeHabitRepository : HabitRepository {
     }
 
     override suspend fun restoreHabit(habitId: Int) {
-        TODO("Not yet implemented")
+        habits.value = habits.value.map {
+            if (it.id == habitId) it.copy(isArchived = false) else it
+        }
     }
 }

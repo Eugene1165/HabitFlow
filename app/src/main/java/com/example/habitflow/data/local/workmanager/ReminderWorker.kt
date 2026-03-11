@@ -3,6 +3,7 @@ package com.example.habitflow.data.local.workmanager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
@@ -22,15 +23,13 @@ class ReminderWorker @AssistedInject constructor(
     override suspend fun doWork(): Result {
         val habitId = inputData.getInt("habit_id", DEFAULT_VALUE)
         if (habitId == -1) return Result.failure()
-
         val habit = repository.getHabitById(habitId)
         if (habit == null || habit.isArchived) return Result.success()
+        Log.d("ReminderWorker", "habitId: $habitId, habit: $habit")
 
         showNotification(habit)
 
         return Result.success()
-
-
     }
 
 

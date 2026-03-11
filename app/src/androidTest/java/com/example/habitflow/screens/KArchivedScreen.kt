@@ -10,9 +10,19 @@ class KArchivedScreen(
     semanticsProvider = semanticsProvider
 ) {
     val screenArchived = child<KNode> { hasTestTag("screen_archived") }
+    val confirmDeleteBtn = child<KNode> { hasText("Удалить") }
 
-    fun habitByTitle(title: String): KNode {
-        return child<KNode> { hasText(title) }
+
+    fun restoreBtn(habitId: Int): KNode {
+        return child<KNode> { hasTestTag("restore_btn_${habitId}") }
+    }
+
+    fun deleteBtn(habitId: Int): KNode {
+        return child<KNode> { hasTestTag("delete_btn_${habitId}") }
+    }
+
+    fun habitCardById(habitId: Int): KNode {
+        return child<KNode> { hasTestTag("habit_item_id_$habitId") }
     }
 
 }

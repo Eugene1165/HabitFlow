@@ -2,6 +2,7 @@ package com.example.habitflow.data.local.workmanager
 
 import android.content.Context
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.workDataOf
 import androidx.work.WorkManager
@@ -28,7 +29,6 @@ class WorkManagerReminderScheduler @Inject constructor(
             now,
             nextReminder
         )
-
         val workRequest = PeriodicWorkRequestBuilder<ReminderWorker>(
             24, TimeUnit.HOURS)
             .setInitialDelay(delayMinutes, TimeUnit.MINUTES)

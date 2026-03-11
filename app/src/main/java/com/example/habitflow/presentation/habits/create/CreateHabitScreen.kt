@@ -85,6 +85,7 @@ fun CreateHabitScreen(habitId: Int?, navController: NavController) {
                 onSelectedDaysChanged = { viewModel.onSelectedDaysChanged(it) },
                 onWeeklyCountChanged = { viewModel.onWeeklyCountChanged(it) },
                 onTargetChanged = { viewModel.onTargetChanged(it) },
+                onReminderChanged = { viewModel.onReminderChanged(it)}
             )
             Spacer(Modifier.height(8.dp))
             Button(

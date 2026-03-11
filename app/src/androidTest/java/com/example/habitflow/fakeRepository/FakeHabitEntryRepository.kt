@@ -1,4 +1,4 @@
-package com.example.habitflow
+package com.example.habitflow.fakeRepository
 
 import com.example.habitflow.domain.model.HabitEntry
 import com.example.habitflow.domain.repository.HabitEntryRepository
@@ -22,8 +22,11 @@ class FakeHabitEntryRepository : HabitEntryRepository {
         startDate: LocalDate,
         endDate: LocalDate
     ): Flow<List<HabitEntry>> {
-        return entrys.map { list -> list.filter { entry ->
-            entry.habitId == habitId && (entry.date >= startDate && entry.date <= endDate) } }
+        return entrys.map { list ->
+            list.filter { entry ->
+                entry.habitId == habitId && (entry.date >= startDate && entry.date <= endDate)
+            }
+        }
     }
 
     override fun getEntriesForDate(date: LocalDate): Flow<List<HabitEntry>> {
@@ -35,7 +38,9 @@ class FakeHabitEntryRepository : HabitEntryRepository {
         currentDate: LocalDate,
         isDone: Boolean
     ) {
-        TODO("Not yet implemented")
+        entrys.value = entrys.value.map {
+            if (it.habitId == habitId && it.date == currentDate) it.copy(isDone = isDone) else it
+        }
     }
 
     override suspend fun getEntryByDate(
