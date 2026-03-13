@@ -89,7 +89,7 @@ fun HabitsListScreen(navController: NavController) {
                         modifier = Modifier.testTag("habits_list"),
                         contentPadding = PaddingValues(bottom = 80.dp)
                     ) {
-                        items(habits) { habitWithStatus ->
+                        items(habits, key = {it.habit.id}) { habitWithStatus ->
                             HabitCard(
                                 habit = habitWithStatus.habit,
                                 onClick = { habitId -> navController.navigate("habit_info/$habitId") }
@@ -115,9 +115,6 @@ fun HabitsListScreen(navController: NavController) {
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text("Ошибка")
-                            Button(onClick = { viewModel.state }) {
-                                Text("Повторить")
-                            }
                         }
                     }
                 }
@@ -127,7 +124,7 @@ fun HabitsListScreen(navController: NavController) {
                     .testTag("fab_add_new_habit")
                     .align(Alignment.BottomEnd)
                     .padding(16.dp),
-                containerColor = Color(0xFF6650A4),
+                containerColor = Color(color = 0xFF6650A4),
                 onClick = { navController.navigate("create_habit") }) {
                 Icon(Icons.Default.Add, contentDescription = null)
             }

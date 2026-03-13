@@ -14,34 +14,34 @@ import javax.inject.Inject
 class UserPreferencesRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) : UserPreferencesRepository {
-    private val ONBOARDING_KEY = booleanPreferencesKey("onboarding_completed")
-    private val DARK_THEME_KEY = booleanPreferencesKey("dark_theme")
-    private val FIRST_DAY_OF_WEEK_KEY = stringPreferencesKey("first_day_of_week")
+    private val onBoardingKey = booleanPreferencesKey("onboarding_completed")
+    private val darkThemeKey = booleanPreferencesKey("dark_theme")
+    private val firstDayOfWeekDay = stringPreferencesKey("first_day_of_week")
 
     override fun isOnBoardingCompleted(): Flow<Boolean> {
-        return dataStore.data.map { preferences -> preferences[ONBOARDING_KEY] ?: false }
+        return dataStore.data.map { preferences -> preferences[onBoardingKey] ?: false }
 
     }
 
     override suspend fun setOnBoardingCompleted() {
-        dataStore.edit { preferences -> preferences[ONBOARDING_KEY] = true }
+        dataStore.edit { preferences -> preferences[onBoardingKey] = true }
     }
 
     override fun isDarkThemeEnabled(): Flow<Boolean> {
-        return dataStore.data.map { preferences -> preferences[DARK_THEME_KEY] ?: false }
+        return dataStore.data.map { preferences -> preferences[darkThemeKey] ?: false }
     }
 
     override suspend fun setDarkThemeEnabled(isEnabled: Boolean) {
-        dataStore.edit { preferences -> preferences[DARK_THEME_KEY] = isEnabled }
+        dataStore.edit { preferences -> preferences[darkThemeKey] = isEnabled }
     }
 
     override fun getFirstDayOfWeek(): Flow<DayOfWeek> {
         return dataStore.data.map { preferences ->
-            val str = preferences[FIRST_DAY_OF_WEEK_KEY] ?: "MONDAY"
+            val str = preferences[firstDayOfWeekDay] ?: "MONDAY"
             DayOfWeek.valueOf(str) }
     }
 
     override suspend fun setFirstDayOfWeek(day: DayOfWeek) {
-        dataStore.edit { preferences -> preferences[FIRST_DAY_OF_WEEK_KEY] = day.name }
+        dataStore.edit { preferences -> preferences[firstDayOfWeekDay] = day.name }
     }
 }

@@ -16,7 +16,7 @@ class MainViewModel @Inject constructor(
     val isDarkTheme: StateFlow<Boolean> = getDarkThemeUseCase()
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
             initialValue = false
         )
 }

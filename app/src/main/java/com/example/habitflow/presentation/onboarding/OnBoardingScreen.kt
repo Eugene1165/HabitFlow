@@ -41,16 +41,18 @@ fun OnBoardingScreen(navController: NavController) {
     val viewModel: OnBoardingViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    Scaffold() { paddingValues ->
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)) {
+    Scaffold { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
             //подписка на события
             LaunchedEffect(Unit) {
                 viewModel.events.collect { event ->
                     when (event) {
-                        is OnBoardingEvent.NavigateToMain -> navController.navigate("main") {
-                            popUpTo("onboarding") { inclusive = true }
+                        is OnBoardingEvent.NavigateToMain -> navController.navigate(route = "main") {
+                            popUpTo(route = "onboarding") { inclusive = true }
                         }
                     }
                 }
@@ -73,8 +75,8 @@ fun OnBoardingScreen(navController: NavController) {
                             .background(
                                 Brush.verticalGradient(
                                     colors = listOf(
-                                        Color(0xFF6650A4),
-                                        Color(0xFF1A1A2E)
+                                        Color(color = 0xFF6650A4),
+                                        Color(color = 0xFF1A1A2E)
                                     )
                                 )
                             )
@@ -83,75 +85,75 @@ fun OnBoardingScreen(navController: NavController) {
                             modifier = Modifier.fillMaxSize(),
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
-                            Spacer(modifier = Modifier.height(64.dp))
-                            Text("🎯", fontSize = 80.sp)
-                            Spacer(Modifier.height(16.dp))
+                            Spacer(modifier = Modifier.height(height = 64.dp))
+                            Text(text = "🎯", fontSize = 80.sp)
+                            Spacer(Modifier.height(height = 16.dp))
                             Text(
                                 text = "HabitFlow",
                                 fontSize = 36.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White
                             )
-                            Spacer(Modifier.height(8.dp))
+                            Spacer(Modifier.height(height = 8.dp))
                             Text(
                                 text = "Формируй привычки,\nменяй жизнь",
                                 fontSize = 16.sp,
                                 color = Color.White.copy(alpha = 0.7f),
                                 textAlign = TextAlign.Center
                             )
-                            Spacer(Modifier.height(32.dp))
+                            Spacer(Modifier.height(height = 32.dp))
                             Row(
-                                modifier = Modifier.fillMaxWidth(0.8f),
+                                modifier = Modifier.fillMaxWidth(fraction = 0.8f),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.CheckCircle,
                                     contentDescription = null,
                                     tint = Color.White,
-                                    modifier = Modifier.size(20.dp)
+                                    modifier = Modifier.size(size = 20.dp)
                                 )
-                                Spacer(Modifier.width(8.dp))
+                                Spacer(Modifier.width(width = 8.dp))
                                 Text("Отслеживай каждый день", color = Color.White)
                             }
-                            Spacer(Modifier.height(12.dp))
+                            Spacer(Modifier.height(height = 12.dp))
                             Row(
-                                modifier = Modifier.fillMaxWidth(0.8f),
+                                modifier = Modifier.fillMaxWidth(fraction = 0.8f),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Info,
                                     contentDescription = null,
                                     tint = Color.White,
-                                    modifier = Modifier.size(20.dp)
+                                    modifier = Modifier.size(size = 20.dp)
                                 )
-                                Spacer(Modifier.width(8.dp))
-                                Text("Смотри статистику ", color = Color.White)
+                                Spacer(Modifier.width(width = 8.dp))
+                                Text(text = "Смотри статистику ", color = Color.White)
                             }
-                            Spacer(Modifier.height(12.dp))
+                            Spacer(Modifier.height(height = 12.dp))
                             Row(
-                                modifier = Modifier.fillMaxWidth(0.8f),
+                                modifier = Modifier.fillMaxWidth(fraction = 0.8f),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Notifications,
                                     contentDescription = null,
                                     tint = Color.White,
-                                    modifier = Modifier.size(20.dp)
+                                    modifier = Modifier.size(size = 20.dp)
                                 )
-                                Spacer(Modifier.width(8.dp))
-                                Text("Не забывай с напоминаниями", color = Color.White)
+                                Spacer(Modifier.width(width = 8.dp))
+                                Text(text = "Не забывай с напоминаниями", color = Color.White)
                             }
 
-                            Spacer(Modifier.weight(1f))
+                            Spacer(Modifier.weight(weight = 1f))
 
                             Button(
-                                modifier = Modifier.fillMaxWidth(0.8f),
+                                modifier = Modifier.fillMaxWidth(fraction = 0.8f),
                                 onClick = { viewModel.onComplete() },
                                 colors = ButtonDefaults.buttonColors(containerColor = Color.White)
                             ) {
-                                Text("Начать ", color = Color(0xFF6650A4))
+                                Text(text = "Начать ", color = Color(color = 0xFF6650A4))
                             }
-                            Spacer(modifier = Modifier.height(32.dp))
+                            Spacer(modifier = Modifier.height(height = 32.dp))
                         }
                     }
                 }

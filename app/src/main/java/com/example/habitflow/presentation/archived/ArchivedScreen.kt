@@ -95,7 +95,7 @@ fun ArchivedScreen(navController: NavController) {
                     LazyColumn(
                         contentPadding = PaddingValues(bottom = 80.dp)
                     ) {
-                        items(habits) { habit ->
+                        items(habits, key = {it.id}) { habit ->
                             HabitCard(
                                 habit = habit,
                                 onClick = { habitId -> navController.navigate("habit_info/$habitId") }

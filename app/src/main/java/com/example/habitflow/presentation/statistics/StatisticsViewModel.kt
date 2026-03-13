@@ -25,7 +25,7 @@ class StatisticsViewModel @Inject constructor(
         .catch { e -> emit(StatisticsUiState.Error(e.message ?: "Ошибка загрузки")) }
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
             initialValue = StatisticsUiState.Loading
         )
 }

@@ -7,8 +7,6 @@ import com.example.habitflow.domain.model.RepeatType
 import com.example.habitflow.domain.usecase.GetAllActiveHabitsUseCase
 import com.example.habitflow.domain.usecase.GetAllHabitsStatisticsUseCase
 import com.example.habitflow.domain.usecase.GetHabitsStatisticsUseCase
-import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals

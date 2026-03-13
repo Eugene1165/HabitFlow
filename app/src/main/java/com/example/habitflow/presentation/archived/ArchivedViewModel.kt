@@ -30,7 +30,7 @@ class ArchivedViewModel @Inject constructor(
         .catch { e -> emit(ArchivedUiState.Error(e.message ?: "привычек не найдено")) }
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
             initialValue = ArchivedUiState.Loading
         )
 
@@ -41,5 +41,4 @@ class ArchivedViewModel @Inject constructor(
     fun onDelete(habitId: Int) {
         viewModelScope.launch { deleteHabitUseCase.invoke(habitId) }
     }
-
 }

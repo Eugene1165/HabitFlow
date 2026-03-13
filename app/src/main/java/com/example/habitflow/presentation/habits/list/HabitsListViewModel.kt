@@ -43,7 +43,7 @@ class HabitsListViewModel @Inject constructor(
         .catch { e -> emit(HabitsListUiState.Error(e.message ?: "Ошибка")) }
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
             initialValue = HabitsListUiState.Loading
         )
     private val togglingHabits = mutableSetOf<Int>()

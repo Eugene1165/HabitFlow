@@ -24,11 +24,9 @@ class ReminderWorker @AssistedInject constructor(
         val habitId = inputData.getInt("habit_id", DEFAULT_VALUE)
         if (habitId == -1) return Result.failure()
         val habit = repository.getHabitById(habitId)
-        if (habit == null || habit.isArchived) return Result.success()
-        Log.d("ReminderWorker", "habitId: $habitId, habit: $habit")
-
-        showNotification(habit)
-
+        habit?.let { h ->
+            if (!h.isArchived) showNotification(h)
+        }
         return Result.success()
     }
 
