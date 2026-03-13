@@ -302,3 +302,5 @@ App Start
 | Database migrations | ✅ Готов (exportSchema = true, ksp schemaLocation = $projectDir/schemas, app/schemas/2.json в git, MIGRATION_1_2 — добавление isSynced в habit_entries) |
 | Retry синхронизации HabitEntries | ✅ Готов (markAsSynced(id) + getUnsyncedEntries() в DAO; addEntry/updateEntry помечают isSynced=true после успешного API; getEntriesForHabit onStart retry всех isSynced=false записей) |
 | Dark theme (компоненты) | ✅ Готов (ColorPicker: FlowRow→LazyRow, hardcoded Color.Black→onSurface; HabitCard: убран Color.White контейнер, Color.Black/Gray→Material theme цвета) |
+| ViewModel рефакторинг (stateIn) | ✅ Готов (StatisticsViewModel, ArchivedViewModel, CalendarViewModel, SettingsViewModel — переведены на stateIn(); HabitFormViewModel, HabitInfoViewModel, OnBoardingViewModel — оставлены MutableStateFlow по архитектурным причинам) |
+| Unit-тесты (финальная проверка) | ✅ Готов (11 тестов покрывают всю бизнес-логику; новые методы DAO не требуют unit-тестов — тестируются на уровне instrumented) |

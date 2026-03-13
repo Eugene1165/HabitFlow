@@ -7,10 +7,11 @@ import com.example.habitflow.domain.usecase.GetFirstDayOfWeekUseCase
 import com.example.habitflow.domain.usecase.SetDarkThemeUseCase
 import com.example.habitflow.domain.usecase.SetFirstDayOfWeekUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import javax.inject.Inject
@@ -23,26 +24,21 @@ class SettingsViewModel @Inject constructor(
     private val setFirstDayOfWeekUseCase: SetFirstDayOfWeekUseCase,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<SettingsUiState>(SettingsUiState.Loading)
-    val state = _state.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            combine(
-                getDarkThemeUseCase(),
-                getFirstDayOfWeekUseCase()
-            ) { isDark, firstDay ->
-                SettingsUiState.Content(
-                    isDarkTheme = isDark,
-                    firstDayOfWeek = firstDay
-                )
-            }
-                .catch { e -> _state.value = SettingsUiState.Error(e.message ?: "Ошибка загрузки") }
-                .collect { newContent ->
-                    _state.value = newContent
-                }
-        }
+    val state: StateFlow<SettingsUiState> = combine(
+        getDarkThemeUseCase(),
+        getFirstDayOfWeekUseCase()
+    ) { isDark, firstDay ->
+        SettingsUiState.Content(
+            isDarkTheme = isDark,
+            firstDayOfWeek = firstDay
+        ) as SettingsUiState
     }
+        .catch { e -> emit(SettingsUiState.Error(e.message ?: "Ошибка загрузки")) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = SettingsUiState.Loading
+        )
 
 
     fun onDarkThemeToggled(isEnabled: Boolean) {

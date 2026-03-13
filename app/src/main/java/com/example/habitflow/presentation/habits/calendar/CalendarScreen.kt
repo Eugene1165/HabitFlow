@@ -17,6 +17,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -53,11 +55,13 @@ fun CalendarScreen(habitId: Int, navController: NavController) {
 
     val viewModel: CalendarViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
                 CalendarEvent.NavigateBack -> navController.popBackStack()
+                is CalendarEvent.ShowError -> snackbarHostState.showSnackbar(event.message)
             }
         }
     }
@@ -69,7 +73,8 @@ fun CalendarScreen(habitId: Int, navController: NavController) {
                 title = (state as? CalendarUiState.Content)?.habit?.title ?: "",
                 onBackClick = { viewModel.onNavigateBack() }
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         when (val currentState = state) {
             is CalendarUiState.Loading -> {
