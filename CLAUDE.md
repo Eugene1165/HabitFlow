@@ -304,3 +304,93 @@ App Start
 | Dark theme (компоненты) | ✅ Готов (ColorPicker: FlowRow→LazyRow, hardcoded Color.Black→onSurface; HabitCard: убран Color.White контейнер, Color.Black/Gray→Material theme цвета) |
 | ViewModel рефакторинг (stateIn) | ✅ Готов (StatisticsViewModel, ArchivedViewModel, CalendarViewModel, SettingsViewModel — переведены на stateIn(); HabitFormViewModel, HabitInfoViewModel, OnBoardingViewModel — оставлены MutableStateFlow по архитектурным причинам) |
 | Unit-тесты (финальная проверка) | ✅ Готов (11 тестов покрывают всю бизнес-логику; новые методы DAO не требуют unit-тестов — тестируются на уровне instrumented) |
+
+---
+
+## Roadmap: Junior+ → Middle+
+
+### Блок 1 — Архитектура и обработка ошибок (критично)
+
+**1.1 Result wrapper pattern**
+Текущая проблема: ошибки глотаются в пустых `catch {}` блоках по всему коду.
+Middle+ решение: ввести `sealed class Result<T>` (Success / Error / Loading) на уровне Domain.
+Репозитории возвращают `Flow<Result<T>>` вместо `Flow<T>`.
+ViewModels маппируют Result → UiState без try/catch.
+Цель: единая стратегия обработки ошибок через все слои.
+
+**1.2 Background sync через WorkManager**
+Текущая проблема: retry синхронизации происходит только при открытии конкретного экрана.
+Middle+ решение: `SyncWorker` — отдельный Worker который при запуске приложения находит все `isSynced = false` записи и отправляет их на сервер.
+Запускается через `OneTimeWorkRequest` при старте приложения.
+
+**1.3 Conflict resolution стратегия**
+Текущая проблема: при конфликте локально vs Supabase — неясно кто победит.
+Middle+ решение: добавить поле `updatedAt: LocalDateTime` в `HabitEntry`. При синхронизации сравнивать timestamps — побеждает последнее изменение (Last Write Wins).
+
+---
+
+### Блок 2 — Новые фичи (бизнес-логика)
+
+**2.1 Поиск и фильтрация привычек**
+`HabitsListScreen` — поле поиска по названию.
+Фильтр по типу повторения (Daily / Weekly).
+Реализация: `MutableStateFlow<String>` для query + `combine` с основным Flow привычек.
+Цель: отработать реактивный поиск без дополнительных запросов к БД.
+
+**2.2 Достижения (Achievements)**
+Новый Domain model: `Achievement(id, title, description, unlockedAt?)`.
+Логика разблокировки: streak 7 дней, streak 30 дней, 10 привычек выполнено, 100% неделя.
+Новый UseCase: `GetAchievementsUseCase` — вычисляет достижения из существующей статистики.
+Цель: сложная бизнес-логика без нового API.
+
+**2.3 Виджет статистики на главном экране (Home Screen Widget)**
+`AppWidget` с Glance (Jetpack) — показывает привычки на сегодня + прогресс.
+Цель: опыт работы с AppWidget API + Glance Compose.
+
+---
+
+### Блок 3 — Качество кода (Middle обязательно знает)
+
+**3.1 Timber для логирования**
+Заменить `Log.d/e` и пустые catch на структурированное логирование через Timber.
+В debug — логировать все ошибки синхронизации.
+В release — только критические ошибки.
+
+**3.2 Проверка производительности**
+`HabitsListScreen` — профилировать через Android Studio Profiler.
+Убедиться что `LazyColumn` не ребилдит все элементы при toggle одной привычки.
+Добавить `key { habit.id }` в `LazyColumn` если отсутствует.
+
+**3.3 Lint + Detekt**
+Настроить статический анализ кода.
+Добавить `detekt.yml` с правилами для проекта.
+Цель: автоматическая проверка архитектурных нарушений.
+
+---
+
+### Блок 4 — Тестирование (Middle пишет тесты самостоятельно)
+
+**4.1 Unit-тесты для Result wrapper**
+После введения Result — переписать существующие 11 тестов под новый контракт.
+Добавить тесты для Error сценариев (сейчас не покрыты).
+
+**4.2 Unit-тесты для Achievement логики**
+`GetAchievementsUseCaseTest` — минимум 6 тестов:
+streak 7 дней разблокирует достижение, streak < 7 не разблокирует, и т.д.
+
+**4.3 Integration тесты для Room**
+`HabitEntryDaoTest` — instrumented тест для `markAsSynced` + `getUnsyncedEntries`.
+Цель: убедиться что SQL запросы работают корректно.
+
+---
+
+### Целевой результат Middle+
+
+| Критерий | Сейчас | Цель |
+|---|---|---|
+| Архитектурные решения | С подсказками | Самостоятельно |
+| Обработка ошибок | Пустые catch | Result pattern |
+| Тесты | С помощью | Самостоятельно |
+| Бизнес-логика | Понимает | Проектирует сам |
+| Flow операторы | Базовые | Сложные уверенно |
+| Отладка | Наугад | Системно |
