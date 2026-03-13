@@ -299,3 +299,6 @@ App Start
 | Синхронизация archiveHabit / restoreHabit | ✅ Готов (PATCH через updateEntriesById, offline-first порядок) |
 | Сетевое логирование | ✅ Готов (HttpLoggingInterceptor BODY в NetworkModule) |
 | Instrumented тесты (Kaspresso) | ✅ 21 тест (все passing): NavigationTest x4, HabitsListTest x4, HabitFormTest x2, HabitInfoTest x3, ArchivedScreenTest x3 (отображение, восстановление, удаление), SettingsScreenTest x3 (отображение, тема, день недели), StatisticsScreenTest x1, CalendarScreenTest x1; AllTestsSuite — единая точка запуска; FakeHabitRepository + FakeHabitEntryRepository + FakeUserPreferencesRepository + FakeReminderScheduler; TestRepositoryModule replaces RepositoryModule + WorkManagerModule |
+| Database migrations | ✅ Готов (exportSchema = true, ksp schemaLocation = $projectDir/schemas, app/schemas/2.json в git, MIGRATION_1_2 — добавление isSynced в habit_entries) |
+| Retry синхронизации HabitEntries | ✅ Готов (markAsSynced(id) + getUnsyncedEntries() в DAO; addEntry/updateEntry помечают isSynced=true после успешного API; getEntriesForHabit onStart retry всех isSynced=false записей) |
+| Dark theme (компоненты) | ✅ Готов (ColorPicker: FlowRow→LazyRow, hardcoded Color.Black→onSurface; HabitCard: убран Color.White контейнер, Color.Black/Gray→Material theme цвета) |

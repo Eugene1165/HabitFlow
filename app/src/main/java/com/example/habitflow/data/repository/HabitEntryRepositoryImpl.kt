@@ -7,6 +7,7 @@ import com.example.habitflow.data.remote.api.HabitEntryApiService
 import com.example.habitflow.domain.model.HabitEntry
 import com.example.habitflow.domain.repository.HabitEntryRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import java.time.LocalDate
@@ -24,6 +25,7 @@ class HabitEntryRepositoryImpl @Inject constructor(
         val entryWithId = entry.copy(id = generatedId.toInt())
         try {
             habitEntryApiService.createEntry(habitEntryDtoMapper.mapHabitEntryToDto(entryWithId))
+            dao.markAsSynced(entryWithId.id)
         } catch (_: Exception) {
         }
     }
@@ -45,6 +47,16 @@ class HabitEntryRepositoryImpl @Inject constructor(
                     }
                     dao.insertAll(entities)
                 } catch (_: Exception) {
+                }
+
+                val unsynced = dao.getUnsyncedEntries().first()
+                unsynced.forEach { entity ->
+                    try {
+                        val entry = habitEntryMapper.mapHabitEntryEntityToHabitEntry(entity)
+                        val dto = habitEntryDtoMapper.mapHabitEntryToDto(entry)
+                        habitEntryApiService.createEntry(dto)
+                        dao.markAsSynced(entity.id)
+                    }catch (t: Throwable){}
                 }
             }
     }
@@ -73,7 +85,8 @@ class HabitEntryRepositoryImpl @Inject constructor(
             val entry = dao.getEntryByDate(habitId, currentDate.toString()) ?: return
             val domainEntity = habitEntryMapper.mapHabitEntryEntityToHabitEntry(entry)
             val dto = habitEntryDtoMapper.mapHabitEntryToDto(domainEntity)
-            habitEntryApiService.updateEntryById("eq.${entry.id}",dto)
+            habitEntryApiService.updateEntryById("eq.${entry.id}", dto)
+            dao.markAsSynced(entry.id)
         } catch (e: Exception) {
         }
     }

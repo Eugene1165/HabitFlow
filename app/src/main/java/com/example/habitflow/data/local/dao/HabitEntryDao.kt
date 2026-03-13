@@ -17,16 +17,26 @@ interface HabitEntryDao {
     suspend fun insertAll(entities: List<HabitEntryEntity>)
 
     @Query("SELECT * FROM habit_entries WHERE habitId = :habitId AND date BETWEEN :startDate AND :endDate  ")
-    fun getEntriesForPeriod(habitId:Int, startDate: String,endDate: String): Flow<List<HabitEntryEntity>>
+    fun getEntriesForPeriod(
+        habitId: Int,
+        startDate: String,
+        endDate: String
+    ): Flow<List<HabitEntryEntity>>
 
     @Query("UPDATE habit_entries SET isDone = :isDone WHERE habitId = :habitId AND date = :currentDate")
-    suspend fun updateEntry(habitId: Int,currentDate: String,isDone: Boolean): Unit
+    suspend fun updateEntry(habitId: Int, currentDate: String, isDone: Boolean): Unit
+
+    @Query("UPDATE habit_entries SET isSynced = 1 WHERE id = :id")
+    suspend fun markAsSynced(id: Int)
+
+    @Query("SELECT * FROM habit_entries WHERE isSynced = 0 ")
+    fun getUnsyncedEntries():Flow<List<HabitEntryEntity>>
 
     @Query("SELECT * FROM habit_entries WHERE habitId = :habitId AND date = :date")
-    suspend fun getEntryByDate(habitId: Int,date: String): HabitEntryEntity?
+    suspend fun getEntryByDate(habitId: Int, date: String): HabitEntryEntity?
 
     @Query("SELECT * FROM habit_entries WHERE habitId = :habitId")
-    fun getEntriesForHabit(habitId: Int): Flow<List<HabitEntryEntity>>
+    fun getEntriesForHabit(habitId: Int):Flow<List<HabitEntryEntity>>
 
     @Query("SELECT * FROM habit_entries WHERE date = :date")
     fun getEntriesForDate(date: String): Flow<List<HabitEntryEntity>>
