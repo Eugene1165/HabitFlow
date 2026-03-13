@@ -11,7 +11,7 @@ import com.example.habitflow.data.local.dao.HabitEntryDao
 import com.example.habitflow.data.local.entity.HabitEntity
 import com.example.habitflow.data.local.entity.HabitEntryEntity
 
-@Database(entities = [HabitEntity::class, HabitEntryEntity::class], version = 2, exportSchema = false)
+@Database(entities = [HabitEntity::class, HabitEntryEntity::class], version = 2, exportSchema = true)
 abstract class HabitDatabase: RoomDatabase() {
     abstract fun habitDao(): HabitDao
     abstract fun habitEntryDao(): HabitEntryDao

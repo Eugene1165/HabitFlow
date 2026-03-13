@@ -50,6 +50,10 @@ android {
     }
 }
 
+ksp{
+    arg("room.schemaLocation","$projectDir/schemas")
+}
+
 configurations.all {
     resolutionStrategy {
         force("com.squareup:javapoet:1.13.0")

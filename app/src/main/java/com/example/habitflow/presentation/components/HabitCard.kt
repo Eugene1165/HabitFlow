@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -40,8 +41,7 @@ fun HabitCard(
             .clickable { onClick(habit.id) }
             .testTag("habit_item_id_${habit.id}"),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        shape = RoundedCornerShape(12.dp)
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
@@ -63,10 +63,13 @@ fun HabitCard(
                     text = habit.title,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(text = habit.repeatType.toDisplayName(), color = Color.Gray)
+                Text(
+                    text = habit.repeatType.toDisplayName(),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
             trailingContent()
         }
