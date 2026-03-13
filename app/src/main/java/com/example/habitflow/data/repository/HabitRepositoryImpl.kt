@@ -9,6 +9,7 @@ import com.example.habitflow.domain.repository.HabitRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import timber.log.Timber
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -30,7 +31,8 @@ class HabitRepositoryImpl @Inject constructor(
                             .let { habitMapper.mapHabitToHabitEntity(it) }
                             .let { dao.addHabit(it) }
                     }
-                } catch (_: kotlin.Exception) {
+                } catch (e: kotlin.Exception) {
+                    Timber.e(e, "Не удалось получить список активных привычек")
                 }
             }
     }
@@ -58,7 +60,9 @@ class HabitRepositoryImpl @Inject constructor(
         val habitWithId = habit.copy(id = generatedId.toInt())
         try {
             habitApiService.createEntries(habitDtoMapper.mapHabitToDto(habitWithId))
-        } catch (_: Exception) { }
+        } catch (e: Exception) {
+            Timber.e(e, "Не удалось добавить привычку")
+        }
         return habitWithId
     }
 
@@ -69,7 +73,8 @@ class HabitRepositoryImpl @Inject constructor(
                 habit.id.toString(),
                 habitDtoMapper.mapHabitToDto(habit)
             )
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Не удалось обновить привычку")
         }
     }
 
@@ -77,7 +82,8 @@ class HabitRepositoryImpl @Inject constructor(
         dao.deleteHabit(habitId)
         try {
             habitApiService.removeEntriesById(habitId.toString())
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Не удалось удалить привычку")
         }
     }
 
@@ -88,7 +94,8 @@ class HabitRepositoryImpl @Inject constructor(
             val habit = habitMapper.mapHabitEntityToHabit(entity).copy(isArchived = true)
             val habitDto = habitDtoMapper.mapHabitToDto(habit)
             habitApiService.updateEntriesById(habit.id.toString(), habitDto)
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Не удалось заархивировать привычку")
         }
     }
 
@@ -99,7 +106,8 @@ class HabitRepositoryImpl @Inject constructor(
             val habit = habitMapper.mapHabitEntityToHabit(entity).copy(isArchived = false)
             val habitDto = habitDtoMapper.mapHabitToDto(habit)
             habitApiService.updateEntriesById(habit.id.toString(), habitDto)
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Не удалось восстановить из архива привычку")
         }
     }
 }

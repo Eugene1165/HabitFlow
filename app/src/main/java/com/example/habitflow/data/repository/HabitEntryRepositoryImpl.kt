@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -26,7 +27,8 @@ class HabitEntryRepositoryImpl @Inject constructor(
         try {
             habitEntryApiService.createEntry(habitEntryDtoMapper.mapHabitEntryToDto(entryWithId))
             dao.markAsSynced(entryWithId.id)
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.e(e, "Не удалось добавить записи для привычки")
         }
     }
 
@@ -46,7 +48,8 @@ class HabitEntryRepositoryImpl @Inject constructor(
                             }
                     }
                     dao.insertAll(entities)
-                } catch (_: Exception) {
+                } catch (e: Exception) {
+                    Timber.e(e, "Не удалось получить  записи для привычки")
                 }
 
                 val unsynced = dao.getUnsyncedEntries().first()
@@ -56,7 +59,9 @@ class HabitEntryRepositoryImpl @Inject constructor(
                         val dto = habitEntryDtoMapper.mapHabitEntryToDto(entry)
                         habitEntryApiService.createEntry(dto)
                         dao.markAsSynced(entity.id)
-                    }catch (t: Throwable){}
+                    } catch (e: Throwable) {
+                        Timber.e(e, "Ошибка retry синхронизации записи \${entity.id}")
+                    }
                 }
             }
     }
@@ -88,6 +93,7 @@ class HabitEntryRepositoryImpl @Inject constructor(
             habitEntryApiService.updateEntryById("eq.${entry.id}", dto)
             dao.markAsSynced(entry.id)
         } catch (e: Exception) {
+            Timber.e(e, "Не удалось обновить записи для привычки")
         }
     }
 
