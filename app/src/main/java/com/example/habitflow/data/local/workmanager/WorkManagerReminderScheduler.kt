@@ -30,7 +30,7 @@ class WorkManagerReminderScheduler @Inject constructor(
             nextReminder
         )
         val workRequest = PeriodicWorkRequestBuilder<ReminderWorker>(
-            24, TimeUnit.HOURS)
+            repeatInterval = 24, TimeUnit.HOURS)
             .setInitialDelay(delayMinutes, TimeUnit.MINUTES)
             .setInputData(workDataOf("habit_id" to habit.id))
             .addTag("reminder_${habit.id}")

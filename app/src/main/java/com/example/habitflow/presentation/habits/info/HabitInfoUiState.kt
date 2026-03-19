@@ -4,7 +4,7 @@ import com.example.habitflow.domain.model.Habit
 import com.example.habitflow.domain.model.HabitEntry
 import com.example.habitflow.domain.model.HabitStatistics
 
-sealed class HabitInfoUiState() {
+sealed class HabitInfoUiState {
     object Loading : HabitInfoUiState()
     data class Content(
         val habit: Habit,

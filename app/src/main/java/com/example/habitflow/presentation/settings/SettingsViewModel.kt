@@ -36,10 +36,9 @@ class SettingsViewModel @Inject constructor(
         .catch { e -> emit(SettingsUiState.Error(e.message ?: "Ошибка загрузки")) }
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = SUBSCRIBE_TIMEOUT_MS),
             initialValue = SettingsUiState.Loading
         )
-
 
     fun onDarkThemeToggled(isEnabled: Boolean) {
         viewModelScope.launch { setDarkThemeUseCase(isEnabled) }
@@ -47,6 +46,10 @@ class SettingsViewModel @Inject constructor(
 
     fun onFirstDayOfWeekChanged(day: DayOfWeek) {
         viewModelScope.launch { setFirstDayOfWeekUseCase(day) }
+    }
+
+    companion object{
+        private const val SUBSCRIBE_TIMEOUT_MS = 5000L
     }
 
 

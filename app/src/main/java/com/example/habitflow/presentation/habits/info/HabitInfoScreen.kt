@@ -47,11 +47,14 @@ import com.example.habitflow.domain.model.HabitEntry
 import com.example.habitflow.presentation.components.HabitFlowTopBar
 import java.time.LocalDate
 
+
+private const val PERCENT_MULTIPLIER = 100
+private const val WEEK_DAYS_BACK = 6
+
 @Composable
 fun HabitInfoScreen(habitId: Int, navController: NavController) {
     val viewModel: HabitInfoViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
-
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
@@ -167,7 +170,7 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
                                 Text("Процент", color = Color.Gray, fontSize = 12.sp)
                                 Text(
                                     text = "%.0f%%".format(
-                                        currentState.statistics.percentCompletion * 100
+                                        currentState.statistics.percentCompletion * PERCENT_MULTIPLIER
                                     ),
                                     fontWeight = FontWeight.Bold
                                 )
@@ -237,9 +240,8 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
 @Composable
 fun WeeklyProgressRow(modifier: Modifier, weeklyEntries: List<HabitEntry>) {
     val today = LocalDate.now()
-    val days = (6 downTo 0).map { today.minusDays(it.toLong()) }
+    val days = (WEEK_DAYS_BACK downTo 0).map { today.minusDays(it.toLong()) }
     val daysNames = listOf("Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс")
-
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly

@@ -9,8 +9,9 @@ import com.example.habitflow.domain.repository.HabitRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import retrofit2.HttpException
 import timber.log.Timber
-import java.lang.Exception
+import java.io.IOException
 import javax.inject.Inject
 
 class HabitRepositoryImpl @Inject constructor(
@@ -31,8 +32,10 @@ class HabitRepositoryImpl @Inject constructor(
                             .let { habitMapper.mapHabitToHabitEntity(it) }
                             .let { dao.addHabit(it) }
                     }
-                } catch (e: kotlin.Exception) {
+                } catch (e: IOException) {
                     Timber.e(e, "Не удалось получить список активных привычек")
+                } catch (e: HttpException) {
+                    Timber.e(e, "Нет сети")
                 }
             }
     }
@@ -60,8 +63,10 @@ class HabitRepositoryImpl @Inject constructor(
         val habitWithId = habit.copy(id = generatedId.toInt())
         try {
             habitApiService.createEntries(habitDtoMapper.mapHabitToDto(habitWithId))
-        } catch (e: Exception) {
+        } catch (e: IOException) {
             Timber.e(e, "Не удалось добавить привычку")
+        } catch (e: HttpException) {
+            Timber.e(e, "Нет сети")
         }
         return habitWithId
     }
@@ -73,8 +78,10 @@ class HabitRepositoryImpl @Inject constructor(
                 habit.id.toString(),
                 habitDtoMapper.mapHabitToDto(habit)
             )
-        } catch (e: Exception) {
+        } catch (e: IOException) {
             Timber.e(e, "Не удалось обновить привычку")
+        } catch (e: HttpException) {
+            Timber.e(e, "Нет сети")
         }
     }
 
@@ -82,8 +89,10 @@ class HabitRepositoryImpl @Inject constructor(
         dao.deleteHabit(habitId)
         try {
             habitApiService.removeEntriesById(habitId.toString())
-        } catch (e: Exception) {
+        } catch (e: IOException) {
             Timber.e(e, "Не удалось удалить привычку")
+        } catch (e: HttpException) {
+            Timber.e(e, "Нет сети")
         }
     }
 
@@ -94,8 +103,10 @@ class HabitRepositoryImpl @Inject constructor(
             val habit = habitMapper.mapHabitEntityToHabit(entity).copy(isArchived = true)
             val habitDto = habitDtoMapper.mapHabitToDto(habit)
             habitApiService.updateEntriesById(habit.id.toString(), habitDto)
-        } catch (e: Exception) {
+        } catch (e: IOException) {
             Timber.e(e, "Не удалось заархивировать привычку")
+        } catch (e: HttpException) {
+            Timber.e(e, "Нет сети")
         }
     }
 
@@ -106,8 +117,10 @@ class HabitRepositoryImpl @Inject constructor(
             val habit = habitMapper.mapHabitEntityToHabit(entity).copy(isArchived = false)
             val habitDto = habitDtoMapper.mapHabitToDto(habit)
             habitApiService.updateEntriesById(habit.id.toString(), habitDto)
-        } catch (e: Exception) {
+        } catch (e: IOException) {
             Timber.e(e, "Не удалось восстановить из архива привычку")
+        } catch (e: HttpException) {
+            Timber.e(e, "Нет сети")
         }
     }
 }

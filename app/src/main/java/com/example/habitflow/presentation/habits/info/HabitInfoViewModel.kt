@@ -46,8 +46,7 @@ class HabitInfoViewModel @Inject constructor(
         loadJob = viewModelScope.launch {
             _state.value = HabitInfoUiState.Loading
             val today = LocalDate.now()
-            val weekStart = today.minusDays(6)
-
+            val weekStart = today.minusDays(WEEK_DAYS_BACK)
             combine(
                 getHabitsStatisticsUseCase(habitId),
                 getHabitEntriesForPeriodUseCase(habitId, weekStart, today),
@@ -76,7 +75,7 @@ class HabitInfoViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 toggleHabitEntryUseCase.invoke(habitId, date)
-            } catch (t: Throwable) {
+            } catch (t: IllegalArgumentException) {
                 _state.value = HabitInfoUiState.Error(t.message ?: "Ошибка выполнения операции")
             }
         }
@@ -84,12 +83,8 @@ class HabitInfoViewModel @Inject constructor(
 
     fun onArchive() {
         viewModelScope.launch {
-            try {
-                archiveHabitUseCase.invoke(habitId)
-                _events.send(HabitInfoEvent.NavigateBack)
-            } catch (t: Throwable) {
-                _state.value = HabitInfoUiState.Error(t.message ?: "Ошибка выполнения операции")
-            }
+            archiveHabitUseCase.invoke(habitId)
+            _events.send(HabitInfoEvent.NavigateBack)
         }
     }
 
@@ -97,6 +92,10 @@ class HabitInfoViewModel @Inject constructor(
         viewModelScope.launch {
             _events.send(HabitInfoEvent.NavigateToCalendar(habitId))
         }
+    }
+
+    companion object{
+        private const val WEEK_DAYS_BACK = 6L
     }
 
 }

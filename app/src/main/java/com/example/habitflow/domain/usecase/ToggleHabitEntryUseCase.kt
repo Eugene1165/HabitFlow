@@ -7,10 +7,9 @@ import javax.inject.Inject
 
 class ToggleHabitEntryUseCase @Inject constructor(private val repository: HabitEntryRepository) {
     suspend operator fun invoke(habitId: Int, date: LocalDate,today: LocalDate = LocalDate.now()) {
-        if (date.isAfter(today))
-            throw IllegalArgumentException(
-                "Пользователь НЕ может отметить выполнение в будущем "
-            )
+        require(!date.isAfter(today)){
+            "Нельзя отметить дату будущего"
+        }
         val existingEntry = repository.getEntryByDate(habitId, date)
         if (existingEntry == null) {
             val newEntry = HabitEntry(id = 0, habitId = habitId, date = date, isDone = true)

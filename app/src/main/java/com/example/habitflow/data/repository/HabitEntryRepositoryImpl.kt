@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import java.io.IOException
+import retrofit2.HttpException
 import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
@@ -27,8 +29,10 @@ class HabitEntryRepositoryImpl @Inject constructor(
         try {
             habitEntryApiService.createEntry(habitEntryDtoMapper.mapHabitEntryToDto(entryWithId))
             dao.markAsSynced(entryWithId.id)
-        } catch (e: Exception) {
-            Timber.e(e, "Не удалось добавить записи для привычки")
+        } catch (e: IOException) {
+            Timber.e(e, "нет сети")
+        } catch (e: HttpException){
+            Timber.e(e,"Не удалось добавить записи для привычки")
         }
     }
 
@@ -48,8 +52,10 @@ class HabitEntryRepositoryImpl @Inject constructor(
                             }
                     }
                     dao.insertAll(entities)
-                } catch (e: Exception) {
+                } catch (e: IOException) {
                     Timber.e(e, "Не удалось получить  записи для привычки")
+                } catch (e: okio.IOException){
+                    Timber.e(e,"Нет сети")
                 }
 
                 val unsynced = dao.getUnsyncedEntries().first()
@@ -59,8 +65,10 @@ class HabitEntryRepositoryImpl @Inject constructor(
                         val dto = habitEntryDtoMapper.mapHabitEntryToDto(entry)
                         habitEntryApiService.createEntry(dto)
                         dao.markAsSynced(entity.id)
-                    } catch (e: Throwable) {
-                        Timber.e(e, "Ошибка retry синхронизации записи \${entity.id}")
+                    } catch (e: IOException) {
+                        Timber.e(e, "нет сети")
+                    } catch (e: HttpException){
+                        Timber.e(e,"Ошибка retry синхронизации записи \${entity.id}")
                     }
                 }
             }
@@ -92,8 +100,10 @@ class HabitEntryRepositoryImpl @Inject constructor(
             val dto = habitEntryDtoMapper.mapHabitEntryToDto(domainEntity)
             habitEntryApiService.updateEntryById("eq.${entry.id}", dto)
             dao.markAsSynced(entry.id)
-        } catch (e: Exception) {
-            Timber.e(e, "Не удалось обновить записи для привычки")
+        } catch (e: IOException) {
+            Timber.e(e, "нет сети")
+        } catch (e: HttpException){
+            Timber.e(e,"Не удалось обновить записи для привычки")
         }
     }
 

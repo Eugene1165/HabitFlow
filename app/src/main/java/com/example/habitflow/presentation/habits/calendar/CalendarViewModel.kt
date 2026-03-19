@@ -63,7 +63,7 @@ class CalendarViewModel @Inject constructor(
         }
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = SharingStarted.WhileSubscribed(SUBSCRIBE_TIMEOUT_MS),
             initialValue = CalendarUiState.Loading
         )
 
@@ -72,8 +72,8 @@ class CalendarViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 toggleHabitEntryUseCase.invoke(habitId, date)
-            } catch (t: Throwable) {
-                _events.send(CalendarEvent.ShowError(t.message ?: "Ошибка выполнения операции"))
+            } catch (e: IllegalArgumentException) {
+                _events.send(CalendarEvent.ShowError(e.message ?: "Ошибка выполнения операции"))
             }
         }
     }
@@ -84,5 +84,9 @@ class CalendarViewModel @Inject constructor(
 
     fun onNavigateBack() {
         viewModelScope.launch { _events.send(CalendarEvent.NavigateBack) }
+    }
+
+    companion object{
+        private const val SUBSCRIBE_TIMEOUT_MS = 5000L
     }
 }

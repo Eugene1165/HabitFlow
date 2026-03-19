@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.habitflow.domain.model.AllHabitsStatistics
-
+private const val PERCENT_MULTIPLIER = 100
 @Composable
 fun StatisticsScreen() {
     val viewModel: StatisticsViewModel = hiltViewModel()
@@ -181,7 +181,7 @@ fun MostConsistentCard(habitName: String, percent: Float) {
                 progress = { percent },
                 modifier = Modifier.fillMaxWidth()
             )
-            Text("${(percent * 100).toInt()}%")
+            Text("${(percent * PERCENT_MULTIPLIER).toInt()}%")
 
         }
     }

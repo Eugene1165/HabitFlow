@@ -24,7 +24,7 @@ class HabitFlowApp : Application(), Configuration.Provider {
     }
 }
 
-internal class CrashReportingTree(): Timber.Tree(){
+internal class CrashReportingTree: Timber.Tree(){
     override fun log(
         priority: Int,
         tag: String?,

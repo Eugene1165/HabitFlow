@@ -51,7 +51,7 @@ import java.util.Locale
 
 
 @Composable
-fun CalendarScreen(habitId: Int, navController: NavController) {
+fun CalendarScreen(navController: NavController) {
 
     val viewModel: CalendarViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -93,7 +93,7 @@ fun CalendarScreen(habitId: Int, navController: NavController) {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues)
-                        .background(Color(0xFFFAF8FF))
+                        .background(Color(color = 0xFFFAF8FF))
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
