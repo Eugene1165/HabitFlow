@@ -37,7 +37,7 @@ class GetHabitsStatisticsUseCase @Inject constructor(
                     startDate = habit.startDate,
                     endDate = today
                 ).map { entries ->
-                    calculateStatistics(habit, entries,today)
+                    calculateStatistics(habit, entries, today)
                 }
             }
     }
@@ -88,8 +88,13 @@ class GetHabitsStatisticsUseCase @Inject constructor(
         }
 
         val bestStreak = when (val repeatType = habit.repeatType) {
-            is RepeatType.Daily -> calculateDailyBestStreak(entries,today)
-            is RepeatType.WeeklyDays -> calculateWeeklyDaysBestStreak(entries, repeatType.days,today)
+            is RepeatType.Daily -> calculateDailyBestStreak(entries, today)
+            is RepeatType.WeeklyDays -> calculateWeeklyDaysBestStreak(
+                entries,
+                repeatType.days,
+                today
+            )
+
             is RepeatType.WeeklyCount -> calculateWeeklyCountBestStreak(entries, repeatType.count)
         }
         return HabitStatistics(
@@ -127,23 +132,11 @@ class GetHabitsStatisticsUseCase @Inject constructor(
             .filter { it.isDone }
             .map { it.date }
             .toSet()
-        var streak = 0
-        var date = today
 
-        while (true) {
-            if (date.dayOfWeek !in days) {
-                date = date.minusDays(1)
-                continue
-            }
-
-            if (completedDates.contains(date)) {
-                streak++
-                date = date.minusDays(1)
-            } else {
-                break
-            }
-        }
-        return streak
+        return generateSequence(today) { it.minusDays(1) }
+            .filter { it.dayOfWeek in days }
+            .takeWhile { it in completedDates }
+            .count()
     }
 
     private fun calculateWeeklyCountStreak(
@@ -159,7 +152,7 @@ class GetHabitsStatisticsUseCase @Inject constructor(
         var currentWeek = today.get(WeekFields.ISO.weekOfWeekBasedYear())
 
         while (true) {
-            val weekEntries = byWeek[currentWeek] ?: break
+            val weekEntries = byWeek[currentWeek] ?: return streak
             val completedCount = weekEntries.count { it.isDone }
 
             if (completedCount >= requiredCount) {
@@ -211,13 +204,15 @@ class GetHabitsStatisticsUseCase @Inject constructor(
         var date = entries.minOfOrNull { it.date } ?: return 0 //начальная дата
 
         while (!date.isAfter(today)) {
-            if (date.dayOfWeek in days) {
-                if (completedDates.contains(date)) {
-                    current++
-                    if (current > best) best = current
-                } else current = 0
+            if (date.dayOfWeek !in days) {
+                date = date.plusDays(1)
+                continue
             }
-            date = date.plusDays(1)
+
+            if (completedDates.contains(date)) {
+                current++
+                if (current > best) best = current
+            } else current = 0
         }
         return best
     }

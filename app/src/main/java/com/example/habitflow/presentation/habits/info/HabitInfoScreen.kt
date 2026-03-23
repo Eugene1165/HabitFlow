@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -46,7 +48,6 @@ import androidx.navigation.NavController
 import com.example.habitflow.domain.model.HabitEntry
 import com.example.habitflow.presentation.components.HabitFlowTopBar
 import java.time.LocalDate
-
 
 private const val PERCENT_MULTIPLIER = 100
 private const val WEEK_DAYS_BACK = 6
@@ -69,8 +70,6 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
         }
     }
 
-    val scrollState = rememberScrollState()
-
     Scaffold(
         modifier = Modifier.testTag("screen_habit_info"),
         topBar = {
@@ -86,7 +85,7 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
                 }
             }
         }
-    ) { paddingValues ->
+    ) {paddingValues ->
         when (val currentState = state) {
             is HabitInfoUiState.Loading -> {
                 Box(
@@ -98,125 +97,13 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
             }
 
             is HabitInfoUiState.Content -> {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues)
-                        .verticalScroll(scrollState)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color(currentState.habit.color.toColorInt()))
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp)
-                        ) {
-                            Text(
-                                text = currentState.habit.title,
-                                style = MaterialTheme.typography.headlineSmall,
-                                color = Color.White
-                            )
-                            Text(
-                                text = currentState.habit.description ?: "",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = Color.White
-                            )
-                        }
-                    }
-                    Spacer(Modifier.height(16.dp))
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Card(modifier = Modifier.weight(1f)) {
-                            Column(
-                                modifier = Modifier.padding(16.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Icon(Icons.Default.Star, contentDescription = null)
-                                Text(text = "Streak", color = Color.Gray, fontSize = 12.sp)
-                                Text(
-                                    text = "${currentState.statistics.currentStreak}",
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Text("дней", color = Color.Gray, fontSize = 12.sp)
-                            }
-                        }
-                        Card(modifier = Modifier.weight(1f)) {
-                            Column(
-                                modifier = Modifier.padding(16.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Icon(Icons.Default.Star, contentDescription = null)
-                                Text("best streak", color = Color.Gray, fontSize = 12.sp)
-                                Text(
-                                    text = "${currentState.statistics.bestStreak}",
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Text("дней", color = Color.Gray, fontSize = 12.sp)
-                            }
-                        }
-                        Card(modifier = Modifier.weight(1f)) {
-                            Column(
-                                modifier = Modifier.padding(16.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Icon(Icons.Default.Info, contentDescription = null)
-                                Text("Процент", color = Color.Gray, fontSize = 12.sp)
-                                Text(
-                                    text = "%.0f%%".format(
-                                        currentState.statistics.percentCompletion * PERCENT_MULTIPLIER
-                                    ),
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Text("выполнения", color = Color.Gray, fontSize = 11.sp)
-                            }
-                        }
-                    }
-                    Spacer(Modifier.height(16.dp))
-                    WeeklyProgressRow(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        weeklyEntries = currentState.weeklyEntries
-                    )
-                    Spacer(Modifier.height(16.dp))
-                    Button(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        onClick = { viewModel.onToggleToday() },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(currentState.habit.color.toColorInt())
-                        )
-                    ) {
-                        Text(if (currentState.isTodayDone) "Снять отметку" else "Отметить сегодня")
-                    }
-                    OutlinedButton(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .testTag("btn_open_calendar"),
-                        onClick = { viewModel.onNavigateToCalendar() }
-                    ) {
-                        Text("Открыть календарь")
-                    }
-                    //архивируем привычку-кнопка для архивации
-                    if (!currentState.habit.isArchived) {
-                        OutlinedButton(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
-                                .testTag("btn_archive_habit"),
-                            onClick = { viewModel.onArchive() }
-                        ) {
-                            Text("Архивировать привычку")
-                        }
-                    }
-                }
+                HabitInfoContent(
+                    paddingValues = paddingValues ,
+                    state = currentState,
+                    onToggleToday = { viewModel.onToggleToday() },
+                    onNavigateToCalendar = { viewModel.onNavigateToCalendar() },
+                    onArchive = { viewModel.onArchive() },
+                )
             }
 
             is HabitInfoUiState.Error -> {
@@ -233,6 +120,158 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
                 }
 
             }
+        }
+    }
+}
+
+@Composable
+fun StatisticCard(
+    modifier: Modifier = Modifier,
+    icon: ImageVector,
+    title: String,
+    value: String,
+    unit: String
+) {
+    Card(modifier = modifier) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(icon, contentDescription = null)
+            Text(title, color = Color.Gray, fontSize = 11.sp)
+            Text(
+                text = value,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+            Text(unit, color = Color.Gray, fontSize = 11.sp)
+        }
+    }
+}
+
+@Composable
+fun HabitInfoContent(
+    paddingValues: PaddingValues,
+    state: HabitInfoUiState.Content,
+    onToggleToday: () -> Unit,
+    onNavigateToCalendar: () -> Unit,
+    onArchive: () -> Unit
+) {
+    val scrollState = rememberScrollState()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
+            .verticalScroll(scrollState)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(state.habit.color.toColorInt()))
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(
+                    text = state.habit.title,
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = Color.White
+                )
+                Text(
+                    text = state.habit.description ?: "",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White
+                )
+            }
+        }
+        Spacer(Modifier.height(16.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            StatisticCard(
+                modifier = Modifier.weight(1f),
+                icon = Icons.Default.Star,
+                title = "Серия",
+                value = "${state.statistics.currentStreak}",
+                unit = "дней"
+            )
+            StatisticCard(
+                modifier = Modifier.weight(1f),
+                icon = Icons.Default.Star,
+                title = "Лучшая серия",
+                value = "${state.statistics.bestStreak}",
+                unit = "дней"
+            )
+            StatisticCard(
+                modifier = Modifier.weight(1f),
+                icon = Icons.Default.Info,
+                title = "Процент",
+                value = "%.0f%%".format(
+                    state.statistics.percentCompletion * PERCENT_MULTIPLIER
+                ),
+                unit = "выполнения"
+            )
+        }
+        Spacer(Modifier.height(16.dp))
+        WeeklyProgressRow(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            weeklyEntries = state.weeklyEntries
+        )
+        Spacer(Modifier.height(16.dp))
+        ButtonsBlock(
+            habitColor = state.habit.color,
+            isTodayDone = state.isTodayDone,
+            isArchived = state.habit.isArchived,
+            onToggleToday = { onToggleToday() },
+            onNavigateToCalendar = { onNavigateToCalendar() },
+            onArchive = { onArchive() }
+        )
+    }
+}
+
+@Suppress("LongParameterList")
+@Composable
+fun ButtonsBlock(
+    habitColor: String,
+    isTodayDone: Boolean,
+    isArchived: Boolean,
+    onToggleToday: () -> Unit,
+    onNavigateToCalendar: () -> Unit,
+    onArchive: () -> Unit,
+) {
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        onClick = { onToggleToday() },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color(habitColor.toColorInt())
+        )
+    ) {
+        Text(if (isTodayDone) "Снять отметку" else "Отметить сегодня")
+    }
+    OutlinedButton(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .testTag("btn_open_calendar"),
+        onClick = { onNavigateToCalendar() }
+    ) {
+        Text("Открыть календарь")
+    }
+    //архивируем привычку-кнопка для архивации
+    if (!isArchived) {
+        OutlinedButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .testTag("btn_archive_habit"),
+            onClick = { onArchive() }
+        ) {
+            Text("Архивировать привычку")
         }
     }
 }

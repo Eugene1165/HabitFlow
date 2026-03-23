@@ -13,7 +13,7 @@ fun RepeatType.toTypeString(): String {
     }
 }
 
-
+@Suppress("ThrowsCount")
 fun String.toRepeatType(repeatDays: String?, repeatCount: Int?): RepeatType {
     return when (this) {
         "DAILY" -> RepeatType.Daily

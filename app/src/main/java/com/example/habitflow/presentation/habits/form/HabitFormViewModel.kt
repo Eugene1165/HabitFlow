@@ -20,7 +20,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
-
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class HabitFormViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -153,6 +153,4 @@ class HabitFormViewModel @Inject constructor(
     fun onErrorShown() {
         _state.update { it.copy(error = null) }
     }
-
-
 }

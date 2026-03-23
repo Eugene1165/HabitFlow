@@ -49,7 +49,7 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-
+@Suppress("LongMethod")
 @Composable
 fun CalendarScreen(navController: NavController) {
 
@@ -203,7 +203,7 @@ fun CalendarContent(
     doneDates: Set<LocalDate>,
     onDayClick: (LocalDate) -> Unit,
     onMonthChanged: (YearMonth) -> Unit
-) {
+    ) {
     val calendarState = rememberCalendarState(
         startMonth = YearMonth.from(habit.startDate),
         endMonth = YearMonth.now(),

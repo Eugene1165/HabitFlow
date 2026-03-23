@@ -85,67 +85,9 @@ fun OnBoardingScreen(navController: NavController) {
                             modifier = Modifier.fillMaxSize(),
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
-                            Spacer(modifier = Modifier.height(height = 64.dp))
-                            Text(text = "🎯", fontSize = 80.sp)
-                            Spacer(Modifier.height(height = 16.dp))
-                            Text(
-                                text = "HabitFlow",
-                                fontSize = 36.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White
-                            )
-                            Spacer(Modifier.height(height = 8.dp))
-                            Text(
-                                text = "Формируй привычки,\nменяй жизнь",
-                                fontSize = 16.sp,
-                                color = Color.White.copy(alpha = 0.7f),
-                                textAlign = TextAlign.Center
-                            )
-                            Spacer(Modifier.height(height = 32.dp))
-                            Row(
-                                modifier = Modifier.fillMaxWidth(fraction = 0.8f),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.CheckCircle,
-                                    contentDescription = null,
-                                    tint = Color.White,
-                                    modifier = Modifier.size(size = 20.dp)
-                                )
-                                Spacer(Modifier.width(width = 8.dp))
-                                Text("Отслеживай каждый день", color = Color.White)
-                            }
-                            Spacer(Modifier.height(height = 12.dp))
-                            Row(
-                                modifier = Modifier.fillMaxWidth(fraction = 0.8f),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Info,
-                                    contentDescription = null,
-                                    tint = Color.White,
-                                    modifier = Modifier.size(size = 20.dp)
-                                )
-                                Spacer(Modifier.width(width = 8.dp))
-                                Text(text = "Смотри статистику ", color = Color.White)
-                            }
-                            Spacer(Modifier.height(height = 12.dp))
-                            Row(
-                                modifier = Modifier.fillMaxWidth(fraction = 0.8f),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Notifications,
-                                    contentDescription = null,
-                                    tint = Color.White,
-                                    modifier = Modifier.size(size = 20.dp)
-                                )
-                                Spacer(Modifier.width(width = 8.dp))
-                                Text(text = "Не забывай с напоминаниями", color = Color.White)
-                            }
-
+                            OnBoardingHeader()
+                            OnBoardingContent()
                             Spacer(Modifier.weight(weight = 1f))
-
                             Button(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.8f),
                                 onClick = { viewModel.onComplete() },
@@ -168,5 +110,71 @@ fun OnBoardingScreen(navController: NavController) {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun OnBoardingHeader(){
+    Spacer(modifier = Modifier.height(height = 64.dp))
+    Text(text = "🎯", fontSize = 80.sp)
+    Spacer(Modifier.height(height = 16.dp))
+    Text(
+        text = "HabitFlow",
+        fontSize = 36.sp,
+        fontWeight = FontWeight.Bold,
+        color = Color.White
+    )
+    Spacer(Modifier.height(height = 8.dp))
+    Text(
+        text = "Формируй привычки,\nменяй жизнь",
+        fontSize = 16.sp,
+        color = Color.White.copy(alpha = 0.7f),
+        textAlign = TextAlign.Center
+    )
+    Spacer(Modifier.height(height = 32.dp))
+}
+
+@Composable
+fun OnBoardingContent(){
+    Row(
+        modifier = Modifier.fillMaxWidth(fraction = 0.8f),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Default.CheckCircle,
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier.size(size = 20.dp)
+        )
+        Spacer(Modifier.width(width = 8.dp))
+        Text("Отслеживай каждый день", color = Color.White)
+    }
+    Spacer(Modifier.height(height = 12.dp))
+    Row(
+        modifier = Modifier.fillMaxWidth(fraction = 0.8f),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Default.Info,
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier.size(size = 20.dp)
+        )
+        Spacer(Modifier.width(width = 8.dp))
+        Text(text = "Смотри статистику ", color = Color.White)
+    }
+    Spacer(Modifier.height(height = 12.dp))
+    Row(
+        modifier = Modifier.fillMaxWidth(fraction = 0.8f),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Default.Notifications,
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier.size(size = 20.dp)
+        )
+        Spacer(Modifier.width(width = 8.dp))
+        Text(text = "Не забывай с напоминаниями", color = Color.White)
     }
 }

@@ -45,17 +45,9 @@ import java.time.LocalTime
 fun HabitFormContent(
     state: HabitFormUiState,
     modifier: Modifier = Modifier,
-    onTitleChanged: (String) -> Unit,
-    onDescriptionChanged: (String) -> Unit,
-    onColorChanged: (String) -> Unit,
-    onRepeatTypeChanged: (RepeatType) -> Unit,
-    onSelectedDaysChanged: (DayOfWeek) -> Unit,
-    onWeeklyCountChanged: (Int) -> Unit,
-    onTargetChanged: (Int?) -> Unit,
-    onReminderChanged: (LocalTime?) -> Unit
+    callbacks: HabitFormCallbacks
 ) {
     val scrollState = rememberScrollState()
-    var expanded by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
     Column(
         modifier = modifier
@@ -71,7 +63,7 @@ fun HabitFormContent(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             value = state.title,
-            onValueChange = { onTitleChanged(it) },
+            onValueChange = { callbacks.onTitleChanged(it) },
             label = { Text("Название") }
         )
         Spacer(Modifier.height(8.dp))
@@ -81,7 +73,7 @@ fun HabitFormContent(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             value = state.description,
-            onValueChange = { onDescriptionChanged(it) },
+            onValueChange = { callbacks.onDescriptionChanged(it) },
             label = { Text("Описание") }
         )
         Spacer(Modifier.height(8.dp))
@@ -95,7 +87,7 @@ fun HabitFormContent(
         ColorPicker(
             selectedColor = state.color,
             colors = habitColors,
-            onColorSelected = { onColorChanged(it) }
+            onColorSelected = { callbacks.onColorChanged(it) }
         )
         Spacer(Modifier.height(8.dp))
         var targetText by remember { mutableStateOf(state.target?.toString() ?: "") }
@@ -107,83 +99,23 @@ fun HabitFormContent(
             value = targetText,
             onValueChange = { newText ->
                 targetText = newText
-                onTargetChanged(newText.toIntOrNull())
+                callbacks.onTargetChanged(newText.toIntOrNull())
             },
             label = { Text("Цель") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
         Spacer(Modifier.height(8.dp))
-        ExposedDropdownMenuBox(
-            modifier = Modifier
-                .testTag("dropdown_menu")
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            expanded = expanded,
-            onExpandedChange = { expanded = it }
-        ) {
-            TextField(
-                value = state.repeatType.toDisplayName(),
-                onValueChange = {},
-                readOnly = true,
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-                modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable)
-            )
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                DropdownMenuItem(
-                    text = { Text("Ежедневно") },
-                    onClick = {
-                        onRepeatTypeChanged(RepeatType.Daily)
-                        expanded = false
-                    }
-                )
-                DropdownMenuItem(
-                    text = { Text("Количество дней") },
-                    onClick = {
-                        onRepeatTypeChanged(RepeatType.WeeklyDays(days = emptyList()))
-                        expanded = false
-                    }
-                )
-                DropdownMenuItem(
-                    text = { Text("Количество раз") },
-                    onClick = {
-                        onRepeatTypeChanged(RepeatType.WeeklyCount(count = 1))
-                        expanded = false
-                    }
-                )
-            }
-        }
-        when (state.repeatType) {
-            is RepeatType.WeeklyDays -> WeeklyDaysSelector(
-                selectedDays = state.repeatType.days,
-                onDayToggle = { onSelectedDaysChanged(it) }
-            )
-
-            is RepeatType.WeeklyCount -> {
-                var countText by remember { mutableStateOf(state.repeatType.count.toString()) }
-                TextField(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    value = countText,
-                    onValueChange = { newText ->
-                        countText = newText
-                        newText.toIntOrNull()?.let { text ->
-                            if (text == 0) {
-                                onWeeklyCountChanged(1)
-                                countText = "1"
-                            } else onWeeklyCountChanged(text)
-                        }
-                    },
-                    label = { Text("Раз в неделю") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                )
-            }
-
-            RepeatType.Daily -> {}
-        }
+        RepeatTypeDropdown(
+            repeatType = state.repeatType,
+            onRepeatTypeChanged = callbacks.onRepeatTypeChanged,
+        )
+        Spacer(Modifier.height(8.dp))
+        RepeatTypeOptions(
+            repeatType = state.repeatType,
+            modifier = Modifier,
+            onSelectedDaysChanged = callbacks.onSelectedDaysChanged,
+            onWeeklyCountChanged = callbacks.onWeeklyCountChanged,
+        )
         Spacer(Modifier.height(8.dp))
         TextField(
             modifier = Modifier
@@ -197,17 +129,19 @@ fun HabitFormContent(
             onValueChange = {},
             label = { Text("Напоминание") }
         )
+
         if (showTimePicker) {
             TimePickerInRemember(
                 initialTime = state.reminder,
                 onConfirm = { time ->
-                    onReminderChanged(time)
+                    callbacks.onReminderChanged(time)
                     showTimePicker = false
                 },
                 onDismiss = { showTimePicker = false })
         }
     }
 }
+
 
 @Composable
 fun WeeklyDaysSelector(
@@ -222,6 +156,97 @@ fun WeeklyDaysSelector(
                 label = { Text(day.toDisplayName()) }
             )
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun RepeatTypeDropdown(
+    repeatType: RepeatType,
+    onRepeatTypeChanged: (RepeatType) -> Unit,
+) {
+    var expanded by remember { mutableStateOf(false) }
+    ExposedDropdownMenuBox(
+        modifier = Modifier
+            .testTag("dropdown_menu")
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        expanded = expanded,
+        onExpandedChange = { expanded = it }
+    ) {
+        TextField(
+            value = repeatType.toDisplayName(),
+            onValueChange = {},
+            readOnly = true,
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+            modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable)
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            DropdownMenuItem(
+                text = { Text("Ежедневно") },
+                onClick = {
+                    onRepeatTypeChanged(RepeatType.Daily)
+                    expanded = false
+                }
+            )
+            DropdownMenuItem(
+                text = { Text("Количество дней") },
+                onClick = {
+                    onRepeatTypeChanged(RepeatType.WeeklyDays(days = emptyList()))
+                    expanded = false
+
+                }
+            )
+            DropdownMenuItem(
+                text = { Text("Количество раз") },
+                onClick = {
+                    onRepeatTypeChanged(RepeatType.WeeklyCount(count = 1))
+                    expanded = false
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun RepeatTypeOptions(
+    modifier: Modifier,
+    repeatType: RepeatType,
+    onSelectedDaysChanged: (DayOfWeek) -> Unit,
+    onWeeklyCountChanged: (Int) -> Unit
+) {
+    when (repeatType) {
+        is RepeatType.WeeklyDays -> WeeklyDaysSelector(
+            selectedDays = repeatType.days,
+            onDayToggle = { onSelectedDaysChanged(it) }
+        )
+
+        is RepeatType.WeeklyCount -> {
+            var countText by remember { mutableStateOf(repeatType.count.toString()) }
+            TextField(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                value = countText,
+                onValueChange = { newText ->
+                    countText = newText
+                    newText.toIntOrNull()?.let { text ->
+                        if (text == 0) {
+                            onWeeklyCountChanged(1)
+                            countText = "1"
+                        } else onWeeklyCountChanged(text)
+                    }
+                },
+                label = { Text("Раз в неделю") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+        }
+
+        RepeatType.Daily -> {}
     }
 }
 

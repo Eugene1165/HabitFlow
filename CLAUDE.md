@@ -309,78 +309,87 @@ App Start
 
 ## Roadmap: Junior+ → Middle+
 
-### Блок 1 — Архитектура и обработка ошибок (критично)
+> **Текущий фокус: глубокое изучение автотестирования (пирамида тестов)**
 
-**1.1 Result wrapper pattern**
+### Блок 1 — Пирамида тестирования (основной приоритет)
+
+```
+        [  UI / Kaspresso  ]      ← мало, медленно, дорого
+      [ Integration / Room  ]
+    [   Unit Tests (JUnit4)  ]    ← много, быстро, дёшево
+```
+
+**1.1 Unit-тесты — углублённо**
+Текущее покрытие: 11 тестов (статистика, toggle).
+Цель: научиться писать тесты самостоятельно, без подсказок.
+- Тестирование Flow через Turbine (`app.cash.turbine`)
+- Error-сценарии (исключения, пустые данные, граничные случаи)
+- Parametrized tests (`@ParameterizedTest`) для RepeatType вариантов
+- Fake vs Mock — понять разницу и когда что применять
+
+**1.2 Integration-тесты — Room DAO**
+`HabitEntryDaoTest`, `HabitDaoTest` — instrumented тесты с реальной in-memory БД.
+- `@RunWith(AndroidJUnit4::class)` + `Room.inMemoryDatabaseBuilder`
+- Тесты для `markAsSynced`, `getUnsyncedEntries`, `getEntriesForHabit`
+- Тест миграции `MIGRATION_1_2`
+Цель: убедиться что SQL-запросы корректны, изолированно от UI.
+
+**1.3 UI-тесты — Kaspresso углублённо**
+Текущее покрытие: 21 тест (базовые сценарии).
+Цель: понять архитектуру Page Object, сложные сценарии, стабильность тестов.
+- Идиоматичный Page Object pattern в Kaspresso
+- Тестирование навигационных флоу (цепочки экранов)
+- Работа с асинхронными операциями (flakiness, idling resources)
+- Параллельный запуск на нескольких устройствах
+
+---
+
+### Блок 2 — Архитектура и обработка ошибок
+
+**2.1 Result wrapper pattern**
 Текущая проблема: ошибки глотаются в пустых `catch {}` блоках по всему коду.
 Middle+ решение: ввести `sealed class Result<T>` (Success / Error / Loading) на уровне Domain.
 Репозитории возвращают `Flow<Result<T>>` вместо `Flow<T>`.
 ViewModels маппируют Result → UiState без try/catch.
-Цель: единая стратегия обработки ошибок через все слои.
+После введения — переписать unit-тесты под новый контракт.
 
-**1.2 Background sync через WorkManager**
-Текущая проблема: retry синхронизации происходит только при открытии конкретного экрана.
-Middle+ решение: `SyncWorker` — отдельный Worker который при запуске приложения находит все `isSynced = false` записи и отправляет их на сервер.
-Запускается через `OneTimeWorkRequest` при старте приложения.
+**2.2 Background sync через WorkManager**
+`SyncWorker` — находит все `isSynced = false` записи при старте приложения и отправляет на сервер.
+Запускается через `OneTimeWorkRequest`.
 
-**1.3 Conflict resolution стратегия**
-Текущая проблема: при конфликте локально vs Supabase — неясно кто победит.
-Middle+ решение: добавить поле `updatedAt: LocalDateTime` в `HabitEntry`. При синхронизации сравнивать timestamps — побеждает последнее изменение (Last Write Wins).
-
----
-
-### Блок 2 — Новые фичи (бизнес-логика)
-
-**2.1 Поиск и фильтрация привычек**
-`HabitsListScreen` — поле поиска по названию.
-Фильтр по типу повторения (Daily / Weekly).
-Реализация: `MutableStateFlow<String>` для query + `combine` с основным Flow привычек.
-Цель: отработать реактивный поиск без дополнительных запросов к БД.
-
-**2.2 Достижения (Achievements)**
-Новый Domain model: `Achievement(id, title, description, unlockedAt?)`.
-Логика разблокировки: streak 7 дней, streak 30 дней, 10 привычек выполнено, 100% неделя.
-Новый UseCase: `GetAchievementsUseCase` — вычисляет достижения из существующей статистики.
-Цель: сложная бизнес-логика без нового API.
-
-**2.3 Виджет статистики на главном экране (Home Screen Widget)**
-`AppWidget` с Glance (Jetpack) — показывает привычки на сегодня + прогресс.
-Цель: опыт работы с AppWidget API + Glance Compose.
+**2.3 Conflict resolution стратегия**
+Добавить поле `updatedAt: LocalDateTime` в `HabitEntry`.
+При синхронизации — Last Write Wins по timestamp.
 
 ---
 
-### Блок 3 — Качество кода (Middle обязательно знает)
+### Блок 3 — Новые фичи (бизнес-логика)
 
-**3.1 Timber для логирования**
-Заменить `Log.d/e` и пустые catch на структурированное логирование через Timber.
-В debug — логировать все ошибки синхронизации.
-В release — только критические ошибки.
+**3.1 Поиск и фильтрация привычек**
+`HabitsListScreen` — поле поиска + фильтр по типу повторения.
+`MutableStateFlow<String>` + `combine` с основным Flow.
 
-**3.2 Проверка производительности**
-`HabitsListScreen` — профилировать через Android Studio Profiler.
-Убедиться что `LazyColumn` не ребилдит все элементы при toggle одной привычки.
-Добавить `key { habit.id }` в `LazyColumn` если отсутствует.
+**3.2 Достижения (Achievements)**
+`Achievement(id, title, description, unlockedAt?)`.
+`GetAchievementsUseCase` — streak 7/30 дней, 100% неделя, 10 выполнений.
+Минимум 6 unit-тестов для логики разблокировки.
 
-**3.3 Lint + Detekt**
-Настроить статический анализ кода.
-Добавить `detekt.yml` с правилами для проекта.
-Цель: автоматическая проверка архитектурных нарушений.
+**3.3 Виджет (Home Screen Widget)**
+`AppWidget` через Glance (Jetpack) — привычки на сегодня + прогресс.
 
 ---
 
-### Блок 4 — Тестирование (Middle пишет тесты самостоятельно)
+### Блок 4 — Качество кода
 
-**4.1 Unit-тесты для Result wrapper**
-После введения Result — переписать существующие 11 тестов под новый контракт.
-Добавить тесты для Error сценариев (сейчас не покрыты).
+**4.1 Lint + Detekt** — ✅ Готов
+- `config/detekt/detekt.yml` настроен, порог `LongMethod.threshold = 100`
+- Все нарушения устранены: рефакторинг streak-функций на `generateSequence + filter + takeWhile`, guard clause в `calculateWeeklyDaysBestStreak`, `?: return streak` в `calculateWeeklyCountStreak`
+- `HabitFormContent` разбит на `RepeatTypeDropdown` + `RepeatTypeOptions`, создан `HabitFormCallbacks`
+- `HabitInfoScreen` разбит на `HabitInfoContent` + `StatisticCard` + `ButtonsBlock`
+- `OnBoardingScreen` разбит на `OnBoardingHeader` + `OnBoardingContent`
+- Обоснованные `@Suppress`: `TooManyFunctions` на `HabitFormViewModel`, `ThrowsCount` на `toRepeatType`, `LongMethod` на `CalendarScreen` (граничный случай 100 строк), `LongParameterList` на `ButtonsBlock`
 
-**4.2 Unit-тесты для Achievement логики**
-`GetAchievementsUseCaseTest` — минимум 6 тестов:
-streak 7 дней разблокирует достижение, streak < 7 не разблокирует, и т.д.
-
-**4.3 Integration тесты для Room**
-`HabitEntryDaoTest` — instrumented тест для `markAsSynced` + `getUnsyncedEntries`.
-Цель: убедиться что SQL запросы работают корректно.
+**4.2 Проверка производительности** — `key { habit.id }` в LazyColumn (в работе).
 
 ---
 
@@ -388,9 +397,9 @@ streak 7 дней разблокирует достижение, streak < 7 не
 
 | Критерий | Сейчас | Цель |
 |---|---|---|
-| Архитектурные решения | С подсказками | Самостоятельно |
+| Unit-тесты | С помощью | Самостоятельно, включая Flow + Error |
+| Integration-тесты | Не написаны | Room DAO покрыт |
+| UI-тесты | Базовые 21 тест | Page Object, сложные флоу |
 | Обработка ошибок | Пустые catch | Result pattern |
-| Тесты | С помощью | Самостоятельно |
 | Бизнес-логика | Понимает | Проектирует сам |
-| Flow операторы | Базовые | Сложные уверенно |
 | Отладка | Наугад | Системно |
