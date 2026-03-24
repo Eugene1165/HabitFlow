@@ -2,6 +2,7 @@ package com.example.habitflow
 
 import app.cash.turbine.test
 import com.example.habitflow.domain.model.Habit
+import com.example.habitflow.domain.model.HabitResult
 import com.example.habitflow.domain.model.HabitStatistics
 import com.example.habitflow.domain.model.RepeatType
 import com.example.habitflow.domain.usecase.GetAllActiveHabitsUseCase
@@ -48,13 +49,14 @@ class GetAllHabitsStatisticsUseCaseTest {
         val stats1 = HabitStatistics(2, 5, 0.9f)
         val stats2 = HabitStatistics(7, 3, 0.6f)
 
-        every { getAllActiveHabitsUseCase() } returns flowOf(listOf(habitOne, habitTwo))
+        every { getAllActiveHabitsUseCase() } returns flowOf(HabitResult.Success(listOf(habitOne, habitTwo)))
         every { getHabitsStatisticsUseCase(habitOne.id) } returns flowOf(stats1)
         every { getHabitsStatisticsUseCase(habitTwo.id) } returns flowOf(stats2)
 
-        val result = useCase()
-        result.test {
-            val stats = awaitItem()
+        val resultTest = useCase()
+        resultTest.test {
+            val result = awaitItem()
+            val stats = (result as HabitResult.Success).data
             assertEquals(Pair(habitTwo, 7), stats?.currentStreak)
             assertEquals(Pair(habitOne, 5), stats?.bestStreak)
             assertEquals(Pair(habitOne, 0.9f), stats?.mostConsistent)
@@ -67,11 +69,12 @@ class GetAllHabitsStatisticsUseCaseTest {
     fun `usecase returns habits list with empty`() = runTest {
         val emptyList = emptyList<Habit>()
 
-        every { getAllActiveHabitsUseCase() } returns flowOf(emptyList)
+        every { getAllActiveHabitsUseCase() } returns flowOf(HabitResult.Success(emptyList))
 
-        val result = useCase()
-        result.test {
-            val stats = awaitItem()
+        val resultTest = useCase()
+        resultTest.test {
+            val result = awaitItem()
+            val stats = (result as HabitResult.Success).data
             assertEquals(null, stats)
             cancelAndIgnoreRemainingEvents()
         }

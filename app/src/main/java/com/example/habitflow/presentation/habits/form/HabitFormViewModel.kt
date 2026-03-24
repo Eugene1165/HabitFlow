@@ -5,10 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.habitflow.domain.model.Habit
 import com.example.habitflow.domain.model.RepeatType
+import com.example.habitflow.domain.model.HabitResult
 import com.example.habitflow.domain.usecase.AddHabitUseCase
 import com.example.habitflow.domain.usecase.GetHabitByIdUseCase
 import com.example.habitflow.domain.usecase.UpdateHabitUseCase
-import com.example.habitflow.presentation.habits.form.HabitFormEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +20,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
+
 @Suppress("TooManyFunctions")
 @HiltViewModel
 class HabitFormViewModel @Inject constructor(
@@ -107,48 +108,55 @@ class HabitFormViewModel @Inject constructor(
         val current = _state.value
         if (habitId == null) {
             viewModelScope.launch {
-                try {
-                    addHabitUseCase.invoke(
-                        Habit(
-                            id = 0,
-                            title = current.title,
-                            description = current.description.ifBlank { null },
-                            startDate = current.startDate,
-                            color = current.color,
-                            target = current.target,
-                            isArchived = false,
-                            repeatType = current.repeatType,
-                            reminder = current.reminder
-                        )
+                when (val result = addHabitUseCase.invoke(
+                    Habit(
+                        id = 0,
+                        title = current.title,
+                        description = current.description.ifBlank { null },
+                        startDate = current.startDate,
+                        color = current.color,
+                        target = current.target,
+                        isArchived = false,
+                        repeatType = current.repeatType,
+                        reminder = current.reminder
                     )
-                    _events.send(HabitFormEvent.NavigateToHabitsList)
-                } catch (_: Exception) {
-                    _state.update { it.copy(isSaving = false, error = "Ошибка сохранения") }
+                )) {
+                    is HabitResult.Success<*> -> {
+                        _events.send(HabitFormEvent.NavigateToHabitsList)
+                    }
+
+                    is HabitResult.Error -> {
+                        _state.update { it.copy(isSaving = false, error = result.message) }
+                    }
                 }
             }
         } else {
             viewModelScope.launch {
-                try {
-                    updateHabitUseCase.invoke(
-                        Habit(
-                            id = habitId,
-                            title = current.title,
-                            description = current.description.ifBlank { null },
-                            startDate = current.startDate,
-                            color = current.color,
-                            target = current.target,
-                            isArchived = current.isArchived,
-                            repeatType = current.repeatType,
-                            reminder = current.reminder
-                        )
+                when (val result = updateHabitUseCase.invoke(
+                    Habit(
+                        id = habitId,
+                        title = current.title,
+                        description = current.description.ifBlank { null },
+                        startDate = current.startDate,
+                        color = current.color,
+                        target = current.target,
+                        isArchived = current.isArchived,
+                        repeatType = current.repeatType,
+                        reminder = current.reminder
                     )
-                    _events.send(HabitFormEvent.NavigateToHabitFormInfo(habitId))
-                } catch (_: Exception) {
-                    _state.update { it.copy(isSaving = false, error = "Ошибка сохранения") }
+                )) {
+                    is HabitResult.Success<*> -> {
+                        _events.send(HabitFormEvent.NavigateToHabitFormInfo(habitId))
+                    }
+
+                    is HabitResult.Error -> {
+                        _state.update { it.copy(isSaving = false, error = result.message) }
+                    }
                 }
             }
         }
     }
+
 
     fun onErrorShown() {
         _state.update { it.copy(error = null) }

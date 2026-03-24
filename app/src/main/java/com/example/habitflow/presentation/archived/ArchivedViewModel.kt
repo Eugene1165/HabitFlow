@@ -2,14 +2,17 @@ package com.example.habitflow.presentation.archived
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.habitflow.domain.model.HabitResult
 import com.example.habitflow.domain.usecase.DeleteHabitUseCase
 import com.example.habitflow.domain.usecase.GetArchivedHabitsUseCase
 import com.example.habitflow.domain.usecase.RestoreHabitUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,6 +23,11 @@ class ArchivedViewModel @Inject constructor(
     private val deleteHabitUseCase: DeleteHabitUseCase,
     private val getArchivedHabitsUseCase: GetArchivedHabitsUseCase
 ) : ViewModel() {
+
+    private val _events = Channel<ArchivedEvent>()
+    val events = _events.receiveAsFlow()
+
+
     val state: StateFlow<ArchivedUiState> = getArchivedHabitsUseCase()
         .map { habits ->
             when {
@@ -35,10 +43,20 @@ class ArchivedViewModel @Inject constructor(
         )
 
     fun onRestore(habitId: Int) {
-        viewModelScope.launch { restoreHabitUseCase.invoke(habitId) }
+        viewModelScope.launch {
+            when (val result = restoreHabitUseCase.invoke(habitId)) {
+                is HabitResult.Success -> result.data
+                is HabitResult.Error -> _events.send(ArchivedEvent.ShowError(result.message))
+            }
+        }
     }
 
     fun onDelete(habitId: Int) {
-        viewModelScope.launch { deleteHabitUseCase.invoke(habitId) }
+        viewModelScope.launch {
+            when (val result = deleteHabitUseCase.invoke(habitId)) {
+                is HabitResult.Success -> result.data
+                is HabitResult.Error -> _events.send(ArchivedEvent.ShowError(result.message))
+            }
+        }
     }
 }

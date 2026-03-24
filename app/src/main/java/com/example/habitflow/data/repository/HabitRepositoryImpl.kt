@@ -5,10 +5,12 @@ import com.example.habitflow.data.mapper.HabitDtoMapper
 import com.example.habitflow.data.mapper.HabitMapper
 import com.example.habitflow.data.remote.api.HabitApiService
 import com.example.habitflow.domain.model.Habit
+import com.example.habitflow.domain.model.HabitResult
 import com.example.habitflow.domain.repository.HabitRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
@@ -21,24 +23,30 @@ class HabitRepositoryImpl @Inject constructor(
     private val habitDtoMapper: HabitDtoMapper,
 ) : HabitRepository {
 
-    override fun getAllActiveHabits(): Flow<List<Habit>> {
-        return dao.getAllActiveHabits()
-            .map { list -> list.map { entity -> habitMapper.mapHabitEntityToHabit(entity) } }
-            .onStart {
-                try {
-                    val dtos = habitApiService.getAllEntries()
-                    dtos.forEach { dto ->
-                        habitDtoMapper.mapDtoToHabit(dto)
-                            .let { habitMapper.mapHabitToHabitEntity(it) }
-                            .let { dao.addHabit(it) }
-                    }
-                } catch (e: IOException) {
-                    Timber.e(e, "Не удалось получить список активных привычек")
-                } catch (e: HttpException) {
-                    Timber.e(e, "Нет сети")
-                }
+    override fun getAllActiveHabits(): Flow<HabitResult<List<Habit>>> = flow {
+        try {
+            //сетевой запрос -> пишем в Room
+            val dtos = habitApiService.getAllEntries()
+            dtos.forEach { dto ->
+                habitDtoMapper.mapDtoToHabit(dto)
+                    .let { habitMapper.mapHabitToHabitEntity(it) }
+                    .let { dao.addHabit(it) }
             }
+        } catch (e: IOException) {
+            Timber.e(e, "Не удалось получить список активных привычек")
+            emit(HabitResult.Error(e, "Не удалось получить список активных привычек"))
+        } catch (e: HttpException) {
+            Timber.e(e, "Нет сети")
+            emit(HabitResult.Error(e, "Нет сети"))
+        }
+        //запускаем рум поток
+        emitAll(
+            dao.getAllActiveHabits().map { list ->
+                HabitResult.Success(list.map { entity -> habitMapper.mapHabitEntityToHabit(entity) })
+            }
+        )
     }
+
 
     override fun getArchivedHabits(): Flow<List<Habit>> {
         return dao.getArchivedHabits()
@@ -58,69 +66,90 @@ class HabitRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addHabit(habit: Habit): Habit {
+    override suspend fun addHabit(habit: Habit): HabitResult<Habit> {
         val generatedId = dao.addHabit(habitMapper.mapHabitToHabitEntity(habit))
         val habitWithId = habit.copy(id = generatedId.toInt())
-        try {
+        return try {
             habitApiService.createEntries(habitDtoMapper.mapHabitToDto(habitWithId))
+            HabitResult.Success(habitWithId)
         } catch (e: IOException) {
             Timber.e(e, "Не удалось добавить привычку")
+            HabitResult.Error(e, "Не удалось добавить привычку")
         } catch (e: HttpException) {
             Timber.e(e, "Нет сети")
+            HabitResult.Error(e, "Нет сети")
         }
-        return habitWithId
     }
 
-    override suspend fun updateHabit(habit: Habit) {
+    override suspend fun updateHabit(habit: Habit): HabitResult<Unit> {
         dao.updateHabit(habitMapper.mapHabitToHabitEntity(habit))
-        try {
+        return try {
             habitApiService.updateEntriesById(
                 habit.id.toString(),
                 habitDtoMapper.mapHabitToDto(habit)
             )
+            HabitResult.Success(Unit)
         } catch (e: IOException) {
             Timber.e(e, "Не удалось обновить привычку")
+            HabitResult.Error(e, "Не удалось обновить привычку")
         } catch (e: HttpException) {
             Timber.e(e, "Нет сети")
+            HabitResult.Error(e, "Нет сети")
         }
     }
 
-    override suspend fun deleteHabit(habitId: Int) {
+    override suspend fun deleteHabit(habitId: Int): HabitResult<Unit> {
         dao.deleteHabit(habitId)
-        try {
+        return try {
             habitApiService.removeEntriesById(habitId.toString())
+            HabitResult.Success(Unit)
         } catch (e: IOException) {
             Timber.e(e, "Не удалось удалить привычку")
+            HabitResult.Error(e, "Не удалось удалить привычку")
         } catch (e: HttpException) {
             Timber.e(e, "Нет сети")
+            HabitResult.Error(e, "Нет сети")
         }
     }
 
-    override suspend fun archiveHabit(habitId: Int) {
+    override suspend fun archiveHabit(habitId: Int): HabitResult<Unit> {
         dao.archiveHabit(habitId)
-        try {
-            val entity = dao.getHabitById(habitId) ?: return
+        return try {
+            val entity = dao.getHabitById(habitId) ?: return HabitResult.Error(
+                IllegalStateException("Привычка не найдена"),
+                "Привычка не найдена"
+            )
             val habit = habitMapper.mapHabitEntityToHabit(entity).copy(isArchived = true)
             val habitDto = habitDtoMapper.mapHabitToDto(habit)
             habitApiService.updateEntriesById(habit.id.toString(), habitDto)
+            HabitResult.Success(Unit)
         } catch (e: IOException) {
             Timber.e(e, "Не удалось заархивировать привычку")
+            HabitResult.Error(e, "Не удалось заархивировать привычку")
         } catch (e: HttpException) {
             Timber.e(e, "Нет сети")
+            HabitResult.Error(e, "Нет сети")
         }
     }
 
-    override suspend fun restoreHabit(habitId: Int) {
+    override suspend fun restoreHabit(habitId: Int): HabitResult<Unit> {
         dao.restoreHabit(habitId)
-        try {
-            val entity = dao.getHabitById(habitId) ?: return
+        return try {
+            val entity = dao.getHabitById(habitId) ?: return HabitResult.Error(
+                IllegalStateException("Привычка не найдена"),
+                "Привычка не найдена"
+            )
             val habit = habitMapper.mapHabitEntityToHabit(entity).copy(isArchived = false)
             val habitDto = habitDtoMapper.mapHabitToDto(habit)
             habitApiService.updateEntriesById(habit.id.toString(), habitDto)
+            HabitResult.Success(Unit)
         } catch (e: IOException) {
             Timber.e(e, "Не удалось восстановить из архива привычку")
+            HabitResult.Error(e, "Не удалось восстановить из архива привычку")
+
         } catch (e: HttpException) {
             Timber.e(e, "Нет сети")
+            HabitResult.Error(e, "Не удалось восстановить из архива привычку")
         }
     }
 }

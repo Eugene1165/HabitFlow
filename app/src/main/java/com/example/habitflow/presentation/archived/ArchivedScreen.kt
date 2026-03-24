@@ -46,7 +46,6 @@ fun ArchivedScreen(navController: NavController) {
 
     var habitToDelete by remember { mutableStateOf<Int?>(null) }
 
-
     Scaffold(modifier = Modifier
         .testTag("screen_archived")
         .fillMaxSize()) { paddingValues ->
@@ -93,7 +92,7 @@ fun ArchivedScreen(navController: NavController) {
                 is ArchivedUiState.Content -> {
                     val habits = (state as ArchivedUiState.Content).habits
                     LazyColumn(
-                        contentPadding = PaddingValues(bottom = 80.dp)
+                        contentPadding = PaddingValues(bottom = 80.dp),
                     ) {
                         items(habits, key = {it.id}) { habit ->
                             HabitCard(

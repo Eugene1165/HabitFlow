@@ -27,6 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.habitflow.R
 import com.example.habitflow.presentation.components.HabitFlowTopBar
+import com.example.habitflow.presentation.habits.form.HabitFormCallbacks
 import com.example.habitflow.presentation.habits.form.HabitFormContent
 import com.example.habitflow.presentation.habits.form.HabitFormEvent
 import com.example.habitflow.presentation.habits.form.HabitFormViewModel
@@ -78,14 +79,16 @@ fun CreateHabitScreen(habitId: Int?, navController: NavController) {
             HabitFormContent(
                 state = state,
                 modifier = Modifier,
-                onTitleChanged = { viewModel.onTitleChanged(it) },
-                onDescriptionChanged = { viewModel.onDescriptionChanged(it) },
-                onColorChanged = { viewModel.onColorChanged(it) },
-                onRepeatTypeChanged = { viewModel.onRepeatTypeChanged(it) },
-                onSelectedDaysChanged = { viewModel.onSelectedDaysChanged(it) },
-                onWeeklyCountChanged = { viewModel.onWeeklyCountChanged(it) },
-                onTargetChanged = { viewModel.onTargetChanged(it) },
-                onReminderChanged = { viewModel.onReminderChanged(it)}
+                callbacks = HabitFormCallbacks(
+                    onTitleChanged = { viewModel.onTitleChanged(it) },
+                    onDescriptionChanged = { viewModel.onDescriptionChanged(it) },
+                    onColorChanged = { viewModel.onColorChanged(it) },
+                    onRepeatTypeChanged = { viewModel.onRepeatTypeChanged(it) },
+                    onSelectedDaysChanged = { viewModel.onSelectedDaysChanged(it) },
+                    onWeeklyCountChanged = { viewModel.onWeeklyCountChanged(it) },
+                    onTargetChanged = { viewModel.onTargetChanged(it) },
+                    onReminderChanged = { viewModel.onReminderChanged(it)}
+                ),
             )
             Spacer(Modifier.height(8.dp))
             Button(

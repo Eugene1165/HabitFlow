@@ -2,6 +2,7 @@ package com.example.habitflow.presentation.habits.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.habitflow.domain.model.HabitResult
 import com.example.habitflow.domain.usecase.GetAllActiveHabitsUseCase
 import com.example.habitflow.domain.usecase.GetEntriesForDateUseCase
 import com.example.habitflow.domain.usecase.ToggleHabitEntryUseCase
@@ -28,16 +29,21 @@ class HabitsListViewModel @Inject constructor(
     ) { habits, entries ->
         //сюда приходят ПОСЛЕДНИЕ значения из обоих flow
         // здесь ты просто ВОЗВРАЩАЕШЬ новое состояние
-        if (habits.isEmpty()) HabitsListUiState.Empty
-        else {
-            // для каждой привычки проверяем — есть ли она в entries
-            val habitsWithStatus = habits.map { habit ->
-                HabitWithStatus(
-                    habit = habit,
-                    isCompletedToday = entries.any { it.habitId == habit.id && it.isDone }
-                )
+        when (habits) {
+            is HabitResult.Success -> {
+                if (habits.data.isEmpty()) HabitsListUiState.Empty
+                else {
+                    val habitsWithStatus = habits.data.map { habit ->
+                        HabitWithStatus(
+                            habit = habit,
+                            isCompletedToday = entries.any { it.habitId == habit.id && it.isDone }
+                        )
+                    }
+                    HabitsListUiState.Content(habitsWithStatus)
+                }
             }
-            HabitsListUiState.Content(habitsWithStatus)
+
+            is HabitResult.Error -> HabitsListUiState.Error(habits.message)
         }
     }
         .catch { e -> emit(HabitsListUiState.Error(e.message ?: "Ошибка")) }

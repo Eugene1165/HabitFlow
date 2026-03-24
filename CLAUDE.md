@@ -262,6 +262,8 @@ Domain не знает о Room и Retrofit. DTO не используются в
 
 Убирать streak логику, делать простой CRUD, считать процент "на глаз", игнорировать расписание и offline-first.
 
+Не забегать вперёд — реализовывать строго по порядку. Если шаг A не завершён, нельзя переходить к шагу B. Например: нельзя обновлять ViewModel пока не обновлён UseCase, нельзя обновлять UseCase пока не обновлён Repository.
+
 📌 13. ФОРМАТ РАБОТЫ ПО ФИЧЕ
 
 1. Описание пользовательского сценария
@@ -346,14 +348,17 @@ App Start
 
 ### Блок 2 — Архитектура и обработка ошибок
 
-**2.1 Result wrapper pattern**
-Текущая проблема: ошибки глотаются в пустых `catch {}` блоках по всему коду.
-Middle+ решение: ввести `sealed class Result<T>` (Success / Error / Loading) на уровне Domain.
-Репозитории возвращают `Flow<Result<T>>` вместо `Flow<T>`.
-ViewModels маппируют Result → UiState без try/catch.
-После введения — переписать unit-тесты под новый контракт.
+**2.1 Result wrapper pattern** ✅ Готов (~75% самостоятельно — паттерн был новым, первые 3 метода разобрали вместе, остальные реализованы самостоятельно)
+- `HabitResult<out T>` — sealed class в `domain/model/`: `Success<T>(data)`, `Error(exception, message)`
+- Назван `HabitResult` (не `Result`) во избежание конфликта с `kotlin.Result`
+- `HabitRepository`: `getAllActiveHabits()` → `Flow<HabitResult<List<Habit>>>`, `addHabit` → `HabitResult<Habit>`, `updateHabit` → `HabitResult<Unit>`
+- `HabitRepositoryImpl`: Flow-методы через `flow { } + emitAll`, suspend-методы через `return try/catch`
+- Offline-first порядок: сначала Room, потом сеть
+- `AddHabitUseCase`, `UpdateHabitUseCase` — возвращают `HabitResult`, `schedule()` вызывается только при `Success`
+- ViewModels используют `when(result)` без try/catch
+- Unit-тесты и FakeHabitRepository обновлены под новый контракт
 
-**2.2 Background sync через WorkManager**
+**2.2 Background sync через WorkManager** — в работе
 `SyncWorker` — находит все `isSynced = false` записи при старте приложения и отправляет на сервер.
 Запускается через `OneTimeWorkRequest`.
 
@@ -389,7 +394,8 @@ ViewModels маппируют Result → UiState без try/catch.
 - `OnBoardingScreen` разбит на `OnBoardingHeader` + `OnBoardingContent`
 - Обоснованные `@Suppress`: `TooManyFunctions` на `HabitFormViewModel`, `ThrowsCount` на `toRepeatType`, `LongMethod` на `CalendarScreen` (граничный случай 100 строк), `LongParameterList` на `ButtonsBlock`
 
-**4.2 Проверка производительности** — `key { habit.id }` в LazyColumn (в работе).
+**4.2 Проверка производительности** — ✅ Готов
+- `key { habit.id }` проставлен в `LazyColumn` в `ArchivedScreen` и `HabitsListScreen`
 
 ---
 
