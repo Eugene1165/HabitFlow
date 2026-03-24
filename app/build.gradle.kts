@@ -49,6 +49,10 @@ android {
         buildConfig = true
         compose = true
     }
+    sourceSets {
+        getByName("androidTest").assets.srcDirs("$projectDir/schemas")
+    }
+
 }
 detekt{
     config.setFrom("$rootDir/config/detekt/detekt.yml")
@@ -88,6 +92,7 @@ dependencies {
 
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
+    androidTestImplementation(libs.androidx.room.testing)
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.kotlinx.coroutines.core)
