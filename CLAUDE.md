@@ -358,9 +358,11 @@ App Start
 - ViewModels используют `when(result)` без try/catch
 - Unit-тесты и FakeHabitRepository обновлены под новый контракт
 
-**2.2 Background sync через WorkManager** — в работе
-`SyncWorker` — находит все `isSynced = false` записи при старте приложения и отправляет на сервер.
-Запускается через `OneTimeWorkRequest`.
+**2.2 Background sync через WorkManager** ✅ Готов
+- `SyncWorker` — `@HiltWorker`, читает `getUnsyncedEntries().first()`, итерирует с `try/catch` на каждую запись
+- Цепочка маппинга: `HabitEntryEntity → HabitEntry → HabitEntryDto` через два маппера
+- После успешной отправки → `markAsSynced(it.id)`
+- Запускается в `HabitFlowApp.onCreate()` через `enqueueUniqueWork("sync_worker", ExistingWorkPolicy.KEEP, ...)`
 
 **2.3 Conflict resolution стратегия**
 Добавить поле `updatedAt: LocalDateTime` в `HabitEntry`.
