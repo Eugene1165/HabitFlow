@@ -343,7 +343,7 @@ App Start
 
 ```
         [ UI / Kaspresso — 21 тест   ]   ✅
-      [ Integration / Room DAO        ]   🟡 в процессе
+      [ Integration / Room DAO        ]   🟡 14/15 (migration ❌)
     [ Unit Tests — 11 тестов          ]   ✅
 ```
 
@@ -351,8 +351,8 @@ App Start
 - Структура: `androidTest/integrationTests/dao/` + `androidTest/integrationTests/fixtures/`
 - `HabitEntityFactory` — object с `createHabitEntity(id, title, ...)` дефолтными параметрами
 - `HabitDaoTest` ✅ 7 тестов: insert, archive, restore, delete, getById, update, observe
-- `HabitEntryDaoTest` ❌ — следующий шаг
-- Тест миграции `MIGRATION_2_3` ❌
+- `HabitEntryDaoTest` ✅ 7 тестов: addEntry, getEntriesForPeriod, getEntryByDate, updateEntry, markAsSynced, getUnsyncedEntries, getEntriesForDate
+- Тест миграции `MIGRATION_2_3` ❌ — следующий шаг
 - Инфраструктура: `Room.inMemoryDatabaseBuilder`, `allowMainThreadQueries()`, `@Before`/`@After` lifecycle
 
 **1.2 Unit-тесты — углублённо**
@@ -406,7 +406,7 @@ App Start
 | Критерий | Сейчас | Цель |
 |---|---|---|
 | Unit-тесты | 11 тестов, с помощью | Самостоятельно, Flow + Error + Parametrized |
-| Integration-тесты | HabitDaoTest ✅ 7 тестов | Room DAO полностью покрыт |
+| Integration-тесты | HabitDaoTest ✅ 7 + HabitEntryDaoTest ✅ 7, migration ❌ | Room DAO полностью покрыт |
 | UI-тесты | 21 базовый тест | Page Object, сложные флоу, стабильность |
 | CI/CD | Нет | GitHub Actions, coverage gate, артефакты |
 | Прод-мониторинг | Нет | Crashlytics, App Distribution, Play Store |
