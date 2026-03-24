@@ -11,8 +11,12 @@ import com.example.habitflow.data.local.dao.HabitEntryDao
 import com.example.habitflow.data.local.entity.HabitEntity
 import com.example.habitflow.data.local.entity.HabitEntryEntity
 
-@Database(entities = [HabitEntity::class, HabitEntryEntity::class], version = 2, exportSchema = true)
-abstract class HabitDatabase: RoomDatabase() {
+@Database(
+    entities = [HabitEntity::class, HabitEntryEntity::class],
+    version = 3,
+    exportSchema = true
+)
+abstract class HabitDatabase : RoomDatabase() {
     abstract fun habitDao(): HabitDao
     abstract fun habitEntryDao(): HabitEntryDao
 
@@ -27,15 +31,16 @@ abstract class HabitDatabase: RoomDatabase() {
                     klass = HabitDatabase::class.java,
                     name = "habit_database"
                 )
-                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_2_3)
                     .build().also { INSTANCE = it }
             }
         }
 
-        val MIGRATION_1_2 = object : Migration(1,2){
+        @Suppress("MagicNumber")
+        val MIGRATION_2_3 = object : Migration(2, 3) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL(
-                    "ALTER TABLE habit_entries ADD COLUMN isSynced INTEGER NOT NULL DEFAULT 0"
+                    "ALTER TABLE habit_entries ADD COLUMN updatedAt TEXT NOT NULL DEFAULT '1970-01-01T00:00:00'"
                 )
             }
         }

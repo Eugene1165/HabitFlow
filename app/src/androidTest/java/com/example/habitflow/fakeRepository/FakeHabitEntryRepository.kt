@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 class FakeHabitEntryRepository : HabitEntryRepository {
     private val entrys = MutableStateFlow<List<HabitEntry>>(emptyList())
@@ -36,7 +37,8 @@ class FakeHabitEntryRepository : HabitEntryRepository {
     override suspend fun updateEntry(
         habitId: Int,
         currentDate: LocalDate,
-        isDone: Boolean
+        isDone: Boolean,
+        updatedAt: LocalDateTime
     ) {
         entrys.value = entrys.value.map {
             if (it.habitId == habitId && it.date == currentDate) it.copy(isDone = isDone) else it

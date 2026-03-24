@@ -14,6 +14,7 @@ import java.io.IOException
 import retrofit2.HttpException
 import timber.log.Timber
 import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class HabitEntryRepositoryImpl @Inject constructor(
@@ -91,9 +92,10 @@ class HabitEntryRepositoryImpl @Inject constructor(
     override suspend fun updateEntry(
         habitId: Int,
         currentDate: LocalDate,
-        isDone: Boolean
+        isDone: Boolean,
+        updatedAt: LocalDateTime
     ) {
-        dao.updateEntry(habitId, currentDate.toString(), isDone)
+        dao.updateEntry(habitId, currentDate.toString(), isDone,updatedAt.toString())
         try {
             val entry = dao.getEntryByDate(habitId, currentDate.toString()) ?: return
             val domainEntity = habitEntryMapper.mapHabitEntryEntityToHabitEntry(entry)

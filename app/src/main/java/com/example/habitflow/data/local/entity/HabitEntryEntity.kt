@@ -6,6 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.CASCADE
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 
 @Entity(
     tableName = "habit_entries", foreignKeys = [ForeignKey(
@@ -25,5 +26,9 @@ data class HabitEntryEntity(
     @ColumnInfo
     val isDone: Boolean,
     @ColumnInfo
-    val isSynced: Boolean = false
+    val isSynced: Boolean = false,
+    @ColumnInfo
+    val updatedAt: String = "1970-01-01T00:00:00"
 )
+
+

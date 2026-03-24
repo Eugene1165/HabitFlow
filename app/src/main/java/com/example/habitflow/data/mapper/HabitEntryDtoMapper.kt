@@ -12,7 +12,8 @@ class HabitEntryDtoMapper @Inject constructor() {
             id = entry.id,
             habitId = entry.habitId,
             date = entry.date.toString(),
-            isDone = entry.isDone
+            isDone = entry.isDone,
+            updatedAt = entry.updatedAt
         )
     }
 
@@ -21,7 +22,8 @@ class HabitEntryDtoMapper @Inject constructor() {
             id = dto.id,
             habitId = dto.habitId,
             date = dto.date.let { LocalDate.parse(it) },
-            isDone = dto.isDone
+            isDone = dto.isDone,
+            updatedAt = dto.updatedAt
         )
     }
 }

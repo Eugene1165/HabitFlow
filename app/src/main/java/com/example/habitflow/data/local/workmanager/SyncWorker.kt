@@ -11,6 +11,8 @@ import com.example.habitflow.data.remote.api.HabitEntryApiService
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.first
+import okio.IOException
+import retrofit2.HttpException
 import timber.log.Timber
 
 @HiltWorker
@@ -30,8 +32,10 @@ class SyncWorker @AssistedInject constructor(
                 val habitDto = habitEntryDtoMapper.mapHabitEntryToDto(habitEntry)
                 habitEntryApiService.updateEntryById(it.id.toString(),habitDto)
                 habitEntryDao.markAsSynced(it.id)
-            }catch (e: Exception){
+            }catch (e: IOException){
                 Timber.e(e, "Ошибка синхронизации записи ${it.id}")
+            }catch (e: HttpException){
+                Timber.e(e, "нет сети")
             }
         }
         return Result.success()

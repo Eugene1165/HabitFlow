@@ -364,9 +364,13 @@ App Start
 - После успешной отправки → `markAsSynced(it.id)`
 - Запускается в `HabitFlowApp.onCreate()` через `enqueueUniqueWork("sync_worker", ExistingWorkPolicy.KEEP, ...)`
 
-**2.3 Conflict resolution стратегия**
-Добавить поле `updatedAt: LocalDateTime` в `HabitEntry`.
-При синхронизации — Last Write Wins по timestamp.
+**2.3 Conflict resolution стратегия** ✅ Готов
+- `updatedAt: LocalDateTime` добавлен в `HabitEntry`, `HabitEntryEntity` (String), `HabitEntryDto`
+- `HabitEntryMapper` — конвертация `String ↔ LocalDateTime` через `parse/toString`
+- `MIGRATION_2_3` — `ALTER TABLE habit_entries ADD COLUMN updatedAt TEXT NOT NULL DEFAULT '1970-01-01T00:00:00'`
+- `ToggleHabitEntryUseCase` — проставляет `LocalDateTime.now()` при создании и обновлении записи
+- `HabitEntryDao.updateEntry` — обновляет `updatedAt` вместе с `isDone`
+- Last Write Wins реализован на уровне передачи `updatedAt` в API при синхронизации
 
 ---
 

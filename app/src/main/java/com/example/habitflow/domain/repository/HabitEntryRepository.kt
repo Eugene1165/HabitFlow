@@ -3,6 +3,7 @@ package com.example.habitflow.domain.repository
 import com.example.habitflow.domain.model.HabitEntry
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 interface HabitEntryRepository {
 
@@ -18,7 +19,12 @@ interface HabitEntryRepository {
 
     fun getEntriesForDate(date: LocalDate): Flow<List<HabitEntry>>
 
-    suspend fun updateEntry(habitId: Int, currentDate: LocalDate, isDone: Boolean)
+    suspend fun updateEntry(
+        habitId: Int,
+        currentDate: LocalDate,
+        isDone: Boolean,
+        updatedAt: LocalDateTime
+    )
 
-    suspend fun getEntryByDate(habitId: Int,date: LocalDate): HabitEntry?
+    suspend fun getEntryByDate(habitId: Int, date: LocalDate): HabitEntry?
 }

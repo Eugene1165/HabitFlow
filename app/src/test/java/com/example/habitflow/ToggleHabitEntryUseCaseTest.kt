@@ -42,11 +42,11 @@ class ToggleHabitEntryUseCaseTest {
         val date = LocalDate.of(2026, 1, 2)
         val entry = HabitEntry(isDone = true, id = 1, habitId = 1, date = date)
 
-        coEvery { habitEntryRepository.getEntryByDate(any(),any()) } returns entry
-        coEvery { habitEntryRepository.updateEntry(any(),any(),any())} just Runs
+        coEvery { habitEntryRepository.getEntryByDate(any(), any()) } returns entry
+        coEvery { habitEntryRepository.updateEntry(any(), any(), any(), any()) } just Runs
 
-        useCase(habitId = 1,date=date)
-        coVerify { habitEntryRepository.updateEntry(1,date, isDone = false) }
+        useCase(habitId = 1, date = date)
+        coVerify { habitEntryRepository.updateEntry(1, date, isDone = false, any()) }
 
     }
 
@@ -55,11 +55,11 @@ class ToggleHabitEntryUseCaseTest {
         val date = LocalDate.of(2026, 1, 2)
         val entry = HabitEntry(isDone = false, id = 1, habitId = 1, date = date)
 
-        coEvery { habitEntryRepository.getEntryByDate(any(),any()) } returns entry
-        coEvery { habitEntryRepository.updateEntry(any(),any(),any())} just Runs
+        coEvery { habitEntryRepository.getEntryByDate(any(), any()) } returns entry
+        coEvery { habitEntryRepository.updateEntry(any(), any(), any(), any()) } just Runs
 
-        useCase(habitId = 1,date=date)
-        coVerify { habitEntryRepository.updateEntry(1,date, isDone = true) }
+        useCase(habitId = 1, date = date)
+        coVerify { habitEntryRepository.updateEntry(1, date, isDone = true, any()) }
 
     }
 }
