@@ -385,8 +385,9 @@ App Start
 `GetAchievementsUseCase` — streak 7/30 дней, 100% неделя, 10 выполнений.
 Минимум 6 unit-тестов для логики разблокировки.
 
-**3.3 Виджет (Home Screen Widget)**
-`AppWidget` через Glance (Jetpack) — привычки на сегодня + прогресс.
+**3.3 Удаление свайпом (Swipe to Delete)**
+`HabitsListScreen` — свайп влево по карточке привычки показывает диалог подтверждения.
+При подтверждении — hard delete через `DeleteHabitUseCase`.
 
 ---
 
