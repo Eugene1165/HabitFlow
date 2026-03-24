@@ -343,17 +343,18 @@ App Start
 
 ```
         [ UI / Kaspresso — 21 тест   ]   ✅
-      [ Integration / Room DAO        ]   🟡 14/15 (migration ❌)
+      [ Integration / Room DAO        ]   ✅ 15 тестов
     [ Unit Tests — 11 тестов          ]   ✅
 ```
 
-**1.1 Integration-тесты — Room DAO** ← ТЕКУЩИЙ ШАГ
-- Структура: `androidTest/integrationTests/dao/` + `androidTest/integrationTests/fixtures/`
-- `HabitEntityFactory` — object с `createHabitEntity(id, title, ...)` дефолтными параметрами
+**1.1 Integration-тесты — Room DAO** ✅ ЗАВЕРШЁН
+- Структура: `androidTest/integrationTests/dao/` + `androidTest/integrationTests/fixtures/` + `androidTest/integrationTests/migration/`
+- `HabitEntityFactory` + `HabitEntryEntityFactory` — object с дефолтными параметрами
 - `HabitDaoTest` ✅ 7 тестов: insert, archive, restore, delete, getById, update, observe
 - `HabitEntryDaoTest` ✅ 7 тестов: addEntry, getEntriesForPeriod, getEntryByDate, updateEntry, markAsSynced, getUnsyncedEntries, getEntriesForDate
-- Тест миграции `MIGRATION_2_3` ❌ — следующий шаг
-- Инфраструктура: `Room.inMemoryDatabaseBuilder`, `allowMainThreadQueries()`, `@Before`/`@After` lifecycle
+- `MigrationTest` ✅ 1 тест: migrate_2_to_3 через MigrationTestHelper + @get:Rule
+- Инфраструктура DAO: `Room.inMemoryDatabaseBuilder`, `allowMainThreadQueries()`, `runBlocking` в `@Before` для suspend
+- Инфраструктура Migration: `room-testing` зависимость, schemas как androidTest assets в `build.gradle.kts`
 
 **1.2 Unit-тесты — углублённо**
 - Тестирование Flow через Turbine (`app.cash.turbine`)
@@ -406,7 +407,7 @@ App Start
 | Критерий | Сейчас | Цель |
 |---|---|---|
 | Unit-тесты | 11 тестов, с помощью | Самостоятельно, Flow + Error + Parametrized |
-| Integration-тесты | HabitDaoTest ✅ 7 + HabitEntryDaoTest ✅ 7, migration ❌ | Room DAO полностью покрыт |
+| Integration-тесты | ✅ 15 тестов (HabitDaoTest x7, HabitEntryDaoTest x7, MigrationTest x1) | Room DAO полностью покрыт |
 | UI-тесты | 21 базовый тест | Page Object, сложные флоу, стабильность |
 | CI/CD | Нет | GitHub Actions, coverage gate, артефакты |
 | Прод-мониторинг | Нет | Crashlytics, App Distribution, Play Store |
