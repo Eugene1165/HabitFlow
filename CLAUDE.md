@@ -333,72 +333,71 @@ App Start
 
 ---
 
-## Roadmap: Middle SDET
+## Roadmap: Mobile SDET Middle+
 
-> **Цель: стать Mobile SDET Middle+ — писать и продуктовый, и тестовый код профессионально**
+> **Цель: Android Developer Middle+ + Auto QA Engineer Mobile Middle+ (50/50)**
+> Горизонт: 6-9 месяцев при 2-3 часа в день
 
-### Фаза 1 — Полная тестовая пирамида (текущий фокус)
-
-Задача: закрыть дыру в середине пирамиды.
+### Тестовая пирамида (итог Фазы 1)
 
 ```
-        [ UI / Kaspresso — 21 тест   ]   ✅
-      [ Integration / Room DAO        ]   ✅ 15 тестов
-    [ Unit Tests — 11 тестов          ]   ✅
+[ UI / Kaspresso — 21 тест         ]   ✅
+[ Integration / Room DAO — 15      ]   ✅
+[ Unit Tests — 11 тестов           ]   ✅
 ```
 
-**1.1 Integration-тесты — Room DAO** ✅ ЗАВЕРШЁН
-- Структура: `androidTest/integrationTests/dao/` + `androidTest/integrationTests/fixtures/` + `androidTest/integrationTests/migration/`
-- `HabitEntityFactory` + `HabitEntryEntityFactory` — object с дефолтными параметрами
-- `HabitDaoTest` ✅ 7 тестов: insert, archive, restore, delete, getById, update, observe
-- `HabitEntryDaoTest` ✅ 7 тестов: addEntry, getEntriesForPeriod, getEntryByDate, updateEntry, markAsSynced, getUnsyncedEntries, getEntriesForDate
-- `MigrationTest` ✅ 1 тест: migrate_2_to_3 через MigrationTestHelper + @get:Rule
-- Инфраструктура DAO: `Room.inMemoryDatabaseBuilder`, `allowMainThreadQueries()`, `runBlocking` в `@Before` для suspend
-- Инфраструктура Migration: `room-testing` зависимость, schemas как androidTest assets в `build.gradle.kts`
+---
 
-**1.2 Unit-тесты — углублённо**
-- Тестирование Flow через Turbine (`app.cash.turbine`)
+### Фаза 1 — Тестовая пирамида ✅ ЗАВЕРШЕНА
+
+**QA: Integration-тесты — Room DAO** ✅
+- `HabitDaoTest` ✅ 7 тестов, `HabitEntryDaoTest` ✅ 7 тестов, `MigrationTest` ✅ 1 тест
+- Структура: `integrationTests/dao/` + `integrationTests/fixtures/` + `integrationTests/migration/`
+- Инфраструктура: `Room.inMemoryDatabaseBuilder`, `allowMainThreadQueries()`, `MigrationTestHelper`
+
+**QA: Kaspresso Page Object** ✅
+- 21 тест, Page Object реализован в `screens/`
+
+---
+
+### Фаза 2 — CI/CD + Unit углублённо (текущий фокус) ← СЛЕДУЮЩИЙ ШАГ
+
+**QA: CI/CD пайплайн**
+- GitHub Actions: unit + integration тесты на каждый PR
+- Lint + Detekt как gate
+- JaCoCo: coverage измерение + минимальный порог
+- Артефакты: APK + тестовый отчёт
+
+**QA: Unit-тесты углублённо**
+- Turbine (`app.cash.turbine`) для тестирования Flow
 - Error-сценарии: исключения, пустые данные, граничные случаи
-- Parametrized tests (`@ParameterizedTest`) для RepeatType вариантов
-- Fake vs Mock — понять разницу и когда что применять
-
-**1.3 Kaspresso — Page Object pattern**
-- Рефакторинг существующих 21 теста под идиоматичный Page Object
-- Тестирование навигационных флоу (цепочки экранов)
-- Работа с асинхронными операциями (flakiness, idling resources)
+- Parametrized тесты для RepeatType вариантов
 
 ---
 
-### Фаза 2 — CI/CD пайплайн
+### Фаза 3 — Прод-инфраструктура + Модуляризация
 
-Задача: тесты должны запускаться автоматически на каждый коммит.
-
-- GitHub Actions: автозапуск unit + integration тестов на каждый PR
-- Lint + Detekt в CI как gate (не мержится если падает)
-- JaCoCo: измерение coverage, минимальный порог как gate
-- Артефакты: APK + тестовый отчёт в каждом билде
-
----
-
-### Фаза 3 — Прод-инфраструктура
-
-Задача: научиться доставлять приложение в прод и мониторить его.
-
-- Firebase Crashlytics — мониторинг краш-репортов в проде
+**QA: Прод-мониторинг**
+- Firebase Crashlytics — краш-репорты
 - Firebase App Distribution — бета-тестирование
-- Google Play: internal track → closed → open → production
-- Release checklist — что проверять перед каждым релизом
+- Release checklist
+
+**Android: Модуляризация**
+- Разбить `app` на модули: `:core`, `:feature:habits`, `:feature:statistics`
+- Понять Gradle conventions, dependency management между модулями
 
 ---
 
-### Фаза 4 — Advanced SDET
+### Фаза 4 — Advanced (производительность + сложные тесты)
 
-Задача: глубокое качество и производительность.
+**Android: Производительность**
+- LeakCanary — memory leaks
+- Android Profiler — frame drops, CPU, memory
+- Baseline Profiles
 
-- LeakCanary — обнаружение memory leaks
-- Android Profiler — frame drops, CPU, memory, battery
-- Kaspresso: custom interceptors, параллельный запуск на нескольких устройствах
-- Тестирование в сложных условиях: медленная сеть, нет сети, rotation, low memory
+**QA: Advanced тестирование**
+- Kaspresso: custom interceptors, параллельный запуск
+- Тестирование: медленная сеть, rotation, low memory
 
 ---
 
@@ -406,10 +405,11 @@ App Start
 
 | Критерий | Сейчас | Цель |
 |---|---|---|
-| Unit-тесты | 11 тестов, с помощью | Самостоятельно, Flow + Error + Parametrized |
-| Integration-тесты | ✅ 15 тестов (HabitDaoTest x7, HabitEntryDaoTest x7, MigrationTest x1) | Room DAO полностью покрыт |
-| UI-тесты | 21 базовый тест | Page Object, сложные флоу, стабильность |
-| CI/CD | Нет | GitHub Actions, coverage gate, артефакты |
-| Прод-мониторинг | Нет | Crashlytics, App Distribution, Play Store |
-| Производительность | Не измеряется | LeakCanary, Profiler, frame budget |
-| Testability | Не думает об этом | Проектирует код с учётом тестируемости |
+| Продуктовый код | ✅ Clean Arch, MVVM, Compose, Room, Retrofit | Middle+ (модуляризация) |
+| Unit-тесты | 11 тестов | Turbine, Error, Parametrized |
+| Integration-тесты | ✅ 15 тестов | ✅ Достигнуто |
+| UI-тесты | ✅ 21 тест, Page Object | Сложные флоу, стабильность |
+| CI/CD | Нет | GitHub Actions, JaCoCo gate |
+| Прод-мониторинг | Нет | Crashlytics, App Distribution |
+| Производительность | Не измеряется | LeakCanary, Profiler |
+| Модуляризация | Один модуль app | Feature-модули |
