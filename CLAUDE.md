@@ -156,29 +156,29 @@ DI (по желанию) → Dagger2.Hilt
 
 📘 ИНСТРУКЦИЯ ДЛЯ ИИ-НАСТАВНИКА
 Проект: HabitFlow (Habit Tracker)
-Уровень реализации: Middle
+Цель разработчика: стать Mobile SDET Middle+ — рабочим инженером, который пишет и продуктовый код, и тестовый код на профессиональном уровне. Без ухода в менеджмент.
+Уровень реализации: Middle → Middle+
 Формат работы: обучающий, без генерации готового кода
 
 🎯 1. ТВОЯ РОЛЬ
 
-Ты — технический наставник Android-разработчика.
+Ты — технический наставник Mobile SDET.
 
 Ты:
-- Идею проекта модернизируешь,
-- объясняешь архитектуру,
-- проверяешь решения,
-- задаёшь наводящие вопросы,
-- помогаешь мыслить системно,
-- проводишь code review,
-- указываешь на архитектурные ошибки,
-- помогаешь формализовать бизнес-логику.
-- Пишем код исключительно в функциональном стиле
+- Объясняешь архитектуру продуктового кода и тестового кода,
+- Учишь проектировать код с учётом testability,
+- Проверяешь решения и задаёшь наводящие вопросы,
+- Помогаешь мыслить системно (что тестировать, почему, на каком уровне),
+- Проводишь code review — и продуктового, и тестового кода,
+- Указываешь на архитектурные ошибки,
+- Помогаешь строить инфраструктуру качества (CI/CD, мониторинг, релизный процесс),
+- Пишем код исключительно в функциональном стиле.
 
 Ты НЕ:
 - пишешь готовые файлы,
 - генерируешь полностью классы,
 - создаёшь copy-paste решения,
-- реализуешь фичи за разработчика,
+- реализуешь фичи или тесты за разработчика,
 - упрощаешь сложную логику до примитивного CRUD.
 
 Если пользователь просит "напиши код" — ты обязан:
@@ -309,110 +309,104 @@ App Start
 
 ---
 
-## Roadmap: Junior+ → Middle+
+## Реализовано (архив)
 
-> **Текущий фокус: глубокое изучение автотестирования (пирамида тестов)**
+### Архитектура и обработка ошибок
 
-### Блок 1 — Пирамида тестирования (основной приоритет)
+**Result wrapper pattern** ✅ Готов (~75% самостоятельно)
+- `HabitResult<out T>` — sealed class в `domain/model/`: `Success<T>(data)`, `Error(exception, message)`
+- `HabitRepository`: `getAllActiveHabits()` → `Flow<HabitResult<List<Habit>>>`, `addHabit` → `HabitResult<Habit>`, `updateHabit` → `HabitResult<Unit>`
+- ViewModels используют `when(result)` без try/catch
+
+**Background sync через WorkManager** ✅ Готов
+- `SyncWorker` — `@HiltWorker`, читает `getUnsyncedEntries().first()`, итерирует с `try/catch` на каждую запись
+- Запускается в `HabitFlowApp.onCreate()` через `enqueueUniqueWork("sync_worker", ExistingWorkPolicy.KEEP, ...)`
+
+**Conflict resolution** ✅ Готов
+- `updatedAt: LocalDateTime` в `HabitEntry`, `HabitEntryEntity`, `HabitEntryDto`
+- `MIGRATION_2_3` — добавление колонки `updatedAt`
+- Last Write Wins при синхронизации
+
+**Lint + Detekt** ✅ Готов
+- `config/detekt/detekt.yml`, порог `LongMethod.threshold = 100`
+- `key { habit.id }` в `LazyColumn`
+
+---
+
+## Roadmap: Middle SDET
+
+> **Цель: стать Mobile SDET Middle+ — писать и продуктовый, и тестовый код профессионально**
+
+### Фаза 1 — Полная тестовая пирамида (текущий фокус)
+
+Задача: закрыть дыру в середине пирамиды.
 
 ```
-        [  UI / Kaspresso  ]      ← мало, медленно, дорого
-      [ Integration / Room  ]
-    [   Unit Tests (JUnit4)  ]    ← много, быстро, дёшево
+        [ UI / Kaspresso — 21 тест   ]   ✅
+      [ Integration / Room DAO        ]   ❌ ← текущая задача
+    [ Unit Tests — 11 тестов          ]   ✅
 ```
 
-**1.1 Unit-тесты — углублённо**
-Текущее покрытие: 11 тестов (статистика, toggle).
-Цель: научиться писать тесты самостоятельно, без подсказок.
+**1.1 Integration-тесты — Room DAO** ← СЛЕДУЮЩИЙ ШАГ
+- `HabitDaoTest` + `HabitEntryDaoTest` — `Room.inMemoryDatabaseBuilder`, `@RunWith(AndroidJUnit4::class)`
+- Тесты для всех методов DAO: CRUD, `markAsSynced`, `getUnsyncedEntries`, `getEntriesForHabit`
+- Тест миграции `MIGRATION_2_3`
+- Цель: убедиться что SQL-запросы корректны, изолированно от UI
+
+**1.2 Unit-тесты — углублённо**
 - Тестирование Flow через Turbine (`app.cash.turbine`)
-- Error-сценарии (исключения, пустые данные, граничные случаи)
+- Error-сценарии: исключения, пустые данные, граничные случаи
 - Parametrized tests (`@ParameterizedTest`) для RepeatType вариантов
 - Fake vs Mock — понять разницу и когда что применять
 
-**1.2 Integration-тесты — Room DAO**
-`HabitEntryDaoTest`, `HabitDaoTest` — instrumented тесты с реальной in-memory БД.
-- `@RunWith(AndroidJUnit4::class)` + `Room.inMemoryDatabaseBuilder`
-- Тесты для `markAsSynced`, `getUnsyncedEntries`, `getEntriesForHabit`
-- Тест миграции `MIGRATION_1_2`
-Цель: убедиться что SQL-запросы корректны, изолированно от UI.
-
-**1.3 UI-тесты — Kaspresso углублённо**
-Текущее покрытие: 21 тест (базовые сценарии).
-Цель: понять архитектуру Page Object, сложные сценарии, стабильность тестов.
-- Идиоматичный Page Object pattern в Kaspresso
+**1.3 Kaspresso — Page Object pattern**
+- Рефакторинг существующих 21 теста под идиоматичный Page Object
 - Тестирование навигационных флоу (цепочки экранов)
 - Работа с асинхронными операциями (flakiness, idling resources)
-- Параллельный запуск на нескольких устройствах
 
 ---
 
-### Блок 2 — Архитектура и обработка ошибок
+### Фаза 2 — CI/CD пайплайн
 
-**2.1 Result wrapper pattern** ✅ Готов (~75% самостоятельно — паттерн был новым, первые 3 метода разобрали вместе, остальные реализованы самостоятельно)
-- `HabitResult<out T>` — sealed class в `domain/model/`: `Success<T>(data)`, `Error(exception, message)`
-- Назван `HabitResult` (не `Result`) во избежание конфликта с `kotlin.Result`
-- `HabitRepository`: `getAllActiveHabits()` → `Flow<HabitResult<List<Habit>>>`, `addHabit` → `HabitResult<Habit>`, `updateHabit` → `HabitResult<Unit>`
-- `HabitRepositoryImpl`: Flow-методы через `flow { } + emitAll`, suspend-методы через `return try/catch`
-- Offline-first порядок: сначала Room, потом сеть
-- `AddHabitUseCase`, `UpdateHabitUseCase` — возвращают `HabitResult`, `schedule()` вызывается только при `Success`
-- ViewModels используют `when(result)` без try/catch
-- Unit-тесты и FakeHabitRepository обновлены под новый контракт
+Задача: тесты должны запускаться автоматически на каждый коммит.
 
-**2.2 Background sync через WorkManager** ✅ Готов
-- `SyncWorker` — `@HiltWorker`, читает `getUnsyncedEntries().first()`, итерирует с `try/catch` на каждую запись
-- Цепочка маппинга: `HabitEntryEntity → HabitEntry → HabitEntryDto` через два маппера
-- После успешной отправки → `markAsSynced(it.id)`
-- Запускается в `HabitFlowApp.onCreate()` через `enqueueUniqueWork("sync_worker", ExistingWorkPolicy.KEEP, ...)`
-
-**2.3 Conflict resolution стратегия** ✅ Готов
-- `updatedAt: LocalDateTime` добавлен в `HabitEntry`, `HabitEntryEntity` (String), `HabitEntryDto`
-- `HabitEntryMapper` — конвертация `String ↔ LocalDateTime` через `parse/toString`
-- `MIGRATION_2_3` — `ALTER TABLE habit_entries ADD COLUMN updatedAt TEXT NOT NULL DEFAULT '1970-01-01T00:00:00'`
-- `ToggleHabitEntryUseCase` — проставляет `LocalDateTime.now()` при создании и обновлении записи
-- `HabitEntryDao.updateEntry` — обновляет `updatedAt` вместе с `isDone`
-- Last Write Wins реализован на уровне передачи `updatedAt` в API при синхронизации
+- GitHub Actions: автозапуск unit + integration тестов на каждый PR
+- Lint + Detekt в CI как gate (не мержится если падает)
+- JaCoCo: измерение coverage, минимальный порог как gate
+- Артефакты: APK + тестовый отчёт в каждом билде
 
 ---
 
-### Блок 3 — Новые фичи (бизнес-логика)
+### Фаза 3 — Прод-инфраструктура
 
-**3.1 Поиск и фильтрация привычек**
-`HabitsListScreen` — поле поиска + фильтр по типу повторения.
-`MutableStateFlow<String>` + `combine` с основным Flow.
+Задача: научиться доставлять приложение в прод и мониторить его.
 
-**3.2 Достижения (Achievements)**
-`Achievement(id, title, description, unlockedAt?)`.
-`GetAchievementsUseCase` — streak 7/30 дней, 100% неделя, 10 выполнений.
-Минимум 6 unit-тестов для логики разблокировки.
-
-**3.3 Удаление свайпом (Swipe to Delete)**
-`HabitsListScreen` — свайп влево по карточке привычки показывает диалог подтверждения.
-При подтверждении — hard delete через `DeleteHabitUseCase`.
+- Firebase Crashlytics — мониторинг краш-репортов в проде
+- Firebase App Distribution — бета-тестирование
+- Google Play: internal track → closed → open → production
+- Release checklist — что проверять перед каждым релизом
 
 ---
 
-### Блок 4 — Качество кода
+### Фаза 4 — Advanced SDET
 
-**4.1 Lint + Detekt** — ✅ Готов
-- `config/detekt/detekt.yml` настроен, порог `LongMethod.threshold = 100`
-- Все нарушения устранены: рефакторинг streak-функций на `generateSequence + filter + takeWhile`, guard clause в `calculateWeeklyDaysBestStreak`, `?: return streak` в `calculateWeeklyCountStreak`
-- `HabitFormContent` разбит на `RepeatTypeDropdown` + `RepeatTypeOptions`, создан `HabitFormCallbacks`
-- `HabitInfoScreen` разбит на `HabitInfoContent` + `StatisticCard` + `ButtonsBlock`
-- `OnBoardingScreen` разбит на `OnBoardingHeader` + `OnBoardingContent`
-- Обоснованные `@Suppress`: `TooManyFunctions` на `HabitFormViewModel`, `ThrowsCount` на `toRepeatType`, `LongMethod` на `CalendarScreen` (граничный случай 100 строк), `LongParameterList` на `ButtonsBlock`
+Задача: глубокое качество и производительность.
 
-**4.2 Проверка производительности** — ✅ Готов
-- `key { habit.id }` проставлен в `LazyColumn` в `ArchivedScreen` и `HabitsListScreen`
+- LeakCanary — обнаружение memory leaks
+- Android Profiler — frame drops, CPU, memory, battery
+- Kaspresso: custom interceptors, параллельный запуск на нескольких устройствах
+- Тестирование в сложных условиях: медленная сеть, нет сети, rotation, low memory
 
 ---
 
-### Целевой результат Middle+
+### Целевой результат Mobile SDET Middle+
 
 | Критерий | Сейчас | Цель |
 |---|---|---|
-| Unit-тесты | С помощью | Самостоятельно, включая Flow + Error |
-| Integration-тесты | Не написаны | Room DAO покрыт |
-| UI-тесты | Базовые 21 тест | Page Object, сложные флоу |
-| Обработка ошибок | Пустые catch | Result pattern |
-| Бизнес-логика | Понимает | Проектирует сам |
-| Отладка | Наугад | Системно |
+| Unit-тесты | 11 тестов, с помощью | Самостоятельно, Flow + Error + Parametrized |
+| Integration-тесты | Не написаны | Room DAO полностью покрыт |
+| UI-тесты | 21 базовый тест | Page Object, сложные флоу, стабильность |
+| CI/CD | Нет | GitHub Actions, coverage gate, артефакты |
+| Прод-мониторинг | Нет | Crashlytics, App Distribution, Play Store |
+| Производительность | Не измеряется | LeakCanary, Profiler, frame budget |
+| Testability | Не думает об этом | Проектирует код с учётом тестируемости |
