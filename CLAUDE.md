@@ -343,15 +343,17 @@ App Start
 
 ```
         [ UI / Kaspresso — 21 тест   ]   ✅
-      [ Integration / Room DAO        ]   ❌ ← текущая задача
+      [ Integration / Room DAO        ]   🟡 в процессе
     [ Unit Tests — 11 тестов          ]   ✅
 ```
 
-**1.1 Integration-тесты — Room DAO** ← СЛЕДУЮЩИЙ ШАГ
-- `HabitDaoTest` + `HabitEntryDaoTest` — `Room.inMemoryDatabaseBuilder`, `@RunWith(AndroidJUnit4::class)`
-- Тесты для всех методов DAO: CRUD, `markAsSynced`, `getUnsyncedEntries`, `getEntriesForHabit`
-- Тест миграции `MIGRATION_2_3`
-- Цель: убедиться что SQL-запросы корректны, изолированно от UI
+**1.1 Integration-тесты — Room DAO** ← ТЕКУЩИЙ ШАГ
+- Структура: `androidTest/integrationTests/dao/` + `androidTest/integrationTests/fixtures/`
+- `HabitEntityFactory` — object с `createHabitEntity(id, title, ...)` дефолтными параметрами
+- `HabitDaoTest` ✅ 7 тестов: insert, archive, restore, delete, getById, update, observe
+- `HabitEntryDaoTest` ❌ — следующий шаг
+- Тест миграции `MIGRATION_2_3` ❌
+- Инфраструктура: `Room.inMemoryDatabaseBuilder`, `allowMainThreadQueries()`, `@Before`/`@After` lifecycle
 
 **1.2 Unit-тесты — углублённо**
 - Тестирование Flow через Turbine (`app.cash.turbine`)
@@ -404,7 +406,7 @@ App Start
 | Критерий | Сейчас | Цель |
 |---|---|---|
 | Unit-тесты | 11 тестов, с помощью | Самостоятельно, Flow + Error + Parametrized |
-| Integration-тесты | Не написаны | Room DAO полностью покрыт |
+| Integration-тесты | HabitDaoTest ✅ 7 тестов | Room DAO полностью покрыт |
 | UI-тесты | 21 базовый тест | Page Object, сложные флоу, стабильность |
 | CI/CD | Нет | GitHub Actions, coverage gate, артефакты |
 | Прод-мониторинг | Нет | Crashlytics, App Distribution, Play Store |
