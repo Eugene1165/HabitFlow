@@ -360,16 +360,17 @@ App Start
 
 ---
 
-### Фаза 2 — CI/CD + Unit углублённо (текущий фокус) ← СЛЕДУЮЩИЙ ШАГ
+### Фаза 2 — CI/CD + Unit углублённо ✅ ЗАВЕРШЕНА
 
-**QA: CI/CD пайплайн** 🔄 В ПРОЦЕССЕ
-- `.github/workflows/ci.yml` создан
-- `test` джоб: Checkout → JDK 17 → Gradle cache → Detekt → Unit тесты
+**QA: CI/CD пайплайн** ✅ ЗАВЕРШЕНО
+- `.github/workflows/ci.yml` — три джоба: `test` → `build` → `ui-tests`
+- `test` джоб: Checkout → JDK 17 → Gradle cache → Detekt → Unit тесты → JaCoCo coverage check
 - `build` джоб: `needs: test` → assembleDebug → Upload APK artifact
-- `ui-tests` джоб: `needs: build`, `macos-latest`, только на `push` (не PR) — шаги не заполнены
-- JaCoCo: плагин подключён, `jacocoTestReport` task настроен, `enableUnitTestCoverage=true` в debug; domain.usecase=58%, domain.model=96%, total=7%
-- Исправлен баг: бесконечный цикл в `calculateWeeklyDaysBestStreak` (date не двигалась на активных днях)
-- Осталось: local.properties через GitHub Secrets, эмулятор для ui-tests, JaCoCo минимальный порог
+- `ui-tests` джоб: `needs: build`, `macos-latest`, только на `push`; `reactivecircus/android-emulator-runner@v2`, api-level=29, `connectedAndroidTest`
+- GitHub Secrets: `SUPABASE_URL`, `SUPABASE_KEY` — переданы через `env:` во все шаги сборки
+- `build.gradle.kts`: `gradleLocalProperties → System.getenv()` fallback для Secrets
+- JaCoCo: `jacocoTestReport` (xml+html) + `jacocoTestCoverageVerification` (порог 10%, растёт по мере покрытия)
+- Исправлен баг: бесконечный цикл в `calculateWeeklyDaysBestStreak`
 - guides/ci-cd-setup.md — инструкция по CI/CD
 
 **QA: Unit-тесты углублённо** ✅ ЗАВЕРШЕНО
@@ -380,7 +381,7 @@ App Start
 
 ---
 
-### Фаза 3 — Прод-инфраструктура + Модуляризация
+### Фаза 3 — Прод-инфраструктура + Модуляризация ← СЛЕДУЮЩИЙ ШАГ
 
 **QA: Прод-мониторинг**
 - Firebase Crashlytics — краш-репорты
@@ -414,7 +415,7 @@ App Start
 | Unit-тесты | ✅ 19 тестов (Turbine, Error, ViewModel, Channel events) | Параметризация при необходимости |
 | Integration-тесты | ✅ 15 тестов | ✅ Достигнуто |
 | UI-тесты | ✅ 21 тест, Page Object | Сложные флоу, стабильность |
-| CI/CD | Нет | GitHub Actions, JaCoCo gate |
+| CI/CD | ✅ GitHub Actions (test→build→ui-tests), JaCoCo gate 10% | Увеличить JaCoCo порог, стабилизировать ui-tests |
 | Прод-мониторинг | Нет | Crashlytics, App Distribution |
 | Производительность | Не измеряется | LeakCanary, Profiler |
 | Модуляризация | Один модуль app | Feature-модули |

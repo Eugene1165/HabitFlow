@@ -17,8 +17,10 @@ android {
 
     defaultConfig {
         val localProps = gradleLocalProperties(rootDir, providers)
-        buildConfigField("String", "SUPABASE_URL", "\"${localProps["SUPABASE_URL"]}\"")
-        buildConfigField("String", "SUPABASE_KEY", "\"${localProps["SUPABASE_KEY"]}\"")
+        val supabaseUrl = localProps["SUPABASE_URL"]?.toString() ?: System.getenv("SUPABASE_URL")
+        val supabaseKey = localProps["SUPABASE_KEY"]?.toString() ?: System.getenv("SUPABASE_KEY")
+        buildConfigField("String", "SUPABASE_URL", "\"$supabaseUrl\"")
+        buildConfigField("String", "SUPABASE_KEY", "\"$supabaseKey\"")
 
         applicationId = "com.example.habitflow"
         minSdk = 26
@@ -58,13 +60,13 @@ android {
     }
 
 }
-detekt{
+detekt {
     config.setFrom("$rootDir/config/detekt/detekt.yml")
     buildUponDefaultConfig = true //использовать дефолтные правила DETEKT и дополнять своим конфигом
 }
 
-ksp{
-    arg("room.schemaLocation","$projectDir/schemas")
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 configurations.all {
@@ -161,4 +163,35 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         }
     )
 }
+
+tasks.register<JacocoCoverageVerification>("jacocoTestCoverageVerification") {
+    dependsOn(tasks.named("jacocoTestReport"))
+
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.10.toBigDecimal()
+            }
+        }
+    }
+
+    sourceDirectories.setFrom(files("src/main/java"))
+    classDirectories.setFrom(
+        fileTree("build/tmp/kotlin-classes/debug") {
+            exclude(
+                "**/di/**",
+                "**/R.class",
+                "**/*_Factory*",
+                "**/*_HiltModules*",
+                "**/*_MembersInjector*"
+            )
+        }
+    )
+    executionData.setFrom(
+        fileTree(layout.buildDirectory) {
+            include("outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec")
+        }
+    )
+}
+
 
