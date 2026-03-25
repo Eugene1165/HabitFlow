@@ -90,7 +90,7 @@ class StatisticsViewModelTest {
     @Test
     fun `when useCase throw exeption and then state is Error`() = runTest {
 
-        every { useCase() } returns flow { throw Exception("Ошибка загрузки") }
+        every { useCase() } returns flow { throw IllegalStateException("Ошибка загрузки") }
         viewModel = StatisticsViewModel(useCase)
 
         viewModel.state.test {
