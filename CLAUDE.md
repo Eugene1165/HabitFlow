@@ -80,7 +80,7 @@ app/src/main/java/com/example/habitflow/
 
 ### Key Domain Models
 
-```kotlin
+``` kotlin
 // RepeatType — sealed class for three repeat patterns
 sealed class RepeatType {
     object Daily : RepeatType()
