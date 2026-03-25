@@ -30,6 +30,9 @@ jobs:
       - name: Run Detekt
         run: ./gradlew detekt
 
+      - name: Debug exec files
+        run: find app/build -name "*.exec" 2>/dev/null || echo "No exec files found"
+
       - name: Check JaCoCo coverage and run Unit tests
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
