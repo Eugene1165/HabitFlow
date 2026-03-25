@@ -5,7 +5,7 @@ import com.example.habitflow.domain.model.RepeatType
 import java.time.LocalDate
 import java.time.LocalTime
 import kotlin.Int
-
+@Suppress("LongParameterList")
 object HabitFactory {
     fun createHabitDomain(
         id: Int = 1,
