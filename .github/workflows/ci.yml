@@ -30,18 +30,11 @@ jobs:
       - name: Run Detekt
         run: ./gradlew detekt
 
-      - name: Run unit tests
+      - name: Check JaCoCo coverage and run Unit tests
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-        run: ./gradlew test
-
-      - name: Check JaCoCo coverage
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-        run: ./gradlew jacocoTestCoverageVerification
-
+        run: ./gradlew testDebugUnitTest jacocoTestCoverageVerification
 
   build:
     needs: test
