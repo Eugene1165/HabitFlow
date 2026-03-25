@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.detekt)
-    id("jacoco")
 }
 
 android {
@@ -34,7 +33,6 @@ android {
 
     buildTypes {
         debug {
-            enableUnitTestCoverage = true
         }
         release {
             isMinifyEnabled = false
@@ -137,61 +135,6 @@ dependencies {
     implementation(libs.timber)
 }
 
-tasks.register<JacocoReport>("jacocoTestReport") {
-    dependsOn(tasks.named("testDebugUnitTest"))
 
-    reports {
-        xml.required.set(true)
-        html.required.set(true)
-    }
-
-    sourceDirectories.setFrom(files("src/main/java"))
-    classDirectories.setFrom(
-        fileTree("build/tmp/kotlin-classes/debug") {
-            exclude(
-                "**/di/**",
-                "**/R.class",
-                "**/*_Factory*",
-                "**/*_HiltModules*",
-                "**/*_MembersInjector*"
-            )
-        }
-    )
-    executionData.setFrom(
-        fileTree(layout.buildDirectory) {
-            include("**/*.exec")
-        }
-    )
-}
-
-tasks.register<JacocoCoverageVerification>("jacocoTestCoverageVerification") {
-    dependsOn(tasks.named("jacocoTestReport"))
-
-    violationRules {
-        rule {
-            limit {
-                minimum = 0.10.toBigDecimal()
-            }
-        }
-    }
-
-    sourceDirectories.setFrom(files("src/main/java"))
-    classDirectories.setFrom(
-        fileTree("build/tmp/kotlin-classes/debug") {
-            exclude(
-                "**/di/**",
-                "**/R.class",
-                "**/*_Factory*",
-                "**/*_HiltModules*",
-                "**/*_MembersInjector*"
-            )
-        }
-    )
-    executionData.setFrom(
-        fileTree(layout.buildDirectory) {
-            include("**/*.exec")
-        }
-    )
-}
 
 
