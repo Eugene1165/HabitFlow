@@ -10,6 +10,7 @@ import com.example.habitflow.domain.usecase.GetAllHabitsStatisticsUseCase
 import com.example.habitflow.domain.usecase.GetHabitsStatisticsUseCase
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -49,7 +50,14 @@ class GetAllHabitsStatisticsUseCaseTest {
         val stats1 = HabitStatistics(2, 5, 0.9f)
         val stats2 = HabitStatistics(7, 3, 0.6f)
 
-        every { getAllActiveHabitsUseCase() } returns flowOf(HabitResult.Success(listOf(habitOne, habitTwo)))
+        every { getAllActiveHabitsUseCase() } returns flowOf(
+            HabitResult.Success(
+                listOf(
+                    habitOne,
+                    habitTwo
+                )
+            )
+        )
         every { getHabitsStatisticsUseCase(habitOne.id) } returns flowOf(stats1)
         every { getHabitsStatisticsUseCase(habitTwo.id) } returns flowOf(stats2)
 
@@ -78,5 +86,25 @@ class GetAllHabitsStatisticsUseCaseTest {
             assertEquals(null, stats)
             cancelAndIgnoreRemainingEvents()
         }
+    }
+
+    @Test
+    fun `usecase returns Error`() = runTest {
+
+        every { getAllActiveHabitsUseCase() } returns flowOf(
+            HabitResult.Error(
+                Exception("test"),
+                message = "test"
+            )
+        )
+
+        val resultTest = useCase()
+        resultTest.test {
+            val result = awaitItem()
+            assert(result is HabitResult.Error)
+            assertEquals("test", (result as HabitResult.Error).message)
+            cancelAndIgnoreRemainingEvents()
+        }
+        verify(exactly = 0) { getHabitsStatisticsUseCase(any()) }
     }
 }

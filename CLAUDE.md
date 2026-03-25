@@ -295,7 +295,7 @@ App Start
 | Data (Room, DataStore, маппинг) | ✅ Готов |
 | Presentation (все экраны) | ✅ Готов |
 | Уведомления (WorkManager + NotificationManager) | ✅ Готов (ReminderScheduler, WorkManagerReminderScheduler, ReminderWorker, WorkManagerModule, TimePicker UI в HabitFormContent, RequestNotificationPermission в MainActivity, addHabit возвращает Habit с реальным id) |
-| Unit-тесты (статистика, toggle) | ✅ Готов (11 тестов: GetHabitsStatisticsUseCase x5, ToggleHabitEntryUseCase x4, GetAllHabitsStatisticsUseCase x2) |
+| Unit-тесты (статистика, toggle, ViewModel) | ✅ Готов (19 тестов: GetHabitsStatisticsUseCase x5, ToggleHabitEntryUseCase x4, GetAllHabitsStatisticsUseCase x3, StatisticsViewModelTest x4, HabitFormViewModelTest x4) |
 | Retrofit / синхронизация Habits | ✅ Готов (offline-first, Supabase) |
 | Retrofit / синхронизация HabitEntries | ✅ Готов (addEntry/updateEntry работают, данные пишутся в Supabase при toggle) |
 | Синхронизация archiveHabit / restoreHabit | ✅ Готов (PATCH через updateEntriesById, offline-first порядок) |
@@ -305,7 +305,7 @@ App Start
 | Retry синхронизации HabitEntries | ✅ Готов (markAsSynced(id) + getUnsyncedEntries() в DAO; addEntry/updateEntry помечают isSynced=true после успешного API; getEntriesForHabit onStart retry всех isSynced=false записей) |
 | Dark theme (компоненты) | ✅ Готов (ColorPicker: FlowRow→LazyRow, hardcoded Color.Black→onSurface; HabitCard: убран Color.White контейнер, Color.Black/Gray→Material theme цвета) |
 | ViewModel рефакторинг (stateIn) | ✅ Готов (StatisticsViewModel, ArchivedViewModel, CalendarViewModel, SettingsViewModel — переведены на stateIn(); HabitFormViewModel, HabitInfoViewModel, OnBoardingViewModel — оставлены MutableStateFlow по архитектурным причинам) |
-| Unit-тесты (финальная проверка) | ✅ Готов (11 тестов покрывают всю бизнес-логику; новые методы DAO не требуют unit-тестов — тестируются на уровне instrumented) |
+| Unit-тесты (финальная проверка) | ✅ Готов (19 тестов: UseCase + ViewModel уровень; Turbine для Flow + Channel events; Error-сценарии; fixtures/HabitFactory; SavedStateHandle в тестах) |
 
 ---
 
@@ -368,10 +368,11 @@ App Start
 - JaCoCo: coverage измерение + минимальный порог
 - Артефакты: APK + тестовый отчёт
 
-**QA: Unit-тесты углублённо**
-- Turbine (`app.cash.turbine`) для тестирования Flow
-- Error-сценарии: исключения, пустые данные, граничные случаи
-- Parametrized тесты для RepeatType вариантов
+**QA: Unit-тесты углублённо** ✅ ЗАВЕРШЕНО
+- Turbine для Flow — StatisticsViewModelTest x4 (Content, Empty, Error, Exception)
+- Error-сценарии — GetAllHabitsStatisticsUseCase + ViewModel catch
+- fixtures/HabitFactory.kt — переиспользуемые тестовые данные
+- Parametrized тесты — пропущены (JUnit4 громоздко, 3 отдельных теста достаточно)
 
 ---
 
@@ -406,7 +407,7 @@ App Start
 | Критерий | Сейчас | Цель |
 |---|---|---|
 | Продуктовый код | ✅ Clean Arch, MVVM, Compose, Room, Retrofit | Middle+ (модуляризация) |
-| Unit-тесты | 11 тестов | Turbine, Error, Parametrized |
+| Unit-тесты | ✅ 19 тестов (Turbine, Error, ViewModel, Channel events) | Параметризация при необходимости |
 | Integration-тесты | ✅ 15 тестов | ✅ Достигнуто |
 | UI-тесты | ✅ 21 тест, Page Object | Сложные флоу, стабильность |
 | CI/CD | Нет | GitHub Actions, JaCoCo gate |
