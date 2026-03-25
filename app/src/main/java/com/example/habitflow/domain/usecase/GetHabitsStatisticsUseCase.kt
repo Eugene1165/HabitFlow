@@ -204,15 +204,11 @@ class GetHabitsStatisticsUseCase @Inject constructor(
         var date = entries.minOfOrNull { it.date } ?: return 0 //начальная дата
 
         while (!date.isAfter(today)) {
-            if (date.dayOfWeek !in days) {
-                date = date.plusDays(1)
-                continue
+            if (date.dayOfWeek in days) {
+                current = if(date in completedDates) current+ 1 else 0
+                best = maxOf(best,current)
             }
-
-            if (completedDates.contains(date)) {
-                current++
-                if (current > best) best = current
-            } else current = 0
+            date = date.plusDays(1)
         }
         return best
     }

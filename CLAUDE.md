@@ -362,11 +362,15 @@ App Start
 
 ### Фаза 2 — CI/CD + Unit углублённо (текущий фокус) ← СЛЕДУЮЩИЙ ШАГ
 
-**QA: CI/CD пайплайн**
-- GitHub Actions: unit + integration тесты на каждый PR
-- Lint + Detekt как gate
-- JaCoCo: coverage измерение + минимальный порог
-- Артефакты: APK + тестовый отчёт
+**QA: CI/CD пайплайн** 🔄 В ПРОЦЕССЕ
+- `.github/workflows/ci.yml` создан
+- `test` джоб: Checkout → JDK 17 → Gradle cache → Detekt → Unit тесты
+- `build` джоб: `needs: test` → assembleDebug → Upload APK artifact
+- `ui-tests` джоб: `needs: build`, `macos-latest`, только на `push` (не PR) — шаги не заполнены
+- JaCoCo: плагин подключён, `jacocoTestReport` task настроен, `enableUnitTestCoverage=true` в debug; domain.usecase=58%, domain.model=96%, total=7%
+- Исправлен баг: бесконечный цикл в `calculateWeeklyDaysBestStreak` (date не двигалась на активных днях)
+- Осталось: local.properties через GitHub Secrets, эмулятор для ui-tests, JaCoCo минимальный порог
+- guides/ci-cd-setup.md — инструкция по CI/CD
 
 **QA: Unit-тесты углублённо** ✅ ЗАВЕРШЕНО
 - Turbine для Flow — StatisticsViewModelTest x4 (Content, Empty, Error, Exception)
