@@ -71,7 +71,7 @@ jobs:
 
   ui-tests:
     needs: build
-    runs-on: macos-13
+    runs-on: macos-latest
     if: github.event_name == 'push'
     steps:
       - name: Checkout code
@@ -97,8 +97,8 @@ jobs:
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
-          arch: x86_64
+          api-level: 34
+          arch: arm64
           script: ./gradlew connectedAndroidTest
 
 
