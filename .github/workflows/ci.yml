@@ -37,7 +37,8 @@ jobs:
         run: ./gradlew testDebugUnitTest
 
   build:
-    needs: test
+    needs: [test,ui-tests]
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -70,7 +71,7 @@ jobs:
           path: app/build/outputs/apk/debug/*.apk
 
   ui-tests:
-    needs: build
+    needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     steps:
