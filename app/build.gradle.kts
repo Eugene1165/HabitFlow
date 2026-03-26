@@ -83,6 +83,9 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
 
+    //добавлю модуль который создал сам-домеейн слой
+    implementation(project(":core:domain"))
+
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 

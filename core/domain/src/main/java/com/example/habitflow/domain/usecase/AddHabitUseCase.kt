@@ -1,9 +1,9 @@
 package com.example.habitflow.domain.usecase
 
 import com.example.habitflow.domain.model.Habit
+import com.example.habitflow.domain.model.HabitResult
 import com.example.habitflow.domain.repository.HabitRepository
 import com.example.habitflow.domain.scheduler.ReminderScheduler
-import com.example.habitflow.domain.model.HabitResult
 import javax.inject.Inject
 
 class AddHabitUseCase @Inject constructor(

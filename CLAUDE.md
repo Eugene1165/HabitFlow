@@ -381,16 +381,43 @@ App Start
 
 ---
 
-### Фаза 3 — Прод-инфраструктура + Модуляризация ← СЛЕДУЮЩИЙ ШАГ
+### Фаза 3 — Прод-инфраструктура + Модуляризация ← В ПРОЦЕССЕ
 
 **QA: Прод-мониторинг**
 - Firebase Crashlytics — краш-репорты
 - Firebase App Distribution — бета-тестирование
 - Release checklist
 
-**Android: Модуляризация**
-- Разбить `app` на модули: `:core`, `:feature:habits`, `:feature:statistics`
-- Понять Gradle conventions, dependency management между модулями
+**Android: Модуляризация** 🟡 В процессе
+- `:core:domain` ✅ — создан, domain слой перенесён (`model/`, `repository/`, `usecase/`, `scheduler/`, `extensions/`)
+- `app/build.gradle.kts`: `implementation(project(":core:domain"))` ✅
+- `gradle/libs.versions.toml`: добавлены `android-library` plugin alias + `javax-inject` library ✅
+- `app` собирается, все 19 unit-тестов зелёные ✅
+- Следующие модули: `:core:data`, `:core:ui`, `:feature:habits`, `:feature:statistics`, `:feature:settings`
+
+**Структура модулей (целевая):**
+```
+:app                — MainActivity, HabitFlowApp, навигация
+:core:domain        — domain/model, domain/repository, domain/usecase ✅
+:core:data          — data/ (Room, Retrofit, маппинг, реализации)
+:core:ui            — presentation/theme, presentation/components
+:feature:habits     — presentation/habits, presentation/archived
+:feature:statistics — presentation/statistics
+:feature:settings   — presentation/settings
+```
+
+**Граф зависимостей:**
+```
+:feature:*     → :core:domain, :core:ui
+:core:data     → :core:domain
+:app           → все модули
+```
+
+**Уроки при создании `:core:domain`:**
+- Android Studio визард создаёт мусор (MainActivity, themes, иконки) — всё удалять вручную
+- Package декларации файлов должны совпадать с физическим расположением папок
+- Smart cast через границы модулей невозможен — сохранять в локальную `val`
+- `android-library` plugin alias в `libs.versions.toml` — без `version.ref` (версия уже в корневом `build.gradle.kts`)
 
 ---
 

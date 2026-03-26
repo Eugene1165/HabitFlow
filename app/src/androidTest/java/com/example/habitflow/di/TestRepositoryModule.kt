@@ -4,13 +4,10 @@ import com.example.habitflow.fakeRepository.FakeHabitEntryRepository
 import com.example.habitflow.fakeRepository.FakeHabitRepository
 import com.example.habitflow.fakeRepository.FakeReminderScheduler
 import com.example.habitflow.fakeRepository.FakeUserPreferencesRepository
-import com.example.habitflow.data.repository.HabitEntryRepositoryImpl
-import com.example.habitflow.data.repository.HabitRepositoryImpl
 import com.example.habitflow.domain.repository.HabitEntryRepository
 import com.example.habitflow.domain.repository.HabitRepository
 import com.example.habitflow.domain.repository.UserPreferencesRepository
 import com.example.habitflow.domain.scheduler.ReminderScheduler
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent

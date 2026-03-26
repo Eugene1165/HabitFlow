@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "HabitFlow"
 include(":app")
+include(":core:domain")

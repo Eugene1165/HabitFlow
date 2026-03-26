@@ -24,8 +24,9 @@ class StatisticsViewModel @Inject constructor(
                 }
 
                 is HabitResult.Success -> {
-                    if(stats.data == null) StatisticsUiState.Empty
-                    else StatisticsUiState.Content(stats.data)
+                    val data = stats.data
+                    if(data == null) StatisticsUiState.Empty
+                    else StatisticsUiState.Content(data)
                 }
             }
         }

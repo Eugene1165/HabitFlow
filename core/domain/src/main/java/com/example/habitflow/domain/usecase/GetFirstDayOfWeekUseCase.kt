@@ -1,12 +1,13 @@
 package com.example.habitflow.domain.usecase
-
 import com.example.habitflow.domain.repository.UserPreferencesRepository
+import kotlinx.coroutines.flow.Flow
+import java.time.DayOfWeek
 import javax.inject.Inject
 
-class SetDarkThemeUseCase @Inject constructor(
+class GetFirstDayOfWeekUseCase @Inject constructor(
     private val repository: UserPreferencesRepository
 ) {
-    suspend operator fun invoke(isEnabled: Boolean){
-        return repository.setDarkThemeEnabled(isEnabled)
+    operator fun invoke(): Flow<DayOfWeek> {
+        return repository.getFirstDayOfWeek()
     }
 }
