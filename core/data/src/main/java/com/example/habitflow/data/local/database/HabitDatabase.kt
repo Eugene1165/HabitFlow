@@ -16,7 +16,7 @@ import com.example.habitflow.data.local.entity.HabitEntryEntity
     version = 3,
     exportSchema = true
 )
-abstract class HabitDatabase : RoomDatabase() {
+abstract class  HabitDatabase : RoomDatabase() {
     abstract fun habitDao(): HabitDao
     abstract fun habitEntryDao(): HabitEntryDao
 
