@@ -22,4 +22,6 @@ local.properties
 Thumbs.db
 # Guides / personal notes
 **/guides/
+# AI instructions
+CLAUDE.md
 
