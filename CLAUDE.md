@@ -364,12 +364,11 @@ App Start
 
 **QA: CI/CD пайплайн** ✅ ЗАВЕРШЕНО
 - `.github/workflows/ci.yml` — три джоба: `test` → `build` → `ui-tests`
-- `test` джоб: Checkout → JDK 17 → Gradle cache → Detekt → Unit тесты → JaCoCo coverage check
+- `test` джоб: Checkout → JDK 17 → Gradle cache → Detekt → Unit тесты
 - `build` джоб: `needs: test` → assembleDebug → Upload APK artifact
 - `ui-tests` джоб: `needs: build`, `macos-latest`, только на `push`; `reactivecircus/android-emulator-runner@v2`, api-level=29, `connectedAndroidTest`
 - GitHub Secrets: `SUPABASE_URL`, `SUPABASE_KEY` — переданы через `env:` во все шаги сборки
 - `build.gradle.kts`: `gradleLocalProperties → System.getenv()` fallback для Secrets
-- JaCoCo: `jacocoTestReport` (xml+html) + `jacocoTestCoverageVerification` (порог 10%, растёт по мере покрытия)
 - Исправлен баг: бесконечный цикл в `calculateWeeklyDaysBestStreak`
 - guides/ci-cd-setup.md — инструкция по CI/CD
 
@@ -442,7 +441,7 @@ App Start
 | Unit-тесты | ✅ 19 тестов (Turbine, Error, ViewModel, Channel events) | Параметризация при необходимости |
 | Integration-тесты | ✅ 15 тестов | ✅ Достигнуто |
 | UI-тесты | ✅ 21 тест, Page Object | Сложные флоу, стабильность |
-| CI/CD | ✅ GitHub Actions (test→build→ui-tests), JaCoCo gate 10% | Увеличить JaCoCo порог, стабилизировать ui-tests |
+| CI/CD | ✅ GitHub Actions (test→build→ui-tests) | Стабилизировать ui-tests |
 | Прод-мониторинг | Нет | Crashlytics, App Distribution |
 | Производительность | Не измеряется | LeakCanary, Profiler |
 | Модуляризация | Один модуль app | Feature-модули |
