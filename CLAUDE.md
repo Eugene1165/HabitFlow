@@ -366,7 +366,7 @@ App Start
 - `.github/workflows/ci.yml` — три джоба: `test` → `build` → `ui-tests`
 - `test` джоб: Checkout → JDK 17 → Gradle cache → Detekt → Unit тесты
 - `build` джоб: `needs: test` → assembleDebug → Upload APK artifact
-- `ui-tests` джоб: `needs: build`, `macos-latest`, только на `push`; `reactivecircus/android-emulator-runner@v2`, api-level=29, `connectedAndroidTest`
+- `ui-tests` джоб: `needs: build`, `macos-latest`, только на `push`; `reactivecircus/android-emulator-runner@v2`, api-level=34, arch=arm64-v8a, `connectedAndroidTest`
 - GitHub Secrets: `SUPABASE_URL`, `SUPABASE_KEY` — переданы через `env:` во все шаги сборки
 - `build.gradle.kts`: `gradleLocalProperties → System.getenv()` fallback для Secrets
 - Исправлен баг: бесконечный цикл в `calculateWeeklyDaysBestStreak`
@@ -382,7 +382,41 @@ App Start
 
 ### Фаза 3 — Прод-инфраструктура + Модуляризация ← В ПРОЦЕССЕ
 
-**QA: Прод-мониторинг**
+**QA: CI/CD — стабилизация ui-tests** 🟡 В процессе
+- `macos-latest` + `arm64-v8a` + `api-level=34` + `emulator-options` без GUI ✅
+- Осталось: добавить загрузку Allure отчёта как артефакт
+
+**QA: Allure отчёты** — план внедрения
+> Цель: после каждого CI-прогона видеть HTML-отчёт с шагами, скриншотами и статусом каждого теста
+
+Шаг 1 — Зависимости (`gradle/libs.versions.toml` + `app/build.gradle.kts`)
+- Добавить `allure-kotlin-android` в `androidTestImplementation`
+- Версия: `io.qameta.allure:allure-kotlin-android:2.4.0`
+
+Шаг 2 — `CustomTestRunner`
+- Наследовать от `AllureAndroidJUnitRunner` вместо `AndroidJUnitRunner`
+- Сохранить Hilt через override `newApplication` — логика не меняется
+
+Шаг 3 — `BaseAllureTestCase`
+- Создать базовый класс `BaseAllureTestCase : TestCase(kaspressoBuilder)`
+- В конструкторе: `Kaspresso.Builder.withFastSettings().apply { addAllureSupport() }`
+- Все тесты наследуют от него вместо `TestCase()` — step() автоматически попадают в отчёт
+
+Шаг 4 — Аннотации (опционально, для структуры отчёта)
+- `@Epic("HabitFlow")`, `@Feature("HabitsList")`, `@Story("...")` над классами тестов
+
+Шаг 5 — CI/CD (`ci.yml`, джоб `ui-tests`)
+- После `connectedAndroidTest` добавить шаг: `adb pull /sdcard/allure-results ./allure-results`
+- Установить Allure CLI: `brew install allure`
+- Сгенерировать отчёт: `allure generate allure-results --clean -o allure-report`
+- `actions/upload-artifact` для папки `allure-report`
+
+**Ключевые файлы для Allure:**
+- `CustomTestRunner.kt` — смена базового класса runner
+- `androidTest/.../BaseAllureTestCase.kt` — новый базовый класс тестов
+- `.github/workflows/ci.yml` — adb pull + allure generate + upload-artifact
+
+**QA: Прод-мониторинг** (отложено, низкий приоритет)
 - Firebase Crashlytics — краш-репорты
 - Firebase App Distribution — бета-тестирование
 - Release checklist
@@ -441,7 +475,7 @@ App Start
 | Unit-тесты | ✅ 19 тестов (Turbine, Error, ViewModel, Channel events) | Параметризация при необходимости |
 | Integration-тесты | ✅ 15 тестов | ✅ Достигнуто |
 | UI-тесты | ✅ 21 тест, Page Object | Сложные флоу, стабильность |
-| CI/CD | ✅ GitHub Actions (test→build→ui-tests) | Стабилизировать ui-tests |
+| CI/CD | 🟡 GitHub Actions (test→build→ui-tests), ui-tests в процессе | Allure отчёты |
 | Прод-мониторинг | Нет | Crashlytics, App Distribution |
 | Производительность | Не измеряется | LeakCanary, Profiler |
 | Модуляризация | Один модуль app | Feature-модули |
