@@ -1,5 +1,7 @@
 package com.example.habitflow.di
 
+import com.example.habitflow.data.di.RepositoryModule
+import com.example.habitflow.data.di.WorkManagerModule
 import com.example.habitflow.fakeRepository.FakeHabitEntryRepository
 import com.example.habitflow.fakeRepository.FakeHabitRepository
 import com.example.habitflow.fakeRepository.FakeReminderScheduler

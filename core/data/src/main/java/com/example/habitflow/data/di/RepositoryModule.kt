@@ -1,4 +1,4 @@
-package com.example.habitflow.di
+package com.example.habitflow.data.di
 
 import com.example.habitflow.data.local.preferences.UserPreferencesRepositoryImpl
 import com.example.habitflow.data.repository.HabitEntryRepositoryImpl

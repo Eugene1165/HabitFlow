@@ -6,7 +6,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.habitflow.data.local.dao.HabitDao
 import com.example.habitflow.data.local.dao.HabitEntryDao
 import com.example.habitflow.data.local.database.HabitDatabase
-import com.example.habitflow.data.local.entity.HabitEntryEntity
 import com.example.habitflow.integrationTests.fixtures.HabitEntityFactory
 import com.example.habitflow.integrationTests.fixtures.HabitEntryEntityFactory
 import kotlinx.coroutines.flow.first

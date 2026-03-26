@@ -1,5 +1,6 @@
 package com.example.habitflow.data.local.workmanager
 
+import android.R
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -40,7 +41,7 @@ class ReminderWorker @AssistedInject constructor(
 
         //само уведомление,строим его сами
         val notification = NotificationCompat.Builder(applicationContext, "habits_channel")
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setSmallIcon(R.drawable.ic_dialog_info)
             .setContentTitle("HabitFlow")
             .setContentText("Не забудь: ${habit.title}")
             .build()

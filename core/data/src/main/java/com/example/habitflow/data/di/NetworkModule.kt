@@ -1,8 +1,8 @@
-package com.example.habitflow.di
+package com.example.habitflow.data.di
 
-import com.example.habitflow.BuildConfig
 import com.example.habitflow.data.remote.api.HabitApiService
 import com.example.habitflow.data.remote.api.HabitEntryApiService
+import com.example.habitflow.data.di.NetworkConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,14 +19,14 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(networkConfig: NetworkConfig): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val request = chain.request().newBuilder()
-                    .addHeader("apikey", BuildConfig.SUPABASE_KEY)
-                    .addHeader("Authorization", "Bearer ${BuildConfig.SUPABASE_KEY}")
+                    .addHeader("apikey", networkConfig.apiKey)
+                    .addHeader("Authorization", "Bearer ${networkConfig.apiKey}")
                     .build()
                 chain.proceed(request)
             }
@@ -37,9 +37,12 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideHabitApiService(client: OkHttpClient): HabitApiService {
+    fun provideHabitApiService(
+        client: OkHttpClient,
+        networkConfig: NetworkConfig
+    ): HabitApiService {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.SUPABASE_URL)
+            .baseUrl(networkConfig.baseUrl)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -48,9 +51,12 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideHabitEntryApiService(client: OkHttpClient): HabitEntryApiService{
+    fun provideHabitEntryApiService(
+        client: OkHttpClient,
+        networkConfig: NetworkConfig
+    ): HabitEntryApiService {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.SUPABASE_URL)
+            .baseUrl(networkConfig.baseUrl)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

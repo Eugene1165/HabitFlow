@@ -54,17 +54,13 @@ android {
         compose = true
     }
     sourceSets {
-        getByName("androidTest").assets.srcDirs("$projectDir/schemas")
+        getByName("androidTest").assets.srcDirs("${rootDir}/core/data/schemas")
     }
 
 }
 detekt {
     config.setFrom("$rootDir/config/detekt/detekt.yml")
     buildUponDefaultConfig = true //использовать дефолтные правила DETEKT и дополнять своим конфигом
-}
-
-ksp {
-    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 configurations.all {
@@ -85,22 +81,15 @@ dependencies {
 
     //добавлю модуль который создал сам-домеейн слой
     implementation(project(":core:domain"))
+    implementation(project(":core:data"))
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+    implementation(libs.hilt.work)
+    ksp(libs.hilt.work.compiler)
+
 
     implementation(libs.androidx.navigation.compose)
-
-    implementation(libs.squareup.retrofit)
-    implementation(libs.squareup.retrofit.gson)
-
-    implementation(libs.squareup.okhttp)
-    implementation(libs.squareup.okhttp.logging)
-
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.runtime)
-    androidTestImplementation(libs.androidx.room.testing)
-    ksp(libs.androidx.room.compiler)
 
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
@@ -126,14 +115,19 @@ dependencies {
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+
+    androidTestImplementation(libs.androidx.room.runtime)
+    androidTestImplementation(libs.androidx.room.ktx)
+    androidTestImplementation(libs.androidx.room.testing)
+
+
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     implementation(libs.kizitonwose.calendar.compose)
 
     implementation(libs.androidx.work.runtime.ktx)
-    implementation(libs.hilt.work)
-    ksp(libs.hilt.work.compiler)
+
 
     implementation(libs.timber)
 }

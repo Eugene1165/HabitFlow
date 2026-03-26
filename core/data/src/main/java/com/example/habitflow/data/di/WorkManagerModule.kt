@@ -1,4 +1,4 @@
-package com.example.habitflow.di
+package com.example.habitflow.data.di
 
 import com.example.habitflow.data.local.workmanager.WorkManagerReminderScheduler
 import com.example.habitflow.domain.scheduler.ReminderScheduler
