@@ -71,7 +71,7 @@ jobs:
 
   ui-tests:
     needs: build
-    runs-on: macos-13
+    runs-on: ubuntu-latest
     if: github.event_name == 'push'
     steps:
       - name: Checkout code
@@ -90,6 +90,12 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
 
       - name: Run ui tests
         env:
