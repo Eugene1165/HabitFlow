@@ -8,10 +8,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.habitflow.feature.habits.calendar.CalendarScreen
 import com.example.habitflow.feature.habits.info.HabitInfoScreen
-import com.example.habitflow.presentation.habits.create.CreateHabitScreen
+import com.example.habitflow.feature.onboarding.OnBoardingScreen
+import com.example.habitflow.feature.habits.create.CreateHabitScreen
 
 import com.example.habitflow.presentation.main.MainScreen
-import com.example.habitflow.presentation.onboarding.OnBoardingScreen
 
 @Composable
 fun HostNavGraph(navController: NavHostController) {

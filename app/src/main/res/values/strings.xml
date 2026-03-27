@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">HabitFlow</string>
-    <string name="createHabbit">Создание привычек</string>
     <string name="noHabits">Нет привычек</string>
     <string name="futuredate">"Пользователь НЕ может отметить выполнение в будущем "</string>
 </resources>

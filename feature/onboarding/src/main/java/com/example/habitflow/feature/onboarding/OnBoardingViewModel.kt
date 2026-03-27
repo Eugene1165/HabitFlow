@@ -1,4 +1,4 @@
-package com.example.habitflow.presentation.onboarding
+package com.example.habitflow.feature.onboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

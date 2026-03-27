@@ -1,4 +1,4 @@
-package com.example.habitflow.presentation.habits.create
+package com.example.habitflow.feature.habits.create
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,12 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.habitflow.R
+import com.example.habitflow.feature.habits.R
 import com.example.habitflow.feature.habits.form.HabitFormCallbacks
 import com.example.habitflow.feature.habits.form.HabitFormContent
 import com.example.habitflow.feature.habits.form.HabitFormEvent
 import com.example.habitflow.feature.habits.form.HabitFormViewModel
-
 import com.example.habitflow.ui.components.HabitFlowTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,15 +70,15 @@ fun CreateHabitScreen(habitId: Int?, navController: NavController) {
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { paddingValues ->
         Column(
-            modifier = Modifier
+            modifier = Modifier.Companion
                 .fillMaxSize()
                 .padding(paddingValues),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.Companion.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             HabitFormContent(
                 state = state,
-                modifier = Modifier,
+                modifier = Modifier.Companion,
                 callbacks = HabitFormCallbacks(
                     onTitleChanged = { viewModel.onTitleChanged(it) },
                     onDescriptionChanged = { viewModel.onDescriptionChanged(it) },
@@ -91,9 +90,9 @@ fun CreateHabitScreen(habitId: Int?, navController: NavController) {
                     onReminderChanged = { viewModel.onReminderChanged(it) }
                 ),
             )
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.Companion.height(8.dp))
             Button(
-                modifier = Modifier
+                modifier = Modifier.Companion
                     .testTag("btn_save_habit")
                     .fillMaxWidth()
                     .padding(16.dp),
@@ -105,11 +104,3 @@ fun CreateHabitScreen(habitId: Int?, navController: NavController) {
         }
     }
 }
-
-
-
-
-
-
-
-

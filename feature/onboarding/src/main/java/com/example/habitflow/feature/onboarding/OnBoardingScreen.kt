@@ -1,6 +1,9 @@
-package com.example.habitflow.presentation.onboarding
+package com.example.habitflow.feature.onboarding
 
 import androidx.compose.foundation.background
+import androidx.compose.runtime.getValue
+import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,7 +26,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -32,9 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 
 @Composable
 fun OnBoardingScreen(navController: NavController) {
@@ -43,7 +43,7 @@ fun OnBoardingScreen(navController: NavController) {
 
     Scaffold { paddingValues ->
         Box(
-            modifier = Modifier
+            modifier = Modifier.Companion
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
@@ -61,8 +61,8 @@ fun OnBoardingScreen(navController: NavController) {
             when (state) {
                 is OnBoardingUiState.Loading -> {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                        modifier = Modifier.Companion.fillMaxSize(),
+                        contentAlignment = Alignment.Companion.Center
                     ) {
                         CircularProgressIndicator()
                     }
@@ -70,10 +70,10 @@ fun OnBoardingScreen(navController: NavController) {
 
                 is OnBoardingUiState.Content -> {
                     Box(
-                        modifier = Modifier
+                        modifier = Modifier.Companion
                             .fillMaxSize()
                             .background(
-                                Brush.verticalGradient(
+                                Brush.Companion.verticalGradient(
                                     colors = listOf(
                                         Color(color = 0xFF6650A4),
                                         Color(color = 0xFF1A1A2E)
@@ -82,28 +82,28 @@ fun OnBoardingScreen(navController: NavController) {
                             )
                     ) {
                         Column(
-                            modifier = Modifier.fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.Companion.fillMaxSize(),
+                            horizontalAlignment = Alignment.Companion.CenterHorizontally,
                         ) {
                             OnBoardingHeader()
                             OnBoardingContent()
-                            Spacer(Modifier.weight(weight = 1f))
+                            Spacer(Modifier.Companion.weight(weight = 1f))
                             Button(
-                                modifier = Modifier.fillMaxWidth(fraction = 0.8f),
+                                modifier = Modifier.Companion.fillMaxWidth(fraction = 0.8f),
                                 onClick = { viewModel.onComplete() },
-                                colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+                                colors = ButtonDefaults.buttonColors(containerColor = Color.Companion.White)
                             ) {
                                 Text(text = "Начать ", color = Color(color = 0xFF6650A4))
                             }
-                            Spacer(modifier = Modifier.height(height = 32.dp))
+                            Spacer(modifier = Modifier.Companion.height(height = 32.dp))
                         }
                     }
                 }
 
                 is OnBoardingUiState.Error -> {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                        modifier = Modifier.Companion.fillMaxSize(),
+                        contentAlignment = Alignment.Companion.Center
                     ) {
                         Text("Ошибка загрузка")
                     }
@@ -115,66 +115,66 @@ fun OnBoardingScreen(navController: NavController) {
 
 @Composable
 fun OnBoardingHeader(){
-    Spacer(modifier = Modifier.height(height = 64.dp))
+    Spacer(modifier = Modifier.Companion.height(height = 64.dp))
     Text(text = "🎯", fontSize = 80.sp)
-    Spacer(Modifier.height(height = 16.dp))
+    Spacer(Modifier.Companion.height(height = 16.dp))
     Text(
         text = "HabitFlow",
         fontSize = 36.sp,
-        fontWeight = FontWeight.Bold,
-        color = Color.White
+        fontWeight = FontWeight.Companion.Bold,
+        color = Color.Companion.White
     )
-    Spacer(Modifier.height(height = 8.dp))
+    Spacer(Modifier.Companion.height(height = 8.dp))
     Text(
         text = "Формируй привычки,\nменяй жизнь",
         fontSize = 16.sp,
-        color = Color.White.copy(alpha = 0.7f),
-        textAlign = TextAlign.Center
+        color = Color.Companion.White.copy(alpha = 0.7f),
+        textAlign = TextAlign.Companion.Center
     )
-    Spacer(Modifier.height(height = 32.dp))
+    Spacer(Modifier.Companion.height(height = 32.dp))
 }
 
 @Composable
 fun OnBoardingContent(){
     Row(
-        modifier = Modifier.fillMaxWidth(fraction = 0.8f),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier.Companion.fillMaxWidth(fraction = 0.8f),
+        verticalAlignment = Alignment.Companion.CenterVertically
     ) {
         Icon(
             imageVector = Icons.Default.CheckCircle,
             contentDescription = null,
-            tint = Color.White,
-            modifier = Modifier.size(size = 20.dp)
+            tint = Color.Companion.White,
+            modifier = Modifier.Companion.size(size = 20.dp)
         )
-        Spacer(Modifier.width(width = 8.dp))
-        Text("Отслеживай каждый день", color = Color.White)
+        Spacer(Modifier.Companion.width(width = 8.dp))
+        Text("Отслеживай каждый день", color = Color.Companion.White)
     }
-    Spacer(Modifier.height(height = 12.dp))
+    Spacer(Modifier.Companion.height(height = 12.dp))
     Row(
-        modifier = Modifier.fillMaxWidth(fraction = 0.8f),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier.Companion.fillMaxWidth(fraction = 0.8f),
+        verticalAlignment = Alignment.Companion.CenterVertically
     ) {
         Icon(
             imageVector = Icons.Default.Info,
             contentDescription = null,
-            tint = Color.White,
-            modifier = Modifier.size(size = 20.dp)
+            tint = Color.Companion.White,
+            modifier = Modifier.Companion.size(size = 20.dp)
         )
-        Spacer(Modifier.width(width = 8.dp))
-        Text(text = "Смотри статистику ", color = Color.White)
+        Spacer(Modifier.Companion.width(width = 8.dp))
+        Text(text = "Смотри статистику ", color = Color.Companion.White)
     }
-    Spacer(Modifier.height(height = 12.dp))
+    Spacer(Modifier.Companion.height(height = 12.dp))
     Row(
-        modifier = Modifier.fillMaxWidth(fraction = 0.8f),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier.Companion.fillMaxWidth(fraction = 0.8f),
+        verticalAlignment = Alignment.Companion.CenterVertically
     ) {
         Icon(
             imageVector = Icons.Default.Notifications,
             contentDescription = null,
-            tint = Color.White,
-            modifier = Modifier.size(size = 20.dp)
+            tint = Color.Companion.White,
+            modifier = Modifier.Companion.size(size = 20.dp)
         )
-        Spacer(Modifier.width(width = 8.dp))
-        Text(text = "Не забывай с напоминаниями", color = Color.White)
+        Spacer(Modifier.Companion.width(width = 8.dp))
+        Text(text = "Не забывай с напоминаниями", color = Color.Companion.White)
     }
 }

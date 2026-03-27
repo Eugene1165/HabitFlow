@@ -86,6 +86,7 @@ dependencies {
     implementation(project(":feature:habits"))
     implementation(project(":feature:statistics"))
     implementation(project(":feature:settings"))
+    implementation(project(":feature:onboarding"))
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
