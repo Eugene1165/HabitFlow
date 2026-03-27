@@ -108,7 +108,7 @@ jobs:
           arch: x86_64
           disable-animations: true
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: ./gradlew connectedAndroidTest
+          script: adb shell mkdir -p /sdcard/allure-results && ./gradlew connectedAndroidTest
 
       - name: Pull Allure results from device
         if: always()
