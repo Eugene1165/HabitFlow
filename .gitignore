@@ -24,4 +24,7 @@ Thumbs.db
 **/guides/
 # AI instructions
 CLAUDE.md
+# Allure
+allure-results/
+allure-report/
 

@@ -104,11 +104,20 @@ jobs:
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 33
           arch: x86_64
           disable-animations: true
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: adb shell mkdir -p /sdcard/allure-results; ./gradlew :app:connectedDebugAndroidTest; TEST_RESULT=$?; adb pull /sdcard/allure-results ./allure-results || true; exit $TEST_RESULT
+          script: |
+            ./gradlew :app:connectedDebugAndroidTest
+            TEST_RESULT=$?
+            echo "===> Does app external dir exist?"
+            adb shell ls /sdcard/Android/data/ 2>&1 | grep habitflow || echo "NOT FOUND: com.example.habitflow not in Android/data/"
+            echo "===> Search allure anywhere on sdcard:"
+            adb shell find /sdcard -name "*allure*" 2>&1 || echo "Nothing found"
+            echo "===> Pulling Allure results"
+            adb pull /sdcard/Android/data/com.example.habitflow/files/allure-results ./allure-results || true
+            exit $TEST_RESULT
 
       - name: Install Allure CLI
         if: always()
