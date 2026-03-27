@@ -1,4 +1,4 @@
-package com.example.habitflow.presentation.settings
+package com.example.habitflow.feature.settings
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement

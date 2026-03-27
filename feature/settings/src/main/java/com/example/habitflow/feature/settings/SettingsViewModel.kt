@@ -1,4 +1,4 @@
-package com.example.habitflow.presentation.settings
+package com.example.habitflow.feature.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
