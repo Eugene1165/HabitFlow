@@ -1,4 +1,4 @@
-package com.example.habitflow
+package com.example.habitflow.tests
 
 import com.example.habitflow.domain.model.HabitEntry
 import com.example.habitflow.domain.repository.HabitEntryRepository

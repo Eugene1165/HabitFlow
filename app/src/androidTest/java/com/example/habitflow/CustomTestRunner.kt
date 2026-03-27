@@ -2,10 +2,10 @@ package com.example.habitflow
 
 import android.app.Application
 import android.content.Context
+import com.kaspersky.kaspresso.runner.KaspressoRunner
 import dagger.hilt.android.testing.HiltTestApplication
-import io.qameta.allure.android.runners.AllureAndroidJUnitRunner
 
-class CustomTestRunner: AllureAndroidJUnitRunner() {
+class CustomTestRunner: KaspressoRunner() {
     override fun newApplication(
         cl: ClassLoader?,
         className: String?,

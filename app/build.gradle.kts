@@ -28,7 +28,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "com.example.habitflow.CustomTestRunner"
-
+        testInstrumentationRunnerArguments["notClass"] = "com.example.habitflow.tests.AllTestsSuite"
     }
 
     buildTypes {
@@ -138,6 +138,10 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
 
     implementation(libs.timber)
+}
+
+tasks.withType<Test> {
+    exclude("**/AllUnitTestsSuite.class")
 }
 
 

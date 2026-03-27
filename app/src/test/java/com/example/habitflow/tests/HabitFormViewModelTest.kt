@@ -1,4 +1,4 @@
-package com.example.habitflow
+package com.example.habitflow.tests
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test

@@ -1,4 +1,4 @@
-package com.example.habitflow
+package com.example.habitflow.tests
 
 import app.cash.turbine.test
 import com.example.habitflow.domain.model.Habit
