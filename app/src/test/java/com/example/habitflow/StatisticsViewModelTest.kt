@@ -4,9 +4,9 @@ import app.cash.turbine.test
 import com.example.habitflow.domain.model.AllHabitsStatistics
 import com.example.habitflow.domain.model.HabitResult
 import com.example.habitflow.domain.usecase.GetAllHabitsStatisticsUseCase
+import com.example.habitflow.feature.statistics.StatisticsUiState
+import com.example.habitflow.feature.statistics.StatisticsViewModel
 import com.example.habitflow.fixtures.HabitFactory
-import com.example.habitflow.presentation.statistics.StatisticsUiState
-import com.example.habitflow.presentation.statistics.StatisticsViewModel
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers

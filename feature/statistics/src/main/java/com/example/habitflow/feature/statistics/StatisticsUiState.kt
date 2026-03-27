@@ -1,4 +1,4 @@
-package com.example.habitflow.presentation.statistics
+package com.example.habitflow.feature.statistics
 
 import com.example.habitflow.domain.model.AllHabitsStatistics
 

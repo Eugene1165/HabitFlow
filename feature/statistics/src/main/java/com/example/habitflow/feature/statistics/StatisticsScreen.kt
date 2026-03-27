@@ -1,4 +1,4 @@
-package com.example.habitflow.presentation.statistics
+package com.example.habitflow.feature.statistics
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,25 +27,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.habitflow.domain.model.AllHabitsStatistics
+
 private const val PERCENT_MULTIPLIER = 100
+
 @Composable
 fun StatisticsScreen() {
     val viewModel: StatisticsViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(
-        modifier = Modifier
+        modifier = Modifier.Companion
             .testTag("screen_statistics")
             .fillMaxSize()
     ) { paddingValues ->
         Box(
-            modifier = Modifier
+            modifier = Modifier.Companion
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
                 .padding(paddingValues)
@@ -53,8 +54,8 @@ fun StatisticsScreen() {
             when (state) {
                 is StatisticsUiState.Loading -> {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                        modifier = Modifier.Companion.fillMaxSize(),
+                        contentAlignment = Alignment.Companion.Center
                     ) {
                         CircularProgressIndicator()
                     }
@@ -62,10 +63,10 @@ fun StatisticsScreen() {
 
                 is StatisticsUiState.Error -> {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                        modifier = Modifier.Companion.fillMaxSize(),
+                        contentAlignment = Alignment.Companion.Center
                     ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Column(horizontalAlignment = Alignment.Companion.CenterHorizontally) {
                             Text("Ошибка получения статистики по всем привычкам")
                         }
                     }
@@ -79,14 +80,20 @@ fun StatisticsScreen() {
 
                 is StatisticsUiState.Empty -> {
                     Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.Companion.fillMaxSize(),
+                        horizontalAlignment = Alignment.Companion.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text("📋", fontSize = 48.sp)
-                        Spacer(Modifier.height(8.dp))
-                        Text("Нет cтатистики по привычкам", fontWeight = FontWeight.SemiBold)
-                        Text("Отмечайте привычки для сбора статистики", color = Color.Gray)
+                        Spacer(Modifier.Companion.height(8.dp))
+                        Text(
+                            "Нет cтатистики по привычкам",
+                            fontWeight = FontWeight.Companion.SemiBold
+                        )
+                        Text(
+                            "Отмечайте привычки для сбора статистики",
+                            color = Color.Companion.Gray
+                        )
                     }
 
                 }
@@ -99,21 +106,21 @@ fun StatisticsScreen() {
 @Composable
 fun StatisticsContent(data: AllHabitsStatistics) {
     Column(
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier.Companion.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         ActiveHabitsCard(count = data.activeHabitsCount)
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             StreakCard(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.Companion.weight(1f),
                 label = "Best streak",
                 streakValue = data.bestStreak.second,
                 habitName = data.bestStreak.first.title
             )
 
             StreakCard(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.Companion.weight(1f),
                 label = "Current streak",
                 streakValue = data.currentStreak.second,
                 habitName = data.currentStreak.first.title
@@ -132,33 +139,36 @@ fun StatisticsContent(data: AllHabitsStatistics) {
 @Composable
 fun ActiveHabitsCard(count: Int) {
     Card(
-        modifier = Modifier
+        modifier = Modifier.Companion
             .testTag("active_habit_card")
             .fillMaxWidth(),
         shape = RoundedCornerShape(16.dp)
     ) {
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.Companion.padding(16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.Companion.CenterVertically
         ) {
             Icon(Icons.Default.Done, contentDescription = null)
-            Text("$count", fontWeight = Bold, fontSize = 28.sp)
-            Text("активных привычек", color = Color.Gray)
+            Text("$count", fontWeight = FontWeight.Companion.Bold, fontSize = 28.sp)
+            Text("активных привычек", color = Color.Companion.Gray)
         }
     }
 }
 
 @Composable
 fun StreakCard(modifier: Modifier, label: String, streakValue: Int, habitName: String) {
-    Card(modifier = modifier.testTag("streak_habit_card"), shape = RoundedCornerShape(16.dp)) {
+    Card(
+        modifier = modifier.testTag("streak_habit_card"),
+        shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
+    ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.Companion.padding(16.dp),
             verticalArrangement = Arrangement.Center
         ) {
             Text(label)
-            Text("$streakValue дн.", fontSize = 28.sp, fontWeight = Bold)
-            Text(habitName, color = Color.Gray, maxLines = 1)
+            Text("$streakValue дн.", fontSize = 28.sp, fontWeight = FontWeight.Companion.Bold)
+            Text(habitName, color = Color.Companion.Gray, maxLines = 1)
         }
     }
 }
@@ -166,20 +176,20 @@ fun StreakCard(modifier: Modifier, label: String, streakValue: Int, habitName: S
 @Composable
 fun MostConsistentCard(habitName: String, percent: Float) {
     Card(
-        modifier = Modifier
+        modifier = Modifier.Companion
             .testTag("most_habit_card")
             .fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp)
+        shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.Companion.padding(16.dp),
             verticalArrangement = Arrangement.Center
         ) {
             Text("Cамая стабильная")
-            Text(habitName, fontWeight = Bold)
+            Text(habitName, fontWeight = FontWeight.Companion.Bold)
             LinearProgressIndicator(
                 progress = { percent },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.Companion.fillMaxWidth()
             )
             Text("${(percent * PERCENT_MULTIPLIER).toInt()}%")
 

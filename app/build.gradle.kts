@@ -84,6 +84,7 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
     implementation(project(":feature:habits"))
+    implementation(project(":feature:statistics"))
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
