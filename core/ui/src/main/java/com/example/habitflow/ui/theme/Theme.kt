@@ -1,4 +1,4 @@
-package com.example.habitflow.presentation.theme
+package com.example.habitflow.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

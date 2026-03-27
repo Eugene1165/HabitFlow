@@ -1,4 +1,4 @@
-package com.example.habitflow.presentation.extensions
+package com.example.habitflow.ui.extensions
 
 import com.example.habitflow.domain.model.RepeatType
 import java.time.DayOfWeek

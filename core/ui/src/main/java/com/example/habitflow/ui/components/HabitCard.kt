@@ -1,4 +1,4 @@
-package com.example.habitflow.presentation.components
+package com.example.habitflow.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import com.example.habitflow.domain.model.Habit
-import com.example.habitflow.presentation.extensions.toDisplayName
+import com.example.habitflow.ui.extensions.toDisplayName
 
 @Composable
 fun HabitCard(

@@ -22,8 +22,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.habitflow.presentation.components.HabitFlowTopBar
-import com.example.habitflow.presentation.extensions.toDisplayName
+import com.example.habitflow.ui.components.HabitFlowTopBar
+import com.example.habitflow.ui.extensions.toDisplayName
 import java.time.DayOfWeek
 
 @Composable

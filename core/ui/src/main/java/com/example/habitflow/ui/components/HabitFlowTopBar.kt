@@ -1,4 +1,4 @@
-package com.example.habitflow.presentation.components
+package com.example.habitflow.ui.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack

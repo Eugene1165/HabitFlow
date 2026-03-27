@@ -82,6 +82,7 @@ dependencies {
     //добавлю модуль который создал сам-домеейн слой
     implementation(project(":core:domain"))
     implementation(project(":core:data"))
+    implementation(project(":core:ui"))
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

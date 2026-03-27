@@ -1,4 +1,4 @@
-package com.example.habitflow.presentation.components
+package com.example.habitflow.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

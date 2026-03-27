@@ -17,7 +17,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.example.habitflow.presentation.main.MainViewModel
 import com.example.habitflow.presentation.navigation.HostNavGraph
-import com.example.habitflow.presentation.theme.HabitFlowTheme
+import com.example.habitflow.ui.theme.HabitFlowTheme
+
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

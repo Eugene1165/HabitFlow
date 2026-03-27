@@ -34,9 +34,10 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.habitflow.domain.model.RepeatType
-import com.example.habitflow.presentation.components.ColorPicker
-import com.example.habitflow.presentation.components.habitColors
-import com.example.habitflow.presentation.extensions.toDisplayName
+import com.example.habitflow.ui.components.ColorPicker
+import com.example.habitflow.ui.components.habitColors
+import com.example.habitflow.ui.extensions.toDisplayName
+
 import java.time.DayOfWeek
 import java.time.LocalTime
 
