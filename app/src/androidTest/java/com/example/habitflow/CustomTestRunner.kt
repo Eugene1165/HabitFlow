@@ -2,10 +2,10 @@ package com.example.habitflow
 
 import android.app.Application
 import android.content.Context
-import androidx.test.runner.AndroidJUnitRunner
 import dagger.hilt.android.testing.HiltTestApplication
+import io.qameta.allure.android.runners.AllureAndroidJUnitRunner
 
-class CustomTestRunner: AndroidJUnitRunner() {
+class CustomTestRunner: AllureAndroidJUnitRunner() {
     override fun newApplication(
         cl: ClassLoader?,
         className: String?,

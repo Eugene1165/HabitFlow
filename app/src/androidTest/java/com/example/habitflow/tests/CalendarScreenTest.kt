@@ -1,5 +1,7 @@
 package com.example.habitflow.tests
 
+import com.example.habitflow.BaseAllureTestCase
+
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.example.habitflow.MainActivity
 import com.example.habitflow.domain.model.Habit
@@ -8,10 +10,13 @@ import com.example.habitflow.domain.repository.HabitRepository
 import com.example.habitflow.screens.KCalendarScreen
 import com.example.habitflow.screens.KHabitInfoScreen
 import com.example.habitflow.screens.KHabitsListScreen
-import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.kakaocup.compose.node.element.ComposeScreen.Companion.onComposeScreen
+import io.qameta.allure.kotlin.Epic
+import io.qameta.allure.kotlin.Feature
+import io.qameta.allure.kotlin.Severity
+import io.qameta.allure.kotlin.SeverityLevel
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -20,8 +25,10 @@ import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
 
+@Epic("HabitFlow")
+@Feature("CalendarScreenForHabit")
 @HiltAndroidTest
-class CalendarScreenTest: TestCase() {
+class CalendarScreenTest: BaseAllureTestCase() {
 
     @Inject
     lateinit var fakeHabitRepository: HabitRepository
@@ -59,6 +66,7 @@ class CalendarScreenTest: TestCase() {
         composeTestRule.waitForIdle()
     }
 
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     fun calendarDisplayed() = run{
         step("Проверяем что открылся календарь "){
