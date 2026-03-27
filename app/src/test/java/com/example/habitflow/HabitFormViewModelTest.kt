@@ -6,9 +6,9 @@ import com.example.habitflow.domain.model.HabitResult
 import com.example.habitflow.domain.usecase.AddHabitUseCase
 import com.example.habitflow.domain.usecase.GetHabitByIdUseCase
 import com.example.habitflow.domain.usecase.UpdateHabitUseCase
+import com.example.habitflow.feature.habits.form.HabitFormEvent
+import com.example.habitflow.feature.habits.form.HabitFormViewModel
 import com.example.habitflow.fixtures.HabitFactory
-import com.example.habitflow.presentation.habits.form.HabitFormEvent
-import com.example.habitflow.presentation.habits.form.HabitFormViewModel
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

@@ -26,10 +26,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.habitflow.R
-import com.example.habitflow.presentation.habits.form.HabitFormCallbacks
-import com.example.habitflow.presentation.habits.form.HabitFormContent
-import com.example.habitflow.presentation.habits.form.HabitFormEvent
-import com.example.habitflow.presentation.habits.form.HabitFormViewModel
+import com.example.habitflow.feature.habits.form.HabitFormCallbacks
+import com.example.habitflow.feature.habits.form.HabitFormContent
+import com.example.habitflow.feature.habits.form.HabitFormEvent
+import com.example.habitflow.feature.habits.form.HabitFormViewModel
+
 import com.example.habitflow.ui.components.HabitFlowTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -87,7 +88,7 @@ fun CreateHabitScreen(habitId: Int?, navController: NavController) {
                     onSelectedDaysChanged = { viewModel.onSelectedDaysChanged(it) },
                     onWeeklyCountChanged = { viewModel.onWeeklyCountChanged(it) },
                     onTargetChanged = { viewModel.onTargetChanged(it) },
-                    onReminderChanged = { viewModel.onReminderChanged(it)}
+                    onReminderChanged = { viewModel.onReminderChanged(it) }
                 ),
             )
             Spacer(Modifier.height(8.dp))

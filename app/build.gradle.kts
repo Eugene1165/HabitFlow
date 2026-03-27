@@ -83,6 +83,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
+    implementation(project(":feature:habits"))
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
@@ -128,7 +129,6 @@ dependencies {
     implementation(libs.kizitonwose.calendar.compose)
 
     implementation(libs.androidx.work.runtime.ktx)
-
 
     implementation(libs.timber)
 }
