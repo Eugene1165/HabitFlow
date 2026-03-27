@@ -2,16 +2,14 @@ package com.example.habitflow
 
 import android.os.Build
 import androidx.test.rule.GrantPermissionRule
-import com.kaspersky.components.alluresupport.addAllureSupport
+import com.kaspersky.components.alluresupport.withForcedAllureSupport
 import com.kaspersky.kaspresso.kaspresso.Kaspresso
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 import org.junit.Rule
 import org.junit.rules.TestRule
 
 open class BaseAllureTestCase : TestCase(
-    kaspressoBuilder = Kaspresso.Builder.simple().apply {
-        addAllureSupport()
-    }
+    kaspressoBuilder = Kaspresso.Builder.withForcedAllureSupport()
 ) {
     @get:Rule
     val notificationPermissionRule: TestRule =
