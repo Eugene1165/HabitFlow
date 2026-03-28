@@ -8,9 +8,8 @@ import com.example.habitflow.domain.model.Habit
 import com.example.habitflow.domain.model.HabitResult
 import com.example.habitflow.domain.repository.HabitRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
@@ -23,30 +22,28 @@ class HabitRepositoryImpl @Inject constructor(
     private val habitDtoMapper: HabitDtoMapper,
 ) : HabitRepository {
 
-    override fun getAllActiveHabits(): Flow<HabitResult<List<Habit>>> = flow {
-        try {
-            //сетевой запрос -> пишем в Room
-            val dtos = habitApiService.getAllEntries()
-            dtos.forEach { dto ->
-                habitDtoMapper.mapDtoToHabit(dto)
-                    .let { habitMapper.mapHabitToHabitEntity(it) }
-                    .let { dao.addHabit(it) }
-            }
-        } catch (e: IOException) {
-            Timber.e(e, "Не удалось получить список активных привычек")
-            emit(HabitResult.Error(e, "Не удалось получить список активных привычек"))
-        } catch (e: HttpException) {
-            Timber.e(e, "Нет сети")
-            emit(HabitResult.Error(e, "Нет сети"))
-        }
-        //запускаем рум поток
-        emitAll(
-            dao.getAllActiveHabits().map { list ->
+    override fun getAllActiveHabits(): Flow<HabitResult<List<Habit>>> =
+        //запускаем рум поток сначала поскольку стратегия offline-firsst
+        dao.getAllActiveHabits()
+            .map { list ->
                 HabitResult.Success(list.map { entity -> habitMapper.mapHabitEntityToHabit(entity) })
             }
-        )
-    }
+            .onStart {
+                try {
+                    val dtos = habitApiService.getAllEntries()
+                    dtos.forEach { dto ->
+                        habitDtoMapper.mapDtoToHabit(dto)
+                            .let { habitMapper.mapHabitToHabitEntity(it) }
+                            .let { dao.addHabit(it) }
+                    }
 
+                } catch (e: IOException) {
+                    Timber.e(e, "Не удалось получить список активных привычек")
+
+                } catch (e: HttpException) {
+                    Timber.e(e, "Нет сети")
+                }
+            }
 
     override fun getArchivedHabits(): Flow<List<Habit>> {
         return dao.getArchivedHabits()

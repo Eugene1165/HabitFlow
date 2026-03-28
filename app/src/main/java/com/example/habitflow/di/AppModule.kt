@@ -16,6 +16,7 @@ object AppModule {
     @Singleton
     fun provideNetworkConfig(): NetworkConfig = NetworkConfig(
         baseUrl = BuildConfig.SUPABASE_URL,
-        apiKey = BuildConfig.SUPABASE_KEY
+        apiKey = BuildConfig.SUPABASE_KEY,
+        isDebug = BuildConfig.DEBUG
     )
 }

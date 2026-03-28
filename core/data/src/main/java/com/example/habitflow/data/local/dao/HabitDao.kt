@@ -23,7 +23,7 @@ interface HabitDao {
     @Query("SELECT * FROM habits WHERE id=:habitId ")
     fun observeHabitById(habitId: Int): Flow<HabitEntity?>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addHabit(habit: HabitEntity): Long
 
     @Update

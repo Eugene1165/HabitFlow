@@ -122,6 +122,7 @@ class HabitFormViewModel @Inject constructor(
                     )
                 )) {
                     is HabitResult.Success<*> -> {
+                        _state.update { it.copy(isSaving = false) }
                         _events.send(HabitFormEvent.NavigateToHabitsList)
                     }
 
@@ -146,6 +147,7 @@ class HabitFormViewModel @Inject constructor(
                     )
                 )) {
                     is HabitResult.Success<*> -> {
+                        _state.update { it.copy(isSaving = false) }
                         _events.send(HabitFormEvent.NavigateToHabitFormInfo(habitId))
                     }
 

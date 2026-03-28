@@ -33,8 +33,13 @@ class ToggleHabitEntryUseCaseTest {
 
         useCase(habitId = 1, date = date)
 
-        coVerify { habitEntryRepository.addEntry(any()) }
-
+        coVerify {
+            habitEntryRepository.addEntry(
+                match {
+                    it.isDone && it.habitId == 1 && it.date == date
+                }
+            )
+        }
     }
 
     @Test
