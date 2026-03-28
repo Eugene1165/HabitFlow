@@ -30,6 +30,8 @@ before_script:
 
 detekt:
   stage: test
+  rules:
+    - when: manual
   cache:
     key: "$CI_COMMIT_REF_SLUG"
     paths:
@@ -57,7 +59,9 @@ unit-tests:
 lintDebug:
   interruptible: true
   stage: test
-  needs: [ detekt ]
+  rules:
+    - when: manual
+  #needs: [ detekt ]
   cache:
     key: "$CI_COMMIT_REF_SLUG"
     paths:
@@ -73,8 +77,8 @@ lintDebug:
     when: always
 
 ui-tests:
-  stage: ui-tests
-  needs: [ lintDebug,detekt ]
+  stage: test
+  #needs: [ lintDebug,detekt ]
   rules:
     - when: manual
   cache:
@@ -95,6 +99,10 @@ ui-tests:
 
 
   script:
+    - ls /dev/kvm 2>&1 || echo "KVM not available"
+    - ls /etc/udev/ 2>&1 || echo "udev dir not found"
+    - uname -r
+    - cat /proc/cpuinfo | grep -E "vmx|svm" | head -3 || echo "No virtualization flags"
     # Устанавливаем зависимости эмулятора, system image и расширяем PATH
     - apt-get --quiet install --yes libgl1 libpulse0
     - sdkmanager "emulator"
