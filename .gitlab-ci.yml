@@ -80,7 +80,7 @@ lintDebug:
 
 ui-tests:
   stage: ui-tests
-  needs: [ unit-tests]
+  needs: [ lintDebug,detekt]
   rules:
     - when: manual
   cache:
