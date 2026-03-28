@@ -15,26 +15,17 @@ variables:
 before_script:
   - apt-get --quiet update --yes
   - apt-get --quiet install --yes wget unzip
-  # Setup path as android_home for moving/exporting the downloaded sdk into it
   - export ANDROID_HOME="${PWD}/android-sdk-root"
-  # Create a new directory at specified location
   - install -d $ANDROID_HOME
-  # Here we are installing androidSDK tools from official source,
-  # (the key thing here is the url from where you are downloading these sdk tool for command line, so please do note this url pattern there and here as well)
-  # after that unzipping those tools and
-  # then running a series of SDK manager commands to install necessary android SDK packages that'll allow the app to build
-  - wget --no-verbose --output-document=$ANDROID_HOME/cmdline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_TOOLS}_latest.zip
-  - unzip -q -d "$ANDROID_HOME/cmdline-tools" "$ANDROID_HOME/cmdline-tools.zip"
-  - mv -T "$ANDROID_HOME/cmdline-tools/cmdline-tools" "$ANDROID_HOME/cmdline-tools/tools"
-  - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/cmdline-tools/tools/bin
-  # Nothing fancy here, just checking sdkManager version
+  - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/cmdline-tools/tools/bin:$ANDROID_HOME/platform-tools
+  - test -d "$ANDROID_HOME/cmdline-tools/tools/bin" || wget --no-verbose --output-document=$ANDROID_HOME/cmdline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_TOOLS}_latest.zip
+  - test -d "$ANDROID_HOME/cmdline-tools/tools/bin" || unzip -q -d "$ANDROID_HOME/cmdline-tools" "$ANDROID_HOME/cmdline-tools.zip"
+  - test -d "$ANDROID_HOME/cmdline-tools/tools/bin" || mv -T "$ANDROID_HOME/cmdline-tools/cmdline-tools" "$ANDROID_HOME/cmdline-tools/tools"
+  - test -d "$ANDROID_HOME/cmdline-tools/tools/bin" || yes | sdkmanager --licenses > /dev/null || true
+  - test -d "$ANDROID_HOME/cmdline-tools/tools/bin" || sdkmanager "platforms;android-${ANDROID_COMPILE_SDK}"
+  - test -d "$ANDROID_HOME/cmdline-tools/tools/bin" || sdkmanager "platform-tools"
+  - test -d "$ANDROID_HOME/cmdline-tools/tools/bin" || sdkmanager "build-tools;${ANDROID_BUILD_TOOLS}"
   - sdkmanager --version
-  # use yes to accept all licenses
-  - yes | sdkmanager --licenses > /dev/null || true
-  - sdkmanager "platforms;android-${ANDROID_COMPILE_SDK}"
-  - sdkmanager "platform-tools"
-  - sdkmanager "build-tools;${ANDROID_BUILD_TOOLS}"
-  # Not necessary, but just for surity
   - chmod +x ./gradlew
 
 detekt:
@@ -51,7 +42,7 @@ detekt:
 
 unit-tests:
   stage: test
-  needs: [lintDebug]
+  needs: [ lintDebug ]
   rules:
     - when: manual
   cache:
@@ -66,7 +57,7 @@ unit-tests:
 lintDebug:
   interruptible: true
   stage: test
-  needs: [detekt]
+  needs: [ detekt ]
   cache:
     key: "$CI_COMMIT_REF_SLUG"
     paths:
@@ -83,7 +74,7 @@ lintDebug:
 
 ui-tests:
   stage: ui-tests
-  needs: [ lintDebug,detekt]
+  needs: [ lintDebug,detekt ]
   rules:
     - when: manual
   cache:
