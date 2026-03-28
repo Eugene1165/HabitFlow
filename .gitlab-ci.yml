@@ -118,7 +118,7 @@ ui-tests:
     # Запускаем UI-тесты; set +e чтобы продолжить сбор артефактов даже при падении тестов
     - set +e;./gradlew :app:connectedDebugAndroidTest;TEST_RESULT=$?;set -e
     # Отладка: проверяем наличие Allure-файлов на устройстве и вытаскиваем результаты
-    - adb shell ls /sdcard/Android/data/ 2>&1 | grep habitflow || echo "NOT FOUND: com.example.habitflow not in Android/data/"
+    - adb shell ls /sdcard/Android/data/ 2>&1 | grep habitflow || echo "NOT FOUND:com.example.habitflow not in Android/data/"
     - adb shell find /sdcard -name "*allure*" 2>&1 || echo "Nothing found"
     - adb pull /sdcard/Android/data/com.example.habitflow/files/allure-results ./allure-results || true
     # Генерируем HTML-отчёт Allure и выходим с кодом результата тестов
