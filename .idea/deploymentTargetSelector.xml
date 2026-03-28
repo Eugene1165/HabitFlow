@@ -26,16 +26,16 @@
       <SelectionState runConfigName="feature.onboarding">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="MigrationTest">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="AllTestsSuite">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="update_habit_changes_habit_title()">
+      <SelectionState runConfigName="HabitDaoTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="HabitDaoTest">
+      <SelectionState runConfigName="ArchivedScreenTest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="Tests in 'com.example.habitflow.tests'">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

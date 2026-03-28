@@ -1,7 +1,5 @@
 package com.example.habitflow.tests
 
-import com.example.habitflow.BaseAllureTestCase
-
 import io.github.kakaocup.compose.node.element.ComposeScreen.Companion.onComposeScreen
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.example.habitflow.MainActivity
@@ -10,12 +8,9 @@ import com.example.habitflow.domain.model.RepeatType
 import com.example.habitflow.domain.repository.HabitRepository
 import com.example.habitflow.screens.KArchivedScreen
 import com.example.habitflow.screens.KMainScreen
+import com.example.habitflow.HabitBaseTestCase
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import io.qameta.allure.kotlin.Epic
-import io.qameta.allure.kotlin.Feature
-import io.qameta.allure.kotlin.Severity
-import io.qameta.allure.kotlin.SeverityLevel
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -24,10 +19,8 @@ import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
 
-@Epic("HabitFlow")
-@Feature("ArchivedHabitsList")
 @HiltAndroidTest
-class ArchivedScreenTest : BaseAllureTestCase(){
+class ArchivedScreenTest : HabitBaseTestCase(){
 
     @Inject
     lateinit var fakeHabitRepository: HabitRepository
@@ -62,7 +55,6 @@ class ArchivedScreenTest : BaseAllureTestCase(){
         composeTestRule.waitForIdle()
     }
 
-    @Severity(SeverityLevel.CRITICAL)
     @Test
     fun archivedListDisplayed() = run{
         step("Проверяем что привычка в списке отображается"){
@@ -72,7 +64,6 @@ class ArchivedScreenTest : BaseAllureTestCase(){
         }
     }
 
-    @Severity(SeverityLevel.NORMAL)
     @Test
     fun restoreHabit() = run{
         step("Восстановим привычку из архива"){
@@ -87,7 +78,6 @@ class ArchivedScreenTest : BaseAllureTestCase(){
         }
     }
 
-    @Severity(SeverityLevel.NORMAL)
     @Test
     fun deleteHabit() = run{
         step("Удалим привычку из архива"){

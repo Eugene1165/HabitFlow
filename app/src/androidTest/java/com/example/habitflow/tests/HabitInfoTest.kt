@@ -1,7 +1,5 @@
 package com.example.habitflow.tests
 
-import com.example.habitflow.BaseAllureTestCase
-
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
@@ -12,13 +10,10 @@ import com.example.habitflow.domain.repository.HabitRepository
 import com.example.habitflow.screens.KCalendarScreen
 import com.example.habitflow.screens.KHabitInfoScreen
 import com.example.habitflow.screens.KHabitsListScreen
+import com.example.habitflow.HabitBaseTestCase
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.kakaocup.compose.node.element.ComposeScreen.Companion.onComposeScreen
-import io.qameta.allure.kotlin.Epic
-import io.qameta.allure.kotlin.Feature
-import io.qameta.allure.kotlin.Severity
-import io.qameta.allure.kotlin.SeverityLevel
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -27,10 +22,8 @@ import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
 
-@Epic("HabitFlow")
-@Feature("HabitInfoScreenForViewDetails")
 @HiltAndroidTest
-class HabitInfoTest: BaseAllureTestCase() {
+class HabitInfoTest: HabitBaseTestCase() {
     @Inject
     lateinit var fakeHabitRepository: HabitRepository
 
@@ -64,7 +57,6 @@ class HabitInfoTest: BaseAllureTestCase() {
         composeTestRule.waitForIdle()
     }
 
-    @Severity(SeverityLevel.CRITICAL)
     @Test
     fun habitInfoDisplayed() = run{
         step("Проверяем что отображается информация на экране"){
@@ -74,7 +66,6 @@ class HabitInfoTest: BaseAllureTestCase() {
         }
     }
 
-    @Severity(SeverityLevel.CRITICAL)
     @Test
     fun archiveHabit() = run{
         step("Архивируем привычку"){
@@ -93,7 +84,6 @@ class HabitInfoTest: BaseAllureTestCase() {
         }
     }
 
-    @Severity(SeverityLevel.CRITICAL)
     @Test
     fun navigateToCalendar() = run{
         step("тапаем на кнопку перехода в календарь"){

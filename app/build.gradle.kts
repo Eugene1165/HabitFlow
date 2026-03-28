@@ -30,9 +30,6 @@ android {
         testInstrumentationRunner = "com.example.habitflow.CustomTestRunner"
         //игнорирование повторного прогона тестов.Класс AllTests это чисто файл для локального прогона в студии.
         testInstrumentationRunnerArguments["notClass"] = "com.example.habitflow.tests.AllTestsSuite"
-        //генерация папки
-        testInstrumentationRunnerArguments["allure.results.directory"] = "allure-results"
-        testInstrumentationRunnerArguments["listener"] = "io.qameta.allure.kotlin.junit4.AllureJunit4"
     }
 
     buildTypes {
@@ -128,11 +125,6 @@ dependencies {
     androidTestImplementation(libs.androidx.room.runtime)
     androidTestImplementation(libs.androidx.room.ktx)
     androidTestImplementation(libs.androidx.room.testing)
-
-    androidTestImplementation(libs.allure.android)
-    androidTestImplementation(libs.kaspresso.allure)
-
-
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
