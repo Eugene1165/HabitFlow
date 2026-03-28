@@ -29,10 +29,10 @@
       <SelectionState runConfigName="HabitDaoTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="ArchivedScreenTest">
+      <SelectionState runConfigName="Tests in 'com.example.habitflow.tests'">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="Tests in 'com.example.habitflow.tests'">
+      <SelectionState runConfigName="AllTestsSuite">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

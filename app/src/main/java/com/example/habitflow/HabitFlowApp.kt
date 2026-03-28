@@ -34,10 +34,10 @@ class HabitFlowApp : Application(), Configuration.Provider {
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val workRequest = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES)
+        val workRequest = PeriodicWorkRequestBuilder<SyncWorker>(repeatInterval = 15, TimeUnit.MINUTES)
             .setConstraints(constraints)
             //С exponential backoff: retry через 10с → 20с → 40с → 80с → ... (даёт серверу время восстановиться)
-            .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.MINUTES)
+            .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, backoffDelay = 15, TimeUnit.MINUTES)
             .build()
 
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
