@@ -27,7 +27,7 @@ class OnBoardingViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val useCase = isOnBoardingCompletedUseCase.invoke().first()
-            if (useCase) _events.send(OnBoardingEvent.NavigateToMain)
+            if (useCase) _events.send(OnBoardingEvent.NavigateToBottomNav)
             else _state.value = OnBoardingUiState.Content
         }
     }
@@ -35,7 +35,7 @@ class OnBoardingViewModel @Inject constructor(
     fun onComplete() {
         viewModelScope.launch {
             completeOnBoardingUseCase.invoke()
-            _events.send(OnBoardingEvent.NavigateToMain)
+            _events.send(OnBoardingEvent.NavigateToBottomNav)
         }
     }
 }

@@ -34,7 +34,7 @@ import com.example.habitflow.ui.components.HabitFlowTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateHabitScreen(habitId: Int?, navController: NavController) {
+fun CreateHabitScreen(navController: NavController) {
     val viewModel: HabitFormViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
 

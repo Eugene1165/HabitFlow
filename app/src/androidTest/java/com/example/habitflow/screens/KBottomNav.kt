@@ -4,9 +4,9 @@ import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import io.github.kakaocup.compose.node.element.ComposeScreen
 import io.github.kakaocup.compose.node.element.KNode
 
-class KMainScreen(
+class KBottomNav(
     semanticsProvider: SemanticsNodeInteractionsProvider
-) : ComposeScreen<KMainScreen>(
+) : ComposeScreen<KBottomNav>(
     semanticsProvider = semanticsProvider
 ) {
     val tabHabits = child<KNode> { hasTestTag("tab_habits_list") }

@@ -4,7 +4,7 @@ package com.example.habitflow.tests
 import io.github.kakaocup.compose.node.element.ComposeScreen.Companion.onComposeScreen
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.example.habitflow.MainActivity
-import com.example.habitflow.screens.KMainScreen
+import com.example.habitflow.screens.KBottomNav
 import com.example.habitflow.screens.KSettingsScreen
 import com.example.habitflow.HabitBaseTestCase
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -24,7 +24,7 @@ class SettingsScreenTest: HabitBaseTestCase() {
 
     @Before
     fun setUp(){
-        onComposeScreen<KMainScreen>(composeTestRule){
+        onComposeScreen<KBottomNav>(composeTestRule){
             navigateToSettings()
         }
     }

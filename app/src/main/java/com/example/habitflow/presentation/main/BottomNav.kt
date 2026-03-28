@@ -23,7 +23,7 @@ import com.example.habitflow.presentation.navigation.NavigationItem
 import com.example.habitflow.feature.settings.SettingsScreen
 
 @Composable
-fun MainScreen(navController: NavHostController) {
+fun BottomNav(navController: NavHostController) {
     val bottomNavController = rememberNavController()
     Scaffold(
         bottomBar = {

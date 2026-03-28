@@ -51,7 +51,7 @@ fun OnBoardingScreen(navController: NavController) {
             LaunchedEffect(Unit) {
                 viewModel.events.collect { event ->
                     when (event) {
-                        is OnBoardingEvent.NavigateToMain -> navController.navigate(route = "main") {
+                        is OnBoardingEvent.NavigateToBottomNav -> navController.navigate(route = "main") {
                             popUpTo(route = "onboarding") { inclusive = true }
                         }
                     }

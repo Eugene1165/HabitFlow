@@ -30,10 +30,10 @@ class MainActivity : ComponentActivity() {
             val viewModel: MainViewModel = hiltViewModel()
             val isDark by viewModel.isDarkTheme.collectAsStateWithLifecycle()
             HabitFlowTheme(darkTheme = isDark) {
+                RequestNotificationPermission()
                 Surface {
                     val navController = rememberNavController()
                     HostNavGraph(navController)
-                    RequestNotificationPermission()
                 }
             }
         }

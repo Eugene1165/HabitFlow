@@ -7,7 +7,7 @@ import com.example.habitflow.domain.model.Habit
 import com.example.habitflow.domain.model.RepeatType
 import com.example.habitflow.domain.repository.HabitRepository
 import com.example.habitflow.screens.KArchivedScreen
-import com.example.habitflow.screens.KMainScreen
+import com.example.habitflow.screens.KBottomNav
 import com.example.habitflow.HabitBaseTestCase
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -49,7 +49,7 @@ class ArchivedScreenTest : HabitBaseTestCase(){
                 )
             )
         }
-        onComposeScreen<KMainScreen>(composeTestRule){
+        onComposeScreen<KBottomNav>(composeTestRule){
             navigateToArchived()
         }
         composeTestRule.waitForIdle()

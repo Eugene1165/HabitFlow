@@ -5,7 +5,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.example.habitflow.MainActivity
 import com.example.habitflow.screens.KArchivedScreen
 import com.example.habitflow.screens.KHabitsListScreen
-import com.example.habitflow.screens.KMainScreen
+import com.example.habitflow.screens.KBottomNav
 import com.example.habitflow.screens.KSettingsScreen
 import com.example.habitflow.screens.KStatisticsScreen
 import com.example.habitflow.HabitBaseTestCase
@@ -33,7 +33,7 @@ class NavigationTest : HabitBaseTestCase() {
     @Test
     fun navigateToSettingsScreen() = run {
         step("Тапаем на таб settings") {
-            onComposeScreen<KMainScreen>(composeTestRule) {
+            onComposeScreen<KBottomNav>(composeTestRule) {
                 navigateToSettings()
             }
 
@@ -48,7 +48,7 @@ class NavigationTest : HabitBaseTestCase() {
     @Test
     fun navigateToStatisticsScreen() = run {
         step("Тапаем на таб statistics") {
-            onComposeScreen<KMainScreen>(composeTestRule) {
+            onComposeScreen<KBottomNav>(composeTestRule) {
                 navigateToStatistics()
             }
 
@@ -63,7 +63,7 @@ class NavigationTest : HabitBaseTestCase() {
     @Test
     fun navigateToArchivedScreen() = run {
         step("Тапаем на таб archived") {
-            onComposeScreen<KMainScreen>(composeTestRule) {
+            onComposeScreen<KBottomNav>(composeTestRule) {
                 navigateToArchived()
             }
 
@@ -78,13 +78,13 @@ class NavigationTest : HabitBaseTestCase() {
     @Test
     fun navigateToHabitsListScreen() = run {
         step("переходим на экран статистики"){
-            onComposeScreen<KMainScreen>(composeTestRule) {
+            onComposeScreen<KBottomNav>(composeTestRule) {
                 navigateToSettings()
             }
 
         }
         step("Тапаем на таб Habits") {
-            onComposeScreen<KMainScreen>(composeTestRule) {
+            onComposeScreen<KBottomNav>(composeTestRule) {
                 navigateToHabitsList()
             }
 

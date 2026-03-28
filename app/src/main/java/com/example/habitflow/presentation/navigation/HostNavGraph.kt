@@ -7,48 +7,43 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.habitflow.feature.habits.calendar.CalendarScreen
+import com.example.habitflow.feature.habits.create.CreateHabitScreen
 import com.example.habitflow.feature.habits.info.HabitInfoScreen
 import com.example.habitflow.feature.onboarding.OnBoardingScreen
-import com.example.habitflow.feature.habits.create.CreateHabitScreen
-
-import com.example.habitflow.presentation.main.MainScreen
+import com.example.habitflow.presentation.main.BottomNav
 
 @Composable
 fun HostNavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = "onboarding"
+        startDestination = Routes.ONBOARDING
     ) {
-        composable("onboarding") {
+        composable(Routes.ONBOARDING) {
             OnBoardingScreen(navController)
         }
-        composable("main") {
-            MainScreen(navController = navController)
+        composable(Routes.BOTTOM_NAV) {
+            BottomNav(navController = navController)
         }
         composable(
-            route = "habit_info/{habitId}",
+            route = Routes.HABIT_INFO,
             arguments = listOf(navArgument("habitId") { type = NavType.IntType })
         ) { backStackEntry ->
             val habitId = backStackEntry.arguments?.getInt("habitId") ?: return@composable
             HabitInfoScreen(habitId = habitId, navController = navController)
         }
         composable(
-            route = "create_habit?habitId={habitId}",
+            route = Routes.CREATE_HABIT,
             arguments = listOf(
                 navArgument("habitId") {
                     type = NavType.IntType
                     defaultValue = -1
                 }
             )
-        ) { backStackEntry ->
-            val habitId = backStackEntry.arguments?.getInt("habitId")?.takeIf { it != -1 }
-            CreateHabitScreen(habitId=habitId,navController=navController,)
-        }
+        ) { _ -> CreateHabitScreen(navController = navController) }
         composable(
-            route = "calendar/{habitId}",
+            route = Routes.CALENDAR,
             arguments = listOf(navArgument("habitId") { type = NavType.IntType })
-        ) { _ -> CalendarScreen(navController)
-        }
+        ) { _ -> CalendarScreen(navController) }
     }
 }
 

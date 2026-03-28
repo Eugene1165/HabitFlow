@@ -7,7 +7,7 @@ import com.example.habitflow.domain.model.HabitEntry
 import com.example.habitflow.domain.model.RepeatType
 import com.example.habitflow.domain.repository.HabitEntryRepository
 import com.example.habitflow.domain.repository.HabitRepository
-import com.example.habitflow.screens.KMainScreen
+import com.example.habitflow.screens.KBottomNav
 import com.example.habitflow.screens.KStatisticsScreen
 import com.example.habitflow.HabitBaseTestCase
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -59,7 +59,7 @@ class StatisticsScreenTest: HabitBaseTestCase() {
                 isDone = true
             ))
         }
-        onComposeScreen<KMainScreen>(composeTestRule){
+        onComposeScreen<KBottomNav>(composeTestRule){
             navigateToStatistics()
         }
         composeTestRule.waitForIdle()
