@@ -44,6 +44,7 @@ detekt:
     paths:
       - .gradle/caches
       - .gradle/wrapper
+      - android-sdk-root/
   script:
     - ./gradlew detekt
 
@@ -58,6 +59,7 @@ unit-tests:
     paths:
       - .gradle/caches
       - .gradle/wrapper
+      - android-sdk-root/
   script:
     - ./gradlew testDebugUnitTest
 
@@ -70,6 +72,7 @@ lintDebug:
     paths:
       - .gradle/caches
       - .gradle/wrapper
+      - android-sdk-root/
   script:
     - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
   artifacts:
@@ -88,6 +91,7 @@ ui-tests:
     paths:
       - .gradle/caches
       - .gradle/wrapper
+      - android-sdk-root/
   tags:
     - saas-linux-medium-amd64
   artifacts:
@@ -142,6 +146,7 @@ build:
     paths:
       - .gradle/caches
       - .gradle/wrapper
+      - android-sdk-root/
   artifacts:
     when: always
     paths:
