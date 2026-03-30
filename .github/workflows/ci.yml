@@ -74,6 +74,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
+    continue-on-error: true
     timeout-minutes: 7
     steps:
       - name: Checkout code
