@@ -80,7 +80,9 @@ fun HabitInfoScreen(habitId: Int, navController: NavController) {
         },
         floatingActionButton = {
             if (state is HabitInfoUiState.Content) {
-                FloatingActionButton(onClick = { navController.navigate("create_habit?habitId=$habitId") }) {
+                FloatingActionButton(
+                    modifier = Modifier.testTag("fab_edit_habit"),
+                    onClick = { navController.navigate("create_habit?habitId=$habitId") }) {
                     Icon(Icons.Default.Edit, contentDescription = null)
                 }
             }

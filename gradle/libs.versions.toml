@@ -80,6 +80,7 @@ mockk = { group = "io.mockk", name ="mockk",version.ref = "mockk"}
 turbine = {group = "app.cash.turbine",name= "turbine",version.ref = "turbine"}
 
 androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work" }
+androidx-work-testing = { group = "androidx.work", name = "work-testing", version.ref = "work" }
 hilt-work = { group = "androidx.hilt", name = "hilt-work", version = "1.2.0" }
 hilt-work-compiler = { group = "androidx.hilt", name = "hilt-compiler", version = "1.2.0" }
 

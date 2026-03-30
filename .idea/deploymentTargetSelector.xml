@@ -29,16 +29,16 @@
       <SelectionState runConfigName="Tests in 'com.example.habitflow.tests'">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="titleSavedAfterRotation()">
+      <SelectionState runConfigName="toggleHabitCheckbox()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="HabitFormTest">
+      <SelectionState runConfigName="editHabit()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="habitFormStatePreservedOnCall()">
+      <SelectionState runConfigName="habitFormStatePreservedAfterProcessDeath()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="AllTestsSuite">
+      <SelectionState runConfigName="reminderWorkerShowsNotification()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

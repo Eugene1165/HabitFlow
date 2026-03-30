@@ -15,7 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
-import com.example.habitflow.presentation.main.MainViewModel
+import com.example.habitflow.presentation.main.BottomNavViewModel
 import com.example.habitflow.presentation.navigation.HostNavGraph
 import com.example.habitflow.ui.theme.HabitFlowTheme
 
@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val viewModel: MainViewModel = hiltViewModel()
+            val viewModel: BottomNavViewModel = hiltViewModel()
             val isDark by viewModel.isDarkTheme.collectAsStateWithLifecycle()
             HabitFlowTheme(darkTheme = isDark) {
                 RequestNotificationPermission()

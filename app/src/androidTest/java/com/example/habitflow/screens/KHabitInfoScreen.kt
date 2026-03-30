@@ -13,6 +13,8 @@ class KHabitInfoScreen(
     val archiveButton = child<KNode> { hasTestTag("btn_archive_habit") }
     val calendarButton = child<KNode> { hasTestTag("btn_open_calendar") }
 
+    val fabEditHabit = child<KNode> { hasTestTag("fab_edit_habit") }
+
     fun habitByTitle(title: String): KNode {
         return child<KNode> { hasText(title) }
     }

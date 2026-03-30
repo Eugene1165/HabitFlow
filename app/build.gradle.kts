@@ -125,6 +125,7 @@ dependencies {
     androidTestImplementation(libs.androidx.room.runtime)
     androidTestImplementation(libs.androidx.room.ktx)
     androidTestImplementation(libs.androidx.room.testing)
+    androidTestImplementation(libs.androidx.work.testing)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)

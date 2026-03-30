@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class BottomNavViewModel @Inject constructor(
     private val getDarkThemeUseCase: GetDarkThemeUseCase
 ) : ViewModel() {
     val isDarkTheme: StateFlow<Boolean> = getDarkThemeUseCase()

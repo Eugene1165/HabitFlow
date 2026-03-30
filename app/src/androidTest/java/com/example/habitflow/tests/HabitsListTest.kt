@@ -97,6 +97,12 @@ class HabitsListTest : HabitBaseTestCase() {
                 checkboxForHabit(1).assertIsOn()
             }
         }
+        step("Кликаем повторно и проверяем что чекбокс выключен") {
+            onComposeScreen<KHabitsListScreen>(composeTestRule){
+                checkboxForHabit(1).performClick()
+                checkboxForHabit(1).assertIsOff()
+            }
+        }
     }
 
     @Test

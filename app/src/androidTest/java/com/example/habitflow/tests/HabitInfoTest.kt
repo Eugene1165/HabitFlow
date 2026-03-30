@@ -11,6 +11,7 @@ import com.example.habitflow.screens.KCalendarScreen
 import com.example.habitflow.screens.KHabitInfoScreen
 import com.example.habitflow.screens.KHabitsListScreen
 import com.example.habitflow.HabitBaseTestCase
+import com.example.habitflow.screens.KHabitFormScreen
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.kakaocup.compose.node.element.ComposeScreen.Companion.onComposeScreen
@@ -23,7 +24,7 @@ import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltAndroidTest
-class HabitInfoTest: HabitBaseTestCase() {
+class HabitInfoTest : HabitBaseTestCase() {
     @Inject
     lateinit var fakeHabitRepository: HabitRepository
 
@@ -34,7 +35,7 @@ class HabitInfoTest: HabitBaseTestCase() {
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Before
-    fun setUp(){
+    fun setUp() {
         hiltRule.inject()
         runBlocking {
             fakeHabitRepository.addHabit(
@@ -51,29 +52,29 @@ class HabitInfoTest: HabitBaseTestCase() {
                 )
             )
         }
-        onComposeScreen<KHabitsListScreen>(composeTestRule){
+        onComposeScreen<KHabitsListScreen>(composeTestRule) {
             habitCardById(1).performClick()
         }
         composeTestRule.waitForIdle()
     }
 
     @Test
-    fun habitInfoDisplayed() = run{
-        step("Проверяем что отображается информация на экране"){
-            onComposeScreen<KHabitInfoScreen>(composeTestRule){
+    fun habitInfoDisplayed() = run {
+        step("Проверяем что отображается информация на экране") {
+            onComposeScreen<KHabitInfoScreen>(composeTestRule) {
                 screenHabitInfo.assertIsDisplayed()
             }
         }
     }
 
     @Test
-    fun archiveHabit() = run{
-        step("Архивируем привычку"){
-            onComposeScreen<KHabitInfoScreen>(composeTestRule){
+    fun archiveHabit() = run {
+        step("Архивируем привычку") {
+            onComposeScreen<KHabitInfoScreen>(composeTestRule) {
                 archiveButton.performClick()
             }
         }
-        step("Проверяем что привычки нет в списке"){
+        step("Проверяем что привычки нет в списке") {
             composeTestRule.waitUntil(timeoutMillis = 5000) {
                 composeTestRule
                     .onAllNodesWithText("Бег")
@@ -85,16 +86,45 @@ class HabitInfoTest: HabitBaseTestCase() {
     }
 
     @Test
-    fun navigateToCalendar() = run{
-        step("тапаем на кнопку перехода в календарь"){
-            onComposeScreen<KHabitInfoScreen>(composeTestRule){
+    fun navigateToCalendar() = run {
+        step("тапаем на кнопку перехода в календарь") {
+            onComposeScreen<KHabitInfoScreen>(composeTestRule) {
                 calendarButton.performClick()
             }
         }
 
-        step("проверяем что перешли в календарь"){
-            onComposeScreen<KCalendarScreen>(composeTestRule){
+        step("проверяем что перешли в календарь") {
+            onComposeScreen<KCalendarScreen>(composeTestRule) {
                 screenCalendar.assertIsDisplayed()
+            }
+        }
+    }
+
+    @Test
+    fun editHabit() = run {
+        step("тапаем на кнопку редактирования") {
+            onComposeScreen<KHabitInfoScreen>(composeTestRule) {
+                fabEditHabit.performClick()
+            }
+        }
+        step("проверяем что оказались на экране редактирования") {
+            onComposeScreen<KHabitFormScreen>(composeTestRule) {
+                screenHabitForm.assertIsDisplayed()
+            }
+        }
+        step("изменим название привычки"){
+            onComposeScreen<KHabitFormScreen>(composeTestRule) {
+                inputText(titleField,"плавание")
+            }
+        }
+        step("сохраняем результат"){
+            onComposeScreen<KHabitFormScreen>(composeTestRule) {
+                saveButton.performClick()
+            }
+        }
+        step("проверяем что название привычки поменялось"){
+            onComposeScreen<KHabitInfoScreen>(composeTestRule){
+                habitByTitle("плавание").assertIsDisplayed()
             }
         }
     }
