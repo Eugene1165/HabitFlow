@@ -14,4 +14,8 @@ class KHabitFormScreen(
     val titleField = child<KNode> { hasTestTag("habit_name") }
     val descriptionField = child<KNode> { hasTestTag("habit_description") }
     val saveButton = child<KNode> { hasTestTag("btn_save_habit") }
+
+    fun inputText(field: KNode,text: String){
+        field { performTextReplacement(text)}
+    }
 }

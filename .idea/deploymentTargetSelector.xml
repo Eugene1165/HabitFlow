@@ -26,13 +26,19 @@
       <SelectionState runConfigName="feature.onboarding">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="HabitDaoTest">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="Tests in 'com.example.habitflow.tests'">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="AllTestsSuite">
+      <SelectionState runConfigName="titleSavedAfterRotation()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="createHabitSuccess()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="HabitFormTest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="habitFormStatePreservedOnCall()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

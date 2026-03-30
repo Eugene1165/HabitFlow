@@ -1,18 +1,21 @@
 package com.example.habitflow.tests
 
-
-import io.github.kakaocup.compose.node.element.ComposeScreen.Companion.onComposeScreen
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
+import com.example.habitflow.HabitBaseTestCase
 import com.example.habitflow.MainActivity
 import com.example.habitflow.screens.KHabitFormScreen
 import com.example.habitflow.screens.KHabitsListScreen
-import com.example.habitflow.HabitBaseTestCase
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import io.github.kakaocup.compose.node.element.ComposeScreen.Companion.onComposeScreen
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+
 @HiltAndroidTest
 class HabitFormTest : HabitBaseTestCase() {
     @get:Rule(order = 0)
@@ -30,16 +33,22 @@ class HabitFormTest : HabitBaseTestCase() {
         }
     }
 
+    @After
+    fun tearDown(){
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+            .setOrientationNatural()
+    }
+
     @Test
     fun createHabitSuccess() = run {
         step("Вводим название") {
             onComposeScreen<KHabitFormScreen>(composeTestRule) {
-                titleField { performTextReplacement("test") }
+                inputText(titleField,"test")
             }
         }
         step("Вводим описание") {
             onComposeScreen<KHabitFormScreen>(composeTestRule) {
-                descriptionField { performTextReplacement("test") }
+                inputText(descriptionField,"test2")
             }
         }
         step("тапаем на кнопку и сохраняем результат") {
@@ -49,7 +58,7 @@ class HabitFormTest : HabitBaseTestCase() {
         }
 
         step("Ждём закрытия формы") {
-            onComposeScreen<KHabitFormScreen>(composeTestRule){
+            onComposeScreen<KHabitFormScreen>(composeTestRule) {
                 composeTestRule.waitUntil(timeoutMillis = 10000) {
                     composeTestRule
                         .onAllNodesWithTag("screen_habit_form")
@@ -73,15 +82,61 @@ class HabitFormTest : HabitBaseTestCase() {
                 saveButton { performClick() }
             }
         }
-        step("проверяем что остались на экране формы"){
-            onComposeScreen<KHabitFormScreen>(composeTestRule){
-                screenHabitForm{assertIsDisplayed()}
+        step("проверяем что остались на экране формы") {
+            onComposeScreen<KHabitFormScreen>(composeTestRule) {
+                screenHabitForm { assertIsDisplayed() }
             }
         }
-        step("проверяем что отображается snackBar"){
-            onComposeScreen<KHabitFormScreen>(composeTestRule){
+        step("проверяем что отображается snackBar") {
+            onComposeScreen<KHabitFormScreen>(composeTestRule) {
                 errorSnackbar.assertIsDisplayed()
             }
         }
     }
+
+    @Test
+    fun titleSavedAfterRotation() = run {
+        step("Вводим название привычки") {
+            onComposeScreen<KHabitFormScreen>(composeTestRule) {
+                inputText(titleField,"test")
+            }
+        }
+
+        step("переворачиваем экран") {
+            UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+                .setOrientationRight()
+        }
+
+        step("проверяем что название сохранилось") {
+            onComposeScreen<KHabitFormScreen>(composeTestRule) {
+                titleField { assertTextContains("test") }
+            }
+        }
+    }
+
+    @Test
+    fun habitFormStatePreservedOnCall() = run {
+        step("Вводим название привычки") {
+            onComposeScreen<KHabitFormScreen>(composeTestRule) {
+                inputText(titleField,"test")
+            }
+        }
+        step("звонок") {
+            device.phone.emulateCall("1234567890")
+        }
+        step("отклоняем звонок") {
+            device.phone.cancelCall("1234567890")
+        }
+        step("проверяем что остались на экране формы") {
+            onComposeScreen<KHabitFormScreen>(composeTestRule) {
+                screenHabitForm { assertIsDisplayed() }
+            }
+        }
+        step("проверяем что название сохранилось") {
+            onComposeScreen<KHabitFormScreen>(composeTestRule) {
+                titleField { assertTextContains("test") }
+            }
+        }
+    }
+
 }
