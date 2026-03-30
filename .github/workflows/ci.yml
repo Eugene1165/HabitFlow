@@ -118,4 +118,4 @@ jobs:
               java -jar adbserver-desktop.jar & 
               sleep 6
               ./gradlew :app:connectedDebugAndroidTest
-              adb emu kill
+              pkill -9 -f "emulator" || true
