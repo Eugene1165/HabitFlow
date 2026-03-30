@@ -17,14 +17,14 @@ interface HabitApiService {
     @POST("rest/v1/Habit")
     suspend fun createEntries(
         @Body habit: HabitDto
-    ): HabitDto
+    ): Response<Unit>
 
 
     @PATCH("rest/v1/Habit")
     suspend fun updateEntriesById(
         @Query("id") habitId: String,
         @Body habit: HabitDto
-    ): HabitDto
+    ): Response<Unit>
 
     @DELETE("rest/v1/Habit")
     suspend fun removeEntriesById(

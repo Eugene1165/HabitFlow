@@ -67,8 +67,9 @@ class HabitRepositoryImpl @Inject constructor(
         val generatedId = dao.addHabit(habitMapper.mapHabitToHabitEntity(habit))
         val habitWithId = habit.copy(id = generatedId.toInt())
         return try {
-            habitApiService.createEntries(habitDtoMapper.mapHabitToDto(habitWithId))
-            HabitResult.Success(habitWithId)
+            val response = habitApiService.createEntries(habitDtoMapper.mapHabitToDto(habitWithId))
+            if (response.isSuccessful) HabitResult.Success(habitWithId)
+            else HabitResult.Error(Exception(), "Не удалось добавить привычку")
         } catch (e: IOException) {
             Timber.e(e, "Не удалось добавить привычку")
             HabitResult.Error(e, "Не удалось добавить привычку")
@@ -81,11 +82,12 @@ class HabitRepositoryImpl @Inject constructor(
     override suspend fun updateHabit(habit: Habit): HabitResult<Unit> {
         dao.updateHabit(habitMapper.mapHabitToHabitEntity(habit))
         return try {
-            habitApiService.updateEntriesById(
+            val response = habitApiService.updateEntriesById(
                 habit.id.toString(),
                 habitDtoMapper.mapHabitToDto(habit)
             )
-            HabitResult.Success(Unit)
+            if(response.isSuccessful) HabitResult.Success(Unit)
+            else HabitResult.Error(Exception(),"Не удалось обновить привычку")
         } catch (e: IOException) {
             Timber.e(e, "Не удалось обновить привычку")
             HabitResult.Error(e, "Не удалось обновить привычку")
@@ -98,8 +100,9 @@ class HabitRepositoryImpl @Inject constructor(
     override suspend fun deleteHabit(habitId: Int): HabitResult<Unit> {
         dao.deleteHabit(habitId)
         return try {
-            habitApiService.removeEntriesById(habitId.toString())
-            HabitResult.Success(Unit)
+            val response = habitApiService.removeEntriesById(habitId.toString())
+            if(response.isSuccessful) HabitResult.Success(Unit)
+            else HabitResult.Error(Exception(), "Не удалось удалить привычку")
         } catch (e: IOException) {
             Timber.e(e, "Не удалось удалить привычку")
             HabitResult.Error(e, "Не удалось удалить привычку")
