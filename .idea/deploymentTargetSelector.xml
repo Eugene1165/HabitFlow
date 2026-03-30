@@ -32,13 +32,13 @@
       <SelectionState runConfigName="titleSavedAfterRotation()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="createHabitSuccess()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="HabitFormTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="habitFormStatePreservedOnCall()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="AllTestsSuite">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

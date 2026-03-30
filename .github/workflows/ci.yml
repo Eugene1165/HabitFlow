@@ -98,11 +98,9 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: Download and start adbserver
+      - name: Download ADB server
         run: |
           curl -L https://raw.githubusercontent.com/KasperskyLab/Kaspresso/master/artifacts/adbserver-desktop.jar -o adbserver-desktop.jar
-          java -jar adbserver-desktop.jar &
-          sleep 3
 
       - name: Run UI tests
         env:
@@ -114,4 +112,8 @@ jobs:
             arch: x86_64
             disable-animations: true
             emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-            script: ./gradlew :app:connectedDebugAndroidTest
+            script: |
+              export PATH=$PATH:$ANDROID_HOME/platform-tools
+              java -jar adbserver-desktop.jar & 
+              sleep 6
+              ./gradlew :app:connectedDebugAndroidTest
