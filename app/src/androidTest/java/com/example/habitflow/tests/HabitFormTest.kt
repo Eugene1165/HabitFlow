@@ -13,7 +13,6 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.kakaocup.compose.node.element.ComposeScreen.Companion.onComposeScreen
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
@@ -104,8 +103,7 @@ class HabitFormTest : HabitBaseTestCase() {
         }
 
         step("переворачиваем экран") {
-            UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-                .setOrientationRight()
+            device.exploit.rotate()
         }
 
         step("проверяем что название сохранилось") {
@@ -115,7 +113,6 @@ class HabitFormTest : HabitBaseTestCase() {
         }
     }
 
-    @Ignore
     @Test
     fun habitFormStatePreservedOnCall() = run {
         step("Вводим название привычки") {

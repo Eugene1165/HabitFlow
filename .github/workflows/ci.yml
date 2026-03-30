@@ -37,7 +37,7 @@ jobs:
         run: ./gradlew testDebugUnitTest
 
   build:
-    needs: [test, ui-tests]
+    needs: [ test, ui-tests ]
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
@@ -98,14 +98,20 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      - name: Download and start adbserver
+        run: |
+          curl -L https://raw.githubusercontent.com/KasperskyLab/Kaspresso/master/artifacts/adbserver-desktop.jar -o adbserver-desktop.jar
+          java -jar adbserver-desktop.jar &
+          sleep 3
+
       - name: Run UI tests
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+            SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+            SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 33
-          arch: x86_64
-          disable-animations: true
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: ./gradlew :app:connectedDebugAndroidTest
+            api-level: 33
+            arch: x86_64
+            disable-animations: true
+            emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+            script: ./gradlew :app:connectedDebugAndroidTest
