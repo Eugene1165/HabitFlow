@@ -126,6 +126,9 @@ dependencies {
     androidTestImplementation(libs.androidx.room.ktx)
     androidTestImplementation(libs.androidx.room.testing)
     androidTestImplementation(libs.androidx.work.testing)
+    androidTestImplementation(libs.mockwebserver)
+    androidTestImplementation(libs.squareup.retrofit)
+    androidTestImplementation(libs.squareup.retrofit.gson)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)

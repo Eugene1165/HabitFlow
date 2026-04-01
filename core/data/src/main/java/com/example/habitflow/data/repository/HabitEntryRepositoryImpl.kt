@@ -5,6 +5,7 @@ import com.example.habitflow.data.mapper.HabitEntryDtoMapper
 import com.example.habitflow.data.mapper.HabitEntryMapper
 import com.example.habitflow.data.remote.api.HabitEntryApiService
 import com.example.habitflow.domain.model.HabitEntry
+import com.example.habitflow.domain.model.HabitResult
 import com.example.habitflow.domain.repository.HabitEntryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -28,12 +29,20 @@ class HabitEntryRepositoryImpl @Inject constructor(
         val generatedId = dao.addEntry(habitEntryMapper.mapHabitEntryToHabitEntryEntity(entry))
         val entryWithId = entry.copy(id = generatedId.toInt())
         try {
-            habitEntryApiService.createEntry(habitEntryDtoMapper.mapHabitEntryToDto(entryWithId))
-            dao.markAsSynced(entryWithId.id)
+            val response =
+                habitEntryApiService.createEntry(habitEntryDtoMapper.mapHabitEntryToDto(entryWithId))
+            if (response.isSuccessful) {
+                dao.markAsSynced(entryWithId.id)
+                HabitResult.Success(Unit)
+            }
+            else HabitResult.Error(Exception(), "Не удалось добавить записи для привычки")
+
         } catch (e: IOException) {
             Timber.e(e, "нет сети")
-        } catch (e: HttpException){
-            Timber.e(e,"Не удалось добавить записи для привычки")
+            HabitResult.Error(e, "Не удалось добавить записи для привычки")
+        } catch (e: HttpException) {
+            Timber.e(e, "Не удалось добавить записи для привычки")
+            HabitResult.Error(e, "Не удалось добавить записи для привычки")
         }
     }
 
@@ -55,8 +64,8 @@ class HabitEntryRepositoryImpl @Inject constructor(
                     dao.insertAll(entities)
                 } catch (e: IOException) {
                     Timber.e(e, "Не удалось получить  записи для привычки")
-                } catch (e: okio.IOException){
-                    Timber.e(e,"Нет сети")
+                } catch (e: okio.IOException) {
+                    Timber.e(e, "Нет сети")
                 }
 
                 val unsynced = dao.getUnsyncedEntries().first()
@@ -68,8 +77,8 @@ class HabitEntryRepositoryImpl @Inject constructor(
                         dao.markAsSynced(entity.id)
                     } catch (e: IOException) {
                         Timber.e(e, "нет сети")
-                    } catch (e: HttpException){
-                        Timber.e(e,"Ошибка retry синхронизации записи \${entity.id}")
+                    } catch (e: HttpException) {
+                        Timber.e(e, "Ошибка retry синхронизации записи \${entity.id}")
                     }
                 }
             }
@@ -95,17 +104,24 @@ class HabitEntryRepositoryImpl @Inject constructor(
         isDone: Boolean,
         updatedAt: LocalDateTime
     ) {
-        dao.updateEntry(habitId, currentDate.toString(), isDone,updatedAt.toString())
+        dao.updateEntry(habitId, currentDate.toString(), isDone, updatedAt.toString())
         try {
             val entry = dao.getEntryByDate(habitId, currentDate.toString()) ?: return
             val domainEntity = habitEntryMapper.mapHabitEntryEntityToHabitEntry(entry)
             val dto = habitEntryDtoMapper.mapHabitEntryToDto(domainEntity)
-            habitEntryApiService.updateEntryById("eq.${entry.id}", dto)
-            dao.markAsSynced(entry.id)
+            val response = habitEntryApiService.updateEntryById("eq.${entry.id}", dto)
+            if (response.isSuccessful) {
+                dao.markAsSynced(entry.id)
+                HabitResult.Success(Unit)
+            }
+            else HabitResult.Error(Exception(),"Не удалось обновить записи для привычки")
+
         } catch (e: IOException) {
             Timber.e(e, "нет сети")
-        } catch (e: HttpException){
-            Timber.e(e,"Не удалось обновить записи для привычки")
+            HabitResult.Error(e, "Не удалось обновить записи для привычки")
+        } catch (e: HttpException) {
+            Timber.e(e, "Не удалось обновить записи для привычки")
+            HabitResult.Error(e, "Не удалось обновить записи для привычки")
         }
     }
 

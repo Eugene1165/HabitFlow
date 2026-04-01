@@ -26,19 +26,19 @@
       <SelectionState runConfigName="feature.onboarding">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="Tests in 'com.example.habitflow.tests'">
+      <SelectionState runConfigName="HabitRepositoryImplTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="toggleHabitCheckbox()">
+      <SelectionState runConfigName="addEntry_success()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="editHabit()">
+      <SelectionState runConfigName="HabitEntryRepositoryImplTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="habitFormStatePreservedAfterProcessDeath()">
+      <SelectionState runConfigName="updateEntry_success()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="reminderWorkerShowsNotification()">
+      <SelectionState runConfigName="updateEntry_serverError()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

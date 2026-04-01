@@ -86,8 +86,8 @@ class HabitRepositoryImpl @Inject constructor(
                 habit.id.toString(),
                 habitDtoMapper.mapHabitToDto(habit)
             )
-            if(response.isSuccessful) HabitResult.Success(Unit)
-            else HabitResult.Error(Exception(),"Не удалось обновить привычку")
+            if (response.isSuccessful) HabitResult.Success(Unit)
+            else HabitResult.Error(Exception(), "Не удалось обновить привычку")
         } catch (e: IOException) {
             Timber.e(e, "Не удалось обновить привычку")
             HabitResult.Error(e, "Не удалось обновить привычку")
@@ -101,7 +101,7 @@ class HabitRepositoryImpl @Inject constructor(
         dao.deleteHabit(habitId)
         return try {
             val response = habitApiService.removeEntriesById(habitId.toString())
-            if(response.isSuccessful) HabitResult.Success(Unit)
+            if (response.isSuccessful) HabitResult.Success(Unit)
             else HabitResult.Error(Exception(), "Не удалось удалить привычку")
         } catch (e: IOException) {
             Timber.e(e, "Не удалось удалить привычку")
@@ -121,8 +121,9 @@ class HabitRepositoryImpl @Inject constructor(
             )
             val habit = habitMapper.mapHabitEntityToHabit(entity).copy(isArchived = true)
             val habitDto = habitDtoMapper.mapHabitToDto(habit)
-            habitApiService.updateEntriesById(habit.id.toString(), habitDto)
-            HabitResult.Success(Unit)
+            val response = habitApiService.updateEntriesById(habit.id.toString(), habitDto)
+            if (response.isSuccessful) HabitResult.Success(Unit)
+            else HabitResult.Error(Exception(), "Не удалось заархивировать привычку")
         } catch (e: IOException) {
             Timber.e(e, "Не удалось заархивировать привычку")
             HabitResult.Error(e, "Не удалось заархивировать привычку")
@@ -141,12 +142,12 @@ class HabitRepositoryImpl @Inject constructor(
             )
             val habit = habitMapper.mapHabitEntityToHabit(entity).copy(isArchived = false)
             val habitDto = habitDtoMapper.mapHabitToDto(habit)
-            habitApiService.updateEntriesById(habit.id.toString(), habitDto)
-            HabitResult.Success(Unit)
+            val response = habitApiService.updateEntriesById(habit.id.toString(), habitDto)
+            if(response.isSuccessful) HabitResult.Success(Unit)
+            else HabitResult.Error(Exception(), "Не удалось восстановить из архива привычку")
         } catch (e: IOException) {
             Timber.e(e, "Не удалось восстановить из архива привычку")
             HabitResult.Error(e, "Не удалось восстановить из архива привычку")
-
         } catch (e: HttpException) {
             Timber.e(e, "Нет сети")
             HabitResult.Error(e, "Не удалось восстановить из архива привычку")
