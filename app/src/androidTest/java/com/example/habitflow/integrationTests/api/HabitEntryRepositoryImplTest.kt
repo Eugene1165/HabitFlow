@@ -85,8 +85,16 @@ class HabitEntryRepositoryImplTest {
 
         habitDao.addHabit(habitMapper.mapHabitToHabitEntity(habitDomain))
         habitEntryRepositoryImpl.addEntry(entryDomain)
-        val entries = habitEntryDao.getEntriesForHabit(entryDomain.habitId).first()
 
+        val request = mockWebServer.takeRequest()
+        val body = request.body.readUtf8()
+        assertEquals("POST", request.method)
+        assertEquals("/rest/v1/habit_entries", request.path)
+        assertTrue(body.contains("\"habit_id\":1"))
+        assertTrue(body.contains("\"date\":\"2026-03-02\""))
+        assertTrue(body.contains("\"is_done\":false"))
+
+        val entries = habitEntryDao.getEntriesForHabit(entryDomain.habitId).first()
         assertEquals(1, entries.size)
         assertTrue(entries.first().isSynced)
     }
@@ -129,6 +137,12 @@ class HabitEntryRepositoryImplTest {
             isDone = true,
             updatedAt = entryDomain.updatedAt
         )
+        val request = mockWebServer.takeRequest()
+        val body = request.body.readUtf8()
+        assertEquals("PATCH", request.method)
+        assertEquals("/rest/v1/habit_entries?id=eq.1", request.path)
+        assertTrue(body.contains("\"is_done\":true"))
+
         val entries = habitEntryDao.getEntriesForHabit(entryDomain.habitId).first()
 
         assertTrue(entries.first().isSynced)
