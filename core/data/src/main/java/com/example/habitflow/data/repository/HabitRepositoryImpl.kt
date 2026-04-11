@@ -30,7 +30,7 @@ class HabitRepositoryImpl @Inject constructor(
             }
             .onStart {
                 try {
-                    val dtos = habitApiService.getAllEntries()
+                    val dtos = habitApiService.getAllEntries("eq.false")
                     dtos.forEach { dto ->
                         habitDtoMapper.mapDtoToHabit(dto)
                             .let { habitMapper.mapHabitToHabitEntity(it) }
@@ -83,7 +83,7 @@ class HabitRepositoryImpl @Inject constructor(
         dao.updateHabit(habitMapper.mapHabitToHabitEntity(habit))
         return try {
             val response = habitApiService.updateEntriesById(
-                habit.id.toString(),
+                "eq.${habit.id}",
                 habitDtoMapper.mapHabitToDto(habit)
             )
             if (response.isSuccessful) HabitResult.Success(Unit)
@@ -100,7 +100,7 @@ class HabitRepositoryImpl @Inject constructor(
     override suspend fun deleteHabit(habitId: Int): HabitResult<Unit> {
         dao.deleteHabit(habitId)
         return try {
-            val response = habitApiService.removeEntriesById(habitId.toString())
+            val response = habitApiService.removeEntriesById("eq.${habitId}")
             if (response.isSuccessful) HabitResult.Success(Unit)
             else HabitResult.Error(Exception(), "Не удалось удалить привычку")
         } catch (e: IOException) {
@@ -121,7 +121,7 @@ class HabitRepositoryImpl @Inject constructor(
             )
             val habit = habitMapper.mapHabitEntityToHabit(entity).copy(isArchived = true)
             val habitDto = habitDtoMapper.mapHabitToDto(habit)
-            val response = habitApiService.updateEntriesById(habit.id.toString(), habitDto)
+            val response = habitApiService.updateEntriesById("eq.${habitId}", habitDto)
             if (response.isSuccessful) HabitResult.Success(Unit)
             else HabitResult.Error(Exception(), "Не удалось заархивировать привычку")
         } catch (e: IOException) {
@@ -142,7 +142,7 @@ class HabitRepositoryImpl @Inject constructor(
             )
             val habit = habitMapper.mapHabitEntityToHabit(entity).copy(isArchived = false)
             val habitDto = habitDtoMapper.mapHabitToDto(habit)
-            val response = habitApiService.updateEntriesById(habit.id.toString(), habitDto)
+            val response = habitApiService.updateEntriesById("eq.${habitId}", habitDto)
             if(response.isSuccessful) HabitResult.Success(Unit)
             else HabitResult.Error(Exception(), "Не удалось восстановить из архива привычку")
         } catch (e: IOException) {

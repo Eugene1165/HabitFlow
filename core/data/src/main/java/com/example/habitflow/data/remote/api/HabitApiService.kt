@@ -12,7 +12,9 @@ import retrofit2.http.POST
 interface HabitApiService {
 
     @GET("rest/v1/Habit")
-    suspend fun getAllEntries(): List<HabitDto>
+    suspend fun getAllEntries(
+        @Query("is_archived") isArchived: String
+    ): List<HabitDto>
 
     @POST("rest/v1/Habit")
     suspend fun createEntries(

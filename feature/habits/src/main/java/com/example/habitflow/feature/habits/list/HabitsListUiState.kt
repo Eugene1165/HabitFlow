@@ -1,7 +1,5 @@
 package com.example.habitflow.feature.habits.list
 
-import com.example.habitflow.feature.habits.list.HabitWithStatus
-
 sealed class HabitsListUiState {
     object Loading : HabitsListUiState()
     object Empty : HabitsListUiState()

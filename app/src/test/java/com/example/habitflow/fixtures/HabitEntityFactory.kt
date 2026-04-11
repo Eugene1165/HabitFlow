@@ -4,7 +4,7 @@ import com.example.habitflow.data.local.entity.HabitEntity
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
-
+@Suppress("LongParameterList")
 object HabitEntityFactory {
     fun createHabitEntity(
         id: Int = 1,

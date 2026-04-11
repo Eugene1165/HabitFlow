@@ -162,7 +162,7 @@ class HabitRepositoryImplTest {
         val request = mockWebServer.takeRequest()
         val body = request.body.readUtf8()
         assertEquals("PATCH",request.method)
-        assertEquals("/rest/v1/Habit?id=1",request.path)
+        assertEquals("/rest/v1/Habit?id=eq.1",request.path)
         assertTrue(body.contains("new title"))
         assertTrue(body.contains("#F44336"))
         assertTrue(body.contains(LocalDate.of(2026, 3, 2).toString()))
@@ -206,7 +206,7 @@ class HabitRepositoryImplTest {
         val request = mockWebServer.takeRequest()
         val body = request.body.readUtf8()
         assertEquals("DELETE",request.method)
-        assertEquals("/rest/v1/Habit?id=1",request.path)
+        assertEquals("/rest/v1/Habit?id=eq.1",request.path)
         val fromDao = habitDao.getHabitById(habit.toInt())
         val success = result as HabitResult.Success
 
@@ -248,7 +248,7 @@ class HabitRepositoryImplTest {
         val request = mockWebServer.takeRequest()
         val body = request.body.readUtf8()
         assertEquals("PATCH",request.method)
-        assertEquals("/rest/v1/Habit?id=1",request.path)
+        assertEquals("/rest/v1/Habit?id=eq.1",request.path)
         assertTrue(body.contains("\"is_archived\":true"))
 
         val fromDao = habitDao.getHabitById(habit.toInt())
@@ -292,7 +292,7 @@ class HabitRepositoryImplTest {
         val request = mockWebServer.takeRequest()
         val body = request.body.readUtf8()
         assertEquals("PATCH",request.method)
-        assertEquals("/rest/v1/Habit?id=1",request.path)
+        assertEquals("/rest/v1/Habit?id=eq.1",request.path)
         assertTrue(body.contains("\"is_archived\":false"))
 
         val fromDao = habitDao.getHabitById(habit.toInt())

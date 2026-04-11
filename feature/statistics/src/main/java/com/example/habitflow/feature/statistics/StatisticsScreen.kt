@@ -106,21 +106,21 @@ fun StatisticsScreen() {
 @Composable
 fun StatisticsContent(data: AllHabitsStatistics) {
     Column(
-        modifier = Modifier.Companion.padding(16.dp),
+        modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         ActiveHabitsCard(count = data.activeHabitsCount)
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             StreakCard(
-                modifier = Modifier.Companion.weight(1f),
+                modifier = Modifier.weight(1f),
                 label = "Best streak",
                 streakValue = data.bestStreak.second,
                 habitName = data.bestStreak.first.title
             )
 
             StreakCard(
-                modifier = Modifier.Companion.weight(1f),
+                modifier = Modifier.weight(1f),
                 label = "Current streak",
                 streakValue = data.currentStreak.second,
                 habitName = data.currentStreak.first.title
@@ -139,19 +139,19 @@ fun StatisticsContent(data: AllHabitsStatistics) {
 @Composable
 fun ActiveHabitsCard(count: Int) {
     Card(
-        modifier = Modifier.Companion
+        modifier = Modifier
             .testTag("active_habit_card")
             .fillMaxWidth(),
         shape = RoundedCornerShape(16.dp)
     ) {
         Row(
-            modifier = Modifier.Companion.padding(16.dp),
+            modifier = Modifier.padding(16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.Companion.CenterVertically
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(Icons.Default.Done, contentDescription = null)
-            Text("$count", fontWeight = FontWeight.Companion.Bold, fontSize = 28.sp)
-            Text("активных привычек", color = Color.Companion.Gray)
+            Text("$count", fontWeight = FontWeight.Bold, fontSize = 28.sp)
+            Text("активных привычек")
         }
     }
 }
@@ -163,12 +163,14 @@ fun StreakCard(modifier: Modifier, label: String, streakValue: Int, habitName: S
         shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
     ) {
         Column(
-            modifier = Modifier.Companion.padding(16.dp),
+            modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.Center
         ) {
             Text(label)
-            Text("$streakValue дн.", fontSize = 28.sp, fontWeight = FontWeight.Companion.Bold)
-            Text(habitName, color = Color.Companion.Gray, maxLines = 1)
+            Spacer(Modifier.height(6.dp))
+            Text("$streakValue дн.", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+            Spacer(Modifier.height(6.dp))
+            Text(habitName, maxLines = 1)
         }
     }
 }
@@ -176,23 +178,25 @@ fun StreakCard(modifier: Modifier, label: String, streakValue: Int, habitName: S
 @Composable
 fun MostConsistentCard(habitName: String, percent: Float) {
     Card(
-        modifier = Modifier.Companion
+        modifier = Modifier
             .testTag("most_habit_card")
             .fillMaxWidth(),
-        shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp)
     ) {
         Column(
-            modifier = Modifier.Companion.padding(16.dp),
+            modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.Center
         ) {
             Text("Cамая стабильная")
-            Text(habitName, fontWeight = FontWeight.Companion.Bold)
+            Spacer(Modifier.height(6.dp))
+            Text(habitName, fontWeight = FontWeight.Bold)
+            Spacer(Modifier.height(6.dp))
             LinearProgressIndicator(
                 progress = { percent },
-                modifier = Modifier.Companion.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             )
+            Spacer(Modifier.height(6.dp))
             Text("${(percent * PERCENT_MULTIPLIER).toInt()}%")
-
         }
     }
 }
