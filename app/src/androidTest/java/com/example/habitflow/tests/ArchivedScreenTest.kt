@@ -11,15 +11,18 @@ import com.example.habitflow.screens.KBottomNav
 import com.example.habitflow.HabitBaseTestCase
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import io.qameta.allure.android.runners.AllureAndroidJUnit4
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltAndroidTest
+@RunWith(AllureAndroidJUnit4::class)
 class ArchivedScreenTest : HabitBaseTestCase(){
 
     @Inject

@@ -58,6 +58,10 @@ android {
         getByName("androidTest").assets.srcDirs("${rootDir}/core/data/schemas")
     }
 
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+    }
+
 }
 detekt {
     config.setFrom("$rootDir/config/detekt/detekt.yml")
@@ -129,6 +133,14 @@ dependencies {
     androidTestImplementation(libs.mockwebserver)
     androidTestImplementation(libs.squareup.retrofit)
     androidTestImplementation(libs.squareup.retrofit.gson)
+
+    androidTestImplementation(libs.allure.kotlin.model)
+    androidTestImplementation(libs.allure.kotlin.commons)
+    androidTestImplementation(libs.allure.kotlin.junit4)
+    androidTestImplementation(libs.allure.kotlin.android)
+
+    androidTestUtil(libs.androidx.test.orchestrator)
+    androidTestUtil(libs.androidx.test.services)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)

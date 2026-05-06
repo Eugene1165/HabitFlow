@@ -1,0 +1,50 @@
+{
+    "name": "restoreHabit",
+    "start": 1778090371763,
+    "stop": 1778090373807,
+    "stage": "finished",
+    "description": null,
+    "descriptionHtml": null,
+    "status": "passed",
+    "statusDetails": null,
+    "steps": [],
+    "attachments": [],
+    "parameters": [],
+    "uuid": "285d81cd-b3f9-49b3-88ef-492565e3431d",
+    "historyId": "737e51b15cbd179f8fd61e8481ec18e0",
+    "fullName": "com.example.habitflow.tests.ArchivedScreenTest.restoreHabit",
+    "labels": [
+        {
+            "name": "package",
+            "value": "com.example.habitflow.tests"
+        },
+        {
+            "name": "testClass",
+            "value": "com.example.habitflow.tests.ArchivedScreenTest"
+        },
+        {
+            "name": "testMethod",
+            "value": "restoreHabit"
+        },
+        {
+            "name": "suite",
+            "value": "com.example.habitflow.tests.ArchivedScreenTest"
+        },
+        {
+            "name": "host",
+            "value": "localhost"
+        },
+        {
+            "name": "thread",
+            "value": "Instr: com.example.habitflow.CustomTestRunner(47)"
+        },
+        {
+            "name": "framework",
+            "value": "junit4"
+        },
+        {
+            "name": "language",
+            "value": "kotlin"
+        }
+    ]
+}

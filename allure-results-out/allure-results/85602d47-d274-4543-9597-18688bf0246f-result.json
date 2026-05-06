@@ -1,0 +1,50 @@
+{
+    "name": "archivedListDisplayed",
+    "start": 1778090367991,
+    "stop": 1778090370345,
+    "stage": "finished",
+    "description": null,
+    "descriptionHtml": null,
+    "status": "passed",
+    "statusDetails": null,
+    "steps": [],
+    "attachments": [],
+    "parameters": [],
+    "uuid": "85602d47-d274-4543-9597-18688bf0246f",
+    "historyId": "5ae46efa93c64b5e05beb60242a86db4",
+    "fullName": "com.example.habitflow.tests.ArchivedScreenTest.archivedListDisplayed",
+    "labels": [
+        {
+            "name": "package",
+            "value": "com.example.habitflow.tests"
+        },
+        {
+            "name": "testClass",
+            "value": "com.example.habitflow.tests.ArchivedScreenTest"
+        },
+        {
+            "name": "testMethod",
+            "value": "archivedListDisplayed"
+        },
+        {
+            "name": "suite",
+            "value": "com.example.habitflow.tests.ArchivedScreenTest"
+        },
+        {
+            "name": "host",
+            "value": "localhost"
+        },
+        {
+            "name": "thread",
+            "value": "Instr: com.example.habitflow.CustomTestRunner(47)"
+        },
+        {
+            "name": "framework",
+            "value": "junit4"
+        },
+        {
+            "name": "language",
+            "value": "kotlin"
+        }
+    ]
+}
